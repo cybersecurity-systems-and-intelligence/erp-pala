@@ -24,6 +24,7 @@ import Obras from './Obras'
 import {ComponenteContext} from '../context/ComponenteContext'
 
 import { guardarLS } from '../libs/guardarLS'
+import { llamada } from '../libs/llamadas'
 
 
 const drawerWidth = 240
@@ -124,13 +125,12 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Dashboard() {
   
-  const resultadoJwt = JSON.parse(localStorage.getItem('jwt'))
-  const decoded = jwt_decode(resultadoJwt)
-  
   const classes = useStyles()
 
-  const { componentecontx, guardarComponenteContx } = useContext(ComponenteContext)
+  const resultadoJwt = JSON.parse(localStorage.getItem('jwt'))
+  const decoded = jwt_decode(resultadoJwt)    
 
+  const { componentecontx, guardarComponenteContx } = useContext(ComponenteContext)
   const { nivel_acceso, numero_componente } = componentecontx  
 
   const cantidadcards = 12
@@ -164,7 +164,7 @@ export default function Dashboard() {
     
     const consultarAPI = async () => {
       if( nivel_acceso === 0){        
-        const respObrasTotales = await axios.get('https://apicotizacion.herokuapp.com/api/obras')
+        const respObrasTotales = await llamada('https://apicotizacion.herokuapp.com/api/obras', 'get')
         const obrasTotales = respObrasTotales.data.Obras.map(obra => (
           {
             folioObra: obra.folio_obra,
@@ -174,9 +174,9 @@ export default function Dashboard() {
         guardarObrasTotales(respObrasTotales.data.Obras)
         guardarRowsObrasTotales(obrasTotales)
       }else if (nivel_acceso === 1){
-        const respObrasDisp = await axios.get('https://apicotizacion.herokuapp.com/api/obras/vigentes')
-        const respObrasCoti = await axios.get(`https://apicotizacion.herokuapp.com/api/cotizaciones/cotizadas/${decoded.correo}`)
-        const respPerfil = await axios.get(`https://apicotizacion.herokuapp.com/api/proveedores/datos_personales/${decoded.correo}`)
+        const respObrasDisp = await llamada('https://apicotizacion.herokuapp.com/api/obras/vigentes', 'get')
+        const respObrasCoti = await llamada(`https://apicotizacion.herokuapp.com/api/cotizaciones/cotizadas/${decoded.correo}`, 'get')
+        const respPerfil = await llamada(`https://apicotizacion.herokuapp.com/api/proveedores/datos_personales/${decoded.correo}`, 'get')
         const obrasDisp = respObrasDisp.data.Obras.map(obra => (
           {
             folioObra: obra.folio_obra,
@@ -187,7 +187,7 @@ export default function Dashboard() {
           {
             folioObra: obra.folio_obra,
             folioCotizacion: obra.folio_cotizacion,
-            nombreObra: obra.nombre_obra,                   
+            nombreObra: obra.nombre_obra,
           }
         ))
         guardarObrasDisponibles(respObrasDisp.data.Obras)

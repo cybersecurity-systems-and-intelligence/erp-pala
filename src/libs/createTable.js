@@ -11,7 +11,7 @@ function buildTableBody(data, obj) {
 		var dataRow = []
 
 		columns.forEach(function (column) {
-			dataRow.push(row[column].toString())
+			dataRow.push(row[column])
 		})
 
 		body.push(dataRow)

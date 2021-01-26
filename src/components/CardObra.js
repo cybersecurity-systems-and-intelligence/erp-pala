@@ -1,6 +1,7 @@
 import { Fragment, useContext } from 'react';
 import { Card, Container, CardActions, CardContent, Grid, Typography, makeStyles }  from '@material-ui/core/';
 import {Pagination} from '@material-ui/lab/';
+import cloneDeep from 'lodash/cloneDeep';
 import {ComponenteContext} from '../context/ComponenteContext'
 import {createPDF} from '../libs/createPdf'
 
@@ -94,12 +95,13 @@ const CardObra = ({siguientecomponente, rows, cantidadcards, totalpaginas,datosg
     };
 
     const seleccionarObra = e => { 
-      let obraSeleccionada = []       
+           
       if(nivel_acceso === 1 && siguientecomponente === 4 ){
-        obraSeleccionada = obrastotal.filter(row => row.folio_cotizacion === e.target.id)
-        console.log(obraSeleccionada)
+        const copia = cloneDeep(obrastotal)
+        const obraSeleccionada = copia.filter(row => row.folio_cotizacion === e.target.id)        
         createPDF(obraSeleccionada)
-      }else{                    
+      }else{         
+        let obraSeleccionada = []             
         if (seleccionpor === "obra" ){
           obraSeleccionada = obrastotal.filter(row => row.folio_obra === e.target.id)
         }else{          

@@ -1,5 +1,6 @@
 import { image64 } from '../images/logo'
 import { ctable } from './createTable'
+import { formatArray } from './formatters'
 
 const images = `data:image/png;base64,${image64}`
 
@@ -18,8 +19,7 @@ export const createDd = data => {
 		total,
 		total_IVA,
 	} = data[0]
-
-	const arr = data[0].materiales_cotizacion
+	const arr = formatArray(data[0].materiales_cotizacion)
 	
 	const dd = {
 		content: [
