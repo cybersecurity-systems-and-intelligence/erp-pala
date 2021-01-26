@@ -73,11 +73,11 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-const CardObra = ({siguientecomponente, rows, cantidadcards, totalpaginas, paginaactual, paginafinal, guardarPaginaFinal, page, setPage, guardarPaginaActual, obrastotal, obrascotizadas, guardarObra, bandObrasCotizadas, seleccionpor }) => {
+const CardObra = ({siguientecomponente, rows, cantidadcards, totalpaginas,datosgenerales, guardarDatosGenerales, /*paginaactual,*/ /*paginafinal, guardarPaginaFinal,*/ /*page, setPage, guardarPaginaActual,*/ obrastotal, obrascotizadas, guardarObra, bandObrasCotizadas, seleccionpor }) => {
 
 
     const classes = useStyles();
-        
+    const { paginaactual, page, paginafinal } = datosgenerales
     
     
     const { componentecontx, guardarComponenteContx } = useContext(ComponenteContext)
@@ -85,15 +85,21 @@ const CardObra = ({siguientecomponente, rows, cantidadcards, totalpaginas, pagin
     const { nivel_acceso } = componentecontx
 
     const handleChange = (event, value) => {
-      setPage(value);    
-      guardarPaginaActual((cantidadcards*value)-cantidadcards)   
-      guardarPaginaFinal(cantidadcards*value) 
+      //setPage(value);    
+      //guardarPaginaActual((cantidadcards*value)-cantidadcards)   
+      guardarDatosGenerales({
+        ...datosgenerales,
+        paginaactual: (cantidadcards*value)-cantidadcards,
+        page: value,
+        paginafinal: cantidadcards*value
+      })
+      //guardarPaginaFinal(cantidadcards*value) 
     };
 
     const seleccionarObra = e => { 
       let obraSeleccionada = []       
       if(nivel_acceso === 1 && siguientecomponente === 4 ){
-        obraSeleccionada = obrastotal.filter(row => row.folio_obra === e.target.id)
+        obraSeleccionada = obrastotal.filter(row => row.folio_cotizacion === e.target.id)
         console.log(obraSeleccionada)
         createPDF(obraSeleccionada)
       }else{                    

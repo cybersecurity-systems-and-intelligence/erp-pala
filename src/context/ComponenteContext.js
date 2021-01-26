@@ -6,8 +6,6 @@ export const ComponenteContext = createContext()
 // Provider es donde se encuentran las funciones y state
 const ComponenteProvider = (props) => {
 
-    //const componente_ls = JSON.parse(localStorage.getItem('componente'))
-
     const resultado = JSON.parse(localStorage.getItem('componente'))
     let nivel_acceso = 0
     let numero_ventana = 0

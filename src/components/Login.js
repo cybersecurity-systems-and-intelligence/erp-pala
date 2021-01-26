@@ -67,7 +67,7 @@ const Login = () => {
 
     const { componentecontx, guardarComponenteContx } = useContext(ComponenteContext)        
 
-    const [ datoslogeo, guardarDatosLogeo] = useState({
+    const [ datoslogeo, guardarDatosLogeo ] = useState({
         email: '',
         password: ''
     })
@@ -90,7 +90,7 @@ const Login = () => {
             })
                                
             const {nivel_acceso} = jwt_decode(consulta.data.jwToken);
-                     
+
             localStorage.setItem('jwt', JSON.stringify(consulta.data.jwToken))
             
             if ( nivel_acceso === 0 || nivel_acceso === 1 ){                                            

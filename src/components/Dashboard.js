@@ -1,24 +1,21 @@
 import { useState, useContext, useEffect } from 'react';
+
+import { makeStyles, CssBaseline, Drawer, AppBar, Toolbar, Typography, IconButton, Badge } from '@material-ui/core';
+import { Menu, ChevronLeft, ExitToApp } from '@material-ui/icons';
 import clsx from 'clsx';
 import jwt_decode from 'jwt-decode'
 import axios from 'axios'
-import { guardarLS } from '../libs/guardarLS'
-import { makeStyles, Avatar, CssBaseline, Drawer, AppBar, Toolbar, List } from '@material-ui/core';
-import { Typography, Divider, IconButton, Badge } from '@material-ui/core/';
-import { Menu, ChevronLeft, ExitToApp } from '@material-ui/icons';
+
 import imagenes from '../asets/img/imagenes';
 
 import ListItemsAdmin from './admin/ListItemsAdmin';
 import PerfilAdmin from './admin/PerfilAdmin'
 import CrearObraAdmin from './admin/CrearObraAdmin'
-//import ObrasCreadasAdmin from './admin/ObrasCreadasAdmin'
 import ObrasCotizadasAdmin from './admin/ObrasCotizadasAdmin'
 import DetalleObraAdmin from './admin/DetalleObraAdmin'
 
 import ListItemsProv from './prov/ListItemsProv'
 import PerfilProv from './prov/PerfilProv'
-// import ObrasDisponiblesProv from './prov/ObrasDisponiblesProv'
-// import ObrasCotizadasProv from './prov/ObrasCotizadasProv'
 import CotizarObraProv from './prov/CotizarObraProv'
 import DetalleObraCotizadaProv from './prov/DetalleObraCotizadaProv'
 
@@ -26,22 +23,21 @@ import Obras from './Obras'
 
 import {ComponenteContext} from '../context/ComponenteContext'
 
-//import {correoJwt} from '../funciones/decodificarJwt'
+import { guardarLS } from '../libs/guardarLS'
+
 
 const drawerWidth = 240
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-    background: '#f1f8e9',
-    
+    background: '#f1f8e9',    
   },
   toolbar: {
     paddingRight: 24, // keep right padding when drawer closed
     background: '#fff',
     color: '#373737'
   },
-
   hr:{
     background: 'linear-gradient(#d4e157, #afb42b)',
     alignItems: 'center',
@@ -52,9 +48,8 @@ const useStyles = makeStyles((theme) => ({
     height:'8px',
     borderRadius: '5px',
     marginTop:'1px'
-   },
-
-   toolbarIcon: {
+  },
+  toolbarIcon: {
     display: 'flex',
     alignItems: 'center',
     padding: '0 28px',
@@ -109,7 +104,6 @@ const useStyles = makeStyles((theme) => ({
     }),
     width: theme.spacing(7),
     [theme.breakpoints.up('sm')]: {
-      //width: theme.spacing({drawerWidth}),
       width: theme.spacing(9),
     },
   },
@@ -126,42 +120,22 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'auto',
     flexDirection: 'column',
   },
-  fixedHeight: {
-    height: 240,
-  },
 }));
 
 export default function Dashboard() {
   
-  const resultado = JSON.parse(localStorage.getItem('jwt'))
-  const decoded = jwt_decode(resultado)
+  const resultadoJwt = JSON.parse(localStorage.getItem('jwt'))
+  const decoded = jwt_decode(resultadoJwt)
   
-
   const classes = useStyles()
 
   const { componentecontx, guardarComponenteContx } = useContext(ComponenteContext)
 
   const { nivel_acceso, numero_componente } = componentecontx  
 
-  //const componente_ls = JSON.parse(localStorage.getItem('componente'))  
+  const cantidadcards = 12
   
-  // const [ componente, guardarComponente ] = useState({
-  //   nivel_acceso: componente_ls.nivel_acceso,
-  //   numero_componente: componente_ls.numero_componente
-  // })
-
-  // const { nivel_acceso, numero_componente } = componente
-
-  const [open, setOpen] = useState(true);
-  
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-
-  
+  const [ open, setOpen ] = useState(false);
   const [ obrasdisponibles, guardarObrasDisponibles ] = useState([])
   const [ obrascotizadas, guardarObrasCotizadas ] = useState([])
   const [ obrastotales, guardarObrasTotales ] = useState([])
@@ -169,13 +143,27 @@ export default function Dashboard() {
   const [ rowsobrascotizadas, guardarRowsObrasCotizadas ] = useState([])
   const [ rowsobrastotales, guardarRowsObrasTotales ] = useState([])
   const [ actualizarcards, guardarActualizarCards ] = useState(0)
-  const [ paginaactual, guardarPaginaActual ] = useState(0)
-  const [ page, setPage ] = useState(1);    
-  const [ cantidadcards, guardarCantidadCards ] = useState(12)
-  const [ paginafinal, guardarPaginaFinal ] = useState(cantidadcards)
+  //const [ paginaactual, guardarPaginaActual ] = useState(0)
+  //const [ page, setPage ] = useState(1)
+  //const [ paginafinal, guardarPaginaFinal ] = useState(cantidadcards)
   const [ tipobusqueda, guardarTipoBusqueda ] = useState('Buscar por Folio Obra')
   const [ perfil, guardarPerfil ] = useState({})
-  const [ errorconsulta, guardarErrorConsulta ] = useState(false)
+  //const [ errorconsulta, guardarErrorConsulta ] = useState(false)
+  const [ datosgenerales, guardarDatosGenerales ] = useState({
+    paginaactual: 0,
+    page: 1,
+    paginafinal: cantidadcards,
+    //tipobusqueda: 'Buscar por Folio Obra',
+    errorconsulta: false
+  })
+  const [ obra, guardarObra ] = useState({})
+  
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
 
   useEffect(() => {
     
@@ -217,15 +205,12 @@ export default function Dashboard() {
     consultarAPI()
     //eslint-disable-next-line
   }, [actualizarcards])
-  //const [ numerocomponentedashboardadmin, guardarNumeroComponenteDashboardAdmin ] = useState(0)
-  //const [ numerocomponentedashboardprov, guardarNumeroComponenteDashboardProv ] = useState(0)  
-  const [ obra, guardarObra ] = useState({})
+
+  
 
   const paginaAdmin = () => {
     if (nivel_acceso === 0 && numero_componente === 0){
       return <CrearObraAdmin
-        //guardarComponente={guardarComponente}
-        //componente={componente}
         guardarActualizarCards={guardarActualizarCards}
       />
     }else if (nivel_acceso === 0 && numero_componente === 1){
@@ -241,19 +226,21 @@ export default function Dashboard() {
         guardarRows={guardarRowsObrasTotales}      
         obrastotal={obrastotales}     
         totalpaginas={Math.ceil(rowsobrastotales.length/cantidadcards)} 
-        paginaactual={paginaactual}  
-        guardarPaginaActual={guardarPaginaActual}
-        paginafinal={paginafinal}
-        guardarPaginaFinal={guardarPaginaFinal}
-        page={page}
-        setPage={setPage}
+        //paginaactual={paginaactual}  
+        //guardarPaginaActual={guardarPaginaActual}
+        //paginafinal={paginafinal}
+        //guardarPaginaFinal={guardarPaginaFinal}
+        //page={page}
+        //setPage={setPage}
+        datosgenerales={datosgenerales}
+        guardarDatosGenerales={guardarDatosGenerales}
         cantidadcards={cantidadcards}
         bandObrasCotizadas={false}
         tipobusqueda={tipobusqueda}
         guardarTipoBusqueda={guardarTipoBusqueda}
         seleccionpor={'obra'}
-        errorconsulta={errorconsulta}
-        guardarErrorConsulta={guardarErrorConsulta}
+        //errorconsulta={errorconsulta}
+       // guardarErrorConsulta={guardarErrorConsulta}
       />
     }else if (nivel_acceso === 0 && numero_componente === 3){
       return <ObrasCotizadasAdmin
@@ -263,48 +250,33 @@ export default function Dashboard() {
         guardarRowsObrasCotizadas={guardarRowsObrasCotizadas}        
         obrascotizadas={obrascotizadas}
         guardarObrasCotizadas={guardarObrasCotizadas}        
-        paginaactual={paginaactual}  
-        guardarPaginaActual={guardarPaginaActual}
-        paginafinal={paginafinal}
-        guardarPaginaFinal={guardarPaginaFinal}
-        page={page}
-        setPage={setPage}
+        //paginaactual={paginaactual}  
+        //guardarPaginaActual={guardarPaginaActual}
+        //paginafinal={paginafinal}
+        //guardarPaginaFinal={guardarPaginaFinal}
+        //page={page}
+        //setPage={setPage}
+        datosgenerales={datosgenerales}
+        guardarDatosGenerales={guardarDatosGenerales}
         cantidadcards={cantidadcards}
         bandObrasCotizadas={true}
         tipobusqueda={tipobusqueda}
         guardarTipoBusqueda={guardarTipoBusqueda}
-        errorconsulta={errorconsulta}
-        guardarErrorConsulta={guardarErrorConsulta}
+        //errorconsulta={errorconsulta}
+       // guardarErrorConsulta={guardarErrorConsulta}
       />
     }else if (nivel_acceso === 0 && numero_componente === 4){
       return <DetalleObraAdmin
         obra={obra}
       />
-      //return `La Obra es: ${obra.folio_obra} \nLa cotizacion es: ${obra.folio_cotizacion}`
     }else{
       return 'error 400'
     }
-    /*
-    switch (numerocomponentedashboardadmin){
-      case 0:
-        return <CrearObraAdmin
-          guardarNumeroComponenteDashboardAdmin={guardarNumeroComponenteDashboardAdmin}
-        />
-      case 1:
-        return <PerfilAdmin/>
-      case 2:
-        return <ObrasCreadasAdmin/>
-      default:
-        return 'error 400'
-    }
-    */
   }
 
   const paginaUsuario = () => {
     if(nivel_acceso === 1 && numero_componente === 0){
       return <Obras
-        // guardarComponente={guardarComponente}
-        // componente={componente}
         titulo={<h5>OBRAS DISPONIBLES<hr className={classes.hr}/></h5>}
         siguientecomponente={3}
         guardarObra={guardarObra}
@@ -312,29 +284,28 @@ export default function Dashboard() {
         guardarRows={guardarRowsObrasDisponibles}            
         obrastotal={obrasdisponibles}
         totalpaginas={Math.ceil(rowsobrasdisponibles.length/cantidadcards)}   
-        paginaactual={paginaactual}  
-        guardarPaginaActual={guardarPaginaActual}
-        paginafinal={paginafinal}
-        guardarPaginaFinal={guardarPaginaFinal}
-        page={page}
-        setPage={setPage}
+        //paginaactual={paginaactual}  
+        //guardarPaginaActual={guardarPaginaActual}
+        //paginafinal={paginafinal}
+        //guardarPaginaFinal={guardarPaginaFinal}
+        //page={page}
+        //setPage={setPage}
+        datosgenerales={datosgenerales}
+        guardarDatosGenerales={guardarDatosGenerales}
         cantidadcards={cantidadcards}
         bandObrasCotizadas={false}
         tipobusqueda={tipobusqueda}
         guardarTipoBusqueda={guardarTipoBusqueda}
         seleccionpor={'obra'}
-        errorconsulta={errorconsulta}
-        guardarErrorConsulta={guardarErrorConsulta}
+        //errorconsulta={errorconsulta}
+        //guardarErrorConsulta={guardarErrorConsulta}
       />
     }else if(nivel_acceso === 1 && numero_componente === 1){
       return <PerfilProv
         perfil={perfil}
       />
-    }else if(nivel_acceso === 1 && numero_componente === 2){
-      //return <ObrasCotizadasProv/>      
+    }else if(nivel_acceso === 1 && numero_componente === 2){   
       return <Obras
-        // guardarComponente={guardarComponente}
-        // componente={componente}
         titulo={<h5>OBRAS COTIZADAS<hr className={classes.hr}/></h5>}
         siguientecomponente={4}
         guardarObra={guardarObra}
@@ -342,24 +313,24 @@ export default function Dashboard() {
         guardarRows={guardarRowsObrasCotizadas}        
         obrastotal={obrascotizadas}
         totalpaginas={Math.ceil(rowsobrascotizadas.length/cantidadcards)} 
-        paginaactual={paginaactual}  
-        guardarPaginaActual={guardarPaginaActual}
-        paginafinal={paginafinal}
-        guardarPaginaFinal={guardarPaginaFinal}
-        page={page}
-        setPage={setPage}
+        //paginaactual={paginaactual}  
+        //guardarPaginaActual={guardarPaginaActual}
+        //paginafinal={paginafinal}
+        //guardarPaginaFinal={guardarPaginaFinal}
+        //page={page}
+        //setPage={setPage}
+        datosgenerales={datosgenerales}
+        guardarDatosGenerales={guardarDatosGenerales}
         cantidadcards={cantidadcards}
         bandObrasCotizadas={true}
         tipobusqueda={tipobusqueda}
         guardarTipoBusqueda={guardarTipoBusqueda}
-        seleccionpor={'obra'}
-        errorconsulta={errorconsulta}
-        guardarErrorConsulta={guardarErrorConsulta}
+        seleccionpor={'cotizacion'}
+        //errorconsulta={errorconsulta}
+        //guardarErrorConsulta={guardarErrorConsulta}
       />
     }else if(nivel_acceso === 1 && numero_componente === 3){
       return <CotizarObraProv
-        // guardarComponente={guardarComponente}
-        // componente={componente}
         obra={obra}
         guardarActualizarCards={guardarActualizarCards}
       />
@@ -371,30 +342,9 @@ export default function Dashboard() {
     else{
       return 'error 400'
     }
-    /*
-    switch (numerocomponentedashboardprov) {
-      case 0:
-        return <ObrasDisponiblesProv
-          guardarNumeroComponenteDashboardProv={guardarNumeroComponenteDashboardProv}         
-          guardarObra={guardarObra}
-        />
-      case 1:
-        return <PerfilProv/>
-      case 2:
-        return <ObrasCotizadasProv/>
-      case 3:
-        return <CotizarObraProv
-          guardarNumeroComponenteDashboardProv={guardarNumeroComponenteDashboardProv}          
-          obra={obra}
-        />
-      default:
-        return 'error 400'
-    }
-    */
   }
 
   const salirlogin = () => {
-    //guardarLS("", "", "")
     localStorage.removeItem('jwt')
     localStorage.removeItem('componente')
     guardarComponenteContx({
@@ -402,21 +352,6 @@ export default function Dashboard() {
       numero_ventana: 0,
       numero_componente: null
     })
-    /*const objeto = {
-      nivel_acceso: 0,
-      numero_componente: 0,
-      numero_ventana: 0
-    }
-    localStorage.setItem('componente', JSON.stringify(objeto))
-
-    guardarComponenteContx({
-      nivel_acceso: 0,
-      numero_ventana: 0,
-      numero_componente: 0
-    })
-    */
-
-    //guardarNumeroComponente(0)    
   }
 
   return (
@@ -466,24 +401,28 @@ export default function Dashboard() {
           nivel_acceso === 0
           ?
           <ListItemsAdmin
-            guardarPaginaActual={guardarPaginaActual}
-            setPage={setPage}
+            //guardarPaginaActual={guardarPaginaActual}
+            //setPage={setPage}    
+            datosgenerales={datosgenerales}        
+            guardarDatosGenerales={guardarDatosGenerales}
             guardarRowsObrasTotales={guardarRowsObrasTotales}
             guardarRowsObrasCotizadas={guardarRowsObrasCotizadas}     
             obrastotales={obrastotales}            
             guardarTipoBusqueda={guardarTipoBusqueda}            
-            guardarErrorConsulta={guardarErrorConsulta}
+            //guardarErrorConsulta={guardarErrorConsulta}
           />
           :
           <ListItemsProv
-            guardarPaginaActual={guardarPaginaActual}
-            setPage={setPage}
+            //guardarPaginaActual={guardarPaginaActual}
+            //setPage={setPage}       
+            datosgenerales={datosgenerales}     
+            guardarDatosGenerales={guardarDatosGenerales}
             obrasdisponibles={obrasdisponibles}
             guardarRowsObrasDisponibles={guardarRowsObrasDisponibles}                  
             obrascotizadas={obrascotizadas}
             guardarRowsObrasCotizadas={guardarRowsObrasCotizadas}            
             guardarTipoBusqueda={guardarTipoBusqueda}
-            guardarErrorConsulta={guardarErrorConsulta}
+            //guardarErrorConsulta={guardarErrorConsulta}
           />
         }
       </Drawer>

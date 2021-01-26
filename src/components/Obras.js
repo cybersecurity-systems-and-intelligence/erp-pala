@@ -24,12 +24,12 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-const Obras = ( { titulo, siguientecomponente,paginaactual,guardarPaginaActual, paginafinal, guardarPaginaFinal,cantidadcards,page, setPage, totalpaginas, guardarObra, rows, guardarRows, obrastotal, obrascotizadas, bandObrasCotizadas, tipobusqueda, guardarTipoBusqueda, seleccionpor, errorconsulta, guardarErrorConsulta } ) => {
+const Obras = ( { datosgenerales, guardarDatosGenerales, titulo, siguientecomponente,/*paginaactual,guardarPaginaActual,*/ /*paginafinal, guardarPaginaFinal,*/cantidadcards,/*page, setPage,*/ totalpaginas, guardarObra, rows, guardarRows, obrastotal, obrascotizadas, bandObrasCotizadas, tipobusqueda, guardarTipoBusqueda, seleccionpor/*, errorconsulta, guardarErrorConsulta*/ } ) => {
 
     const classes = useStyles();
 
     const [ folio, guardarFolio ] = useState()
-    
+    const { errorconsulta } = datosgenerales
     
 
     return (
@@ -48,10 +48,12 @@ const Obras = ( { titulo, siguientecomponente,paginaactual,guardarPaginaActual, 
                         guardarFolio={guardarFolio}
                         obrastotal={obrastotal}
                         guardarRows={guardarRows}
-                        guardarErrorConsulta={guardarErrorConsulta}
+                        //guardarErrorConsulta={guardarErrorConsulta}
                         bandObrasCotizadas={bandObrasCotizadas}
                         tipobusqueda={tipobusqueda}
                         guardarTipoBusqueda={guardarTipoBusqueda}
+                        datosgenerales={datosgenerales}
+                        guardarDatosGenerales={guardarDatosGenerales}
                     />
                     <br/>
                     {
@@ -66,12 +68,14 @@ const Obras = ( { titulo, siguientecomponente,paginaactual,guardarPaginaActual, 
                             guardarObra={guardarObra}
                             siguientecomponente={siguientecomponente}
                             totalpaginas={totalpaginas}
-                            paginaactual={paginaactual}
-                            guardarPaginaActual={guardarPaginaActual}
-                            paginafinal={paginafinal}
-                            guardarPaginaFinal={guardarPaginaFinal}
-                            page={page}
-                            setPage={setPage}
+                            //paginaactual={paginaactual}
+                            //guardarPaginaActual={guardarPaginaActual}
+                            //paginafinal={paginafinal}
+                            //guardarPaginaFinal={guardarPaginaFinal}
+                            //page={page}
+                            //setPage={setPage}
+                            datosgenerales={datosgenerales}
+                            guardarDatosGenerales={guardarDatosGenerales}
                             cantidadcards={cantidadcards}
                             bandObrasCotizadas={bandObrasCotizadas}
                             seleccionpor={seleccionpor}

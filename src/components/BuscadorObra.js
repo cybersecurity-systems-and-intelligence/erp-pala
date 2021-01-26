@@ -25,53 +25,73 @@ const SwitchPurple = withStyles({
 	track: {},
 })(Switch)
 
-const BuscadorObra = ({ folio, guardarFolio, obrastotal, guardarRows, guardarErrorConsulta, bandObrasCotizadas, tipobusqueda, guardarTipoBusqueda }) => {
+const BuscadorObra = ({ datosgenerales, guardarDatosGenerales, folio, guardarFolio, obrastotal, guardarRows, /*guardarErrorConsulta,*/ bandObrasCotizadas, tipobusqueda, guardarTipoBusqueda }) => {
         
+    //const { tipobusqueda } = datosgenerales
+    
     const consulta_ = (folio_, band) => {
+        
         let consulta = []
-            if(band === 'Buscar por Folio Obra'){                
-                consulta = obrastotal.filter(row => row.folio_obra.startsWith(folio_))
-            }else{                
-                consulta = obrastotal.filter(row => row.folio_cotizacion.startsWith(folio_))
-            }
-            
-            if(consulta.length === 0){
-                guardarErrorConsulta(true)
-                return
-            }
-            guardarErrorConsulta(false)
-            let obrasCard
-            if(bandObrasCotizadas === false){
-                obrasCard = consulta.map(obra => (
-                    {
-                    folioObra: obra.folio_obra,
-                    nombreObra: obra.nombre_obra                    
-                    }
-                ))
-            }else{
-                obrasCard = consulta.map(obra => (
-                    {
-                    folioObra: obra.folio_obra,
-                    folioCotizacion: obra.folio_cotizacion,
-                    nombreObra: obra.nombre_obra                    
-                    }
-                ))
-            }
-            guardarRows(obrasCard)
+        if(band === 'Buscar por Folio Obra'){ 
+            console.log('2' ,folio_);                      
+            consulta = obrastotal.filter(row => row.folio_obra.startsWith(folio_))
+        }else{            
+            console.log('3' ,folio_);    
+            consulta = obrastotal.filter(row => row.folio_cotizacion.startsWith(folio_))
+            console.log('C',consulta)
+        }
+        
+        if(consulta.length === 0){
+            guardarDatosGenerales({
+                ...datosgenerales,
+                errorconsulta: true
+            })
+            //guardarErrorConsulta(true)
+            return
+        }
+        //guardarErrorConsulta(false)
+        guardarDatosGenerales({
+            ...datosgenerales,
+            errorconsulta: false
+        })
+        let obrasCard
+        if(bandObrasCotizadas === false){
+            obrasCard = consulta.map(obra => (
+                {
+                folioObra: obra.folio_obra,
+                nombreObra: obra.nombre_obra                    
+                }
+            ))
+        }else{
+            obrasCard = consulta.map(obra => (
+                {
+                folioObra: obra.folio_obra,
+                folioCotizacion: obra.folio_cotizacion,
+                nombreObra: obra.nombre_obra                    
+                }
+            ))
+        }
+        guardarRows(obrasCard)
             
     }
 	const handleChange = e => {
-        e.target.checked === false ? guardarTipoBusqueda('Buscar por Folio Obra') : guardarTipoBusqueda('Buscar por Folio Cotizacion')
+        
         const band = e.target.checked === false ? 'Buscar por Folio Obra' : 'Buscar por Folio Cotizacion'
-        if(folio !== undefined)
+        guardarTipoBusqueda( band)
+        if (folio !== undefined)
             consulta_(folio, band)
     }
     
     const handleChangeFolio = e => {
         
+        
         if(e.target.value.trim() === ""){            
             //let obrasCard
-            guardarErrorConsulta(false)
+            //guardarErrorConsulta(false)
+            guardarDatosGenerales({
+                ...datosgenerales,
+                errorconsulta: false
+            })
             if (bandObrasCotizadas === false){        
                 const obrasCard = obrastotal.map(obra => (
                     {

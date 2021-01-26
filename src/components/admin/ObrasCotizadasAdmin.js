@@ -2,7 +2,7 @@ import { Fragment, useEffect } from 'react';
 import axios from 'axios'
 import Obras from '../Obras'
 
-const ObrasCotizadasAdmin = ({obra,paginaactual,guardarPaginaActual, paginafinal, guardarPaginaFinal,cantidadcards,page, setPage, guardarObra, rowsobrascotizadas, guardarRowsObrasCotizadas, obrascotizadas, guardarObrasCotizadas, bandObrasCotizadas, tipobusqueda, guardarTipoBusqueda}) => {
+const ObrasCotizadasAdmin = ({obra,/*paginaactual,guardarPaginaActual,*/datosgenerales, guardarDatosGenerales, /*paginafinal, guardarPaginaFinal,*/cantidadcards,/*page, setPage,*/ guardarObra, rowsobrascotizadas, guardarRowsObrasCotizadas, obrascotizadas, guardarObrasCotizadas, bandObrasCotizadas, tipobusqueda, guardarTipoBusqueda}) => {
     const {folio_obra} = obra
 
     useEffect(() => {
@@ -33,12 +33,14 @@ const ObrasCotizadasAdmin = ({obra,paginaactual,guardarPaginaActual, paginafinal
                 obrastotal={obrascotizadas}
                 obrascotizadas={obrascotizadas}
                 totalpaginas={Math.ceil(rowsobrascotizadas.length/cantidadcards)} 
-                paginaactual={paginaactual}  
-                guardarPaginaActual={guardarPaginaActual}
-                paginafinal={paginafinal}
-                guardarPaginaFinal={guardarPaginaFinal}
-                page={page}
-                setPage={setPage}
+                //paginaactual={paginaactual}  
+                //guardarPaginaActual={guardarPaginaActual}
+                datosgenerales={datosgenerales}
+                guardarDatosGenerales={guardarDatosGenerales}
+                //paginafinal={paginafinal}
+                //guardarPaginaFinal={guardarPaginaFinal}
+                //page={page}
+                //setPage={setPage}
                 cantidadcards={cantidadcards}
                 bandObrasCotizadas={true}
                 tipobusqueda={tipobusqueda}
