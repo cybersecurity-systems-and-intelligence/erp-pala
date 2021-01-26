@@ -4,7 +4,7 @@ import { ListAlt, Person, Add } from '@material-ui/icons';
 import {ComponenteContext} from '../../context/ComponenteContext'
 import {guardarLS} from '../../libs/guardarLS'
 
-const ListItemsProv = ( { /*guardarPaginaActual,*/ datosgenerales, guardarDatosGenerales, obrasdisponibles, guardarRowsObrasDisponibles, obrascotizadas, guardarRowsObrasCotizadas, /*setPage,*/ guardarTipoBusqueda, /*guardarErrorConsulta*/} ) => {
+const ListItemsProv = ( { datosgenerales, guardarDatosGenerales, obrasdisponibles, guardarRowsObrasDisponibles, obrascotizadas, guardarRowsObrasCotizadas, guardarTipoBusqueda} ) => {
 
   const { componentecontx, guardarComponenteContx } = useContext(ComponenteContext)
   const { nivel_acceso, numero_ventana } = componentecontx
@@ -12,21 +12,17 @@ const ListItemsProv = ( { /*guardarPaginaActual,*/ datosgenerales, guardarDatosG
   const handleClickPerfil = () => {   
     
     guardarLS( nivel_acceso, 1, numero_ventana)
-    //guardarPaginaActual(0)
-    //setPage(1)
     guardarDatosGenerales({
       ...datosgenerales,
       paginaactual: 0,
       page: 1,
       errorconsulta: false,
-      //tipobusqueda: 'Buscar por Folio Obra'
     })
     guardarComponenteContx({
       ...componentecontx,
       numero_componente: 1
     })
-    guardarTipoBusqueda('Buscar por Folio Obra')
-    //guardarErrorConsulta(false)
+    guardarTipoBusqueda('Buscar por Folio Obra')    
   }
   
   const handleClickObrasDisp = () => {   
@@ -39,13 +35,10 @@ const ListItemsProv = ( { /*guardarPaginaActual,*/ datosgenerales, guardarDatosG
     ))
     
     guardarLS( nivel_acceso, 0, numero_ventana)
-    // guardarPaginaActual(0)
-    // setPage(1)
     guardarDatosGenerales({
       ...datosgenerales,
       paginaactual: 0,
       page: 1,
-      //tipobusqueda: 'Buscar por Folio Obra',
       errorconsulta: false
     })
     guardarComponenteContx({
@@ -54,7 +47,6 @@ const ListItemsProv = ( { /*guardarPaginaActual,*/ datosgenerales, guardarDatosG
     })
     guardarTipoBusqueda('Buscar por Folio Obra')
     guardarRowsObrasDisponibles(obras)    
-    //guardarErrorConsulta(false)
   }
 
   const handleClickObrasCoti = () => {
@@ -67,13 +59,10 @@ const ListItemsProv = ( { /*guardarPaginaActual,*/ datosgenerales, guardarDatosG
     ))
       
     guardarLS( nivel_acceso, 2, numero_ventana)
-    // guardarPaginaActual(0)
-    // setPage(1)
     guardarDatosGenerales({
       ...datosgenerales,
       paginaactual: 0,
       page: 1,
-      //tipobusqueda: 'Buscar por Folio Obra',
       errorconsulta: false
     })
     guardarComponenteContx({
@@ -82,7 +71,6 @@ const ListItemsProv = ( { /*guardarPaginaActual,*/ datosgenerales, guardarDatosG
     })
     guardarTipoBusqueda('Buscar por Folio Obra')
     guardarRowsObrasCotizadas(obras)  
-    //guardarErrorConsulta(false)
   }
 
   return (

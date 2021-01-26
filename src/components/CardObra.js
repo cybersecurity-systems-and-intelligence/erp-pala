@@ -73,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-const CardObra = ({siguientecomponente, rows, cantidadcards, totalpaginas,datosgenerales, guardarDatosGenerales, /*paginaactual,*/ /*paginafinal, guardarPaginaFinal,*/ /*page, setPage, guardarPaginaActual,*/ obrastotal, obrascotizadas, guardarObra, bandObrasCotizadas, seleccionpor }) => {
+const CardObra = ({siguientecomponente, rows, cantidadcards, totalpaginas,datosgenerales, guardarDatosGenerales, obrastotal, guardarObra, bandObrasCotizadas, seleccionpor }) => {
 
 
     const classes = useStyles();
@@ -85,15 +85,12 @@ const CardObra = ({siguientecomponente, rows, cantidadcards, totalpaginas,datosg
     const { nivel_acceso } = componentecontx
 
     const handleChange = (event, value) => {
-      //setPage(value);    
-      //guardarPaginaActual((cantidadcards*value)-cantidadcards)   
       guardarDatosGenerales({
         ...datosgenerales,
         paginaactual: (cantidadcards*value)-cantidadcards,
         page: value,
         paginafinal: cantidadcards*value
       })
-      //guardarPaginaFinal(cantidadcards*value) 
     };
 
     const seleccionarObra = e => { 
@@ -116,19 +113,6 @@ const CardObra = ({siguientecomponente, rows, cantidadcards, totalpaginas,datosg
           numero_componente: siguientecomponente
         })
       }
-        
-        /*
-
-
-
-        guardarComponente({
-          ...componente,
-          numero_componente: 3
-        })
-
-
-
-        */
     }
 
     return (

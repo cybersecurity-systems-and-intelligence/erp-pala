@@ -143,17 +143,12 @@ export default function Dashboard() {
   const [ rowsobrascotizadas, guardarRowsObrasCotizadas ] = useState([])
   const [ rowsobrastotales, guardarRowsObrasTotales ] = useState([])
   const [ actualizarcards, guardarActualizarCards ] = useState(0)
-  //const [ paginaactual, guardarPaginaActual ] = useState(0)
-  //const [ page, setPage ] = useState(1)
-  //const [ paginafinal, guardarPaginaFinal ] = useState(cantidadcards)
   const [ tipobusqueda, guardarTipoBusqueda ] = useState('Buscar por Folio Obra')
   const [ perfil, guardarPerfil ] = useState({})
-  //const [ errorconsulta, guardarErrorConsulta ] = useState(false)
   const [ datosgenerales, guardarDatosGenerales ] = useState({
     paginaactual: 0,
     page: 1,
     paginafinal: cantidadcards,
-    //tipobusqueda: 'Buscar por Folio Obra',
     errorconsulta: false
   })
   const [ obra, guardarObra ] = useState({})
@@ -226,12 +221,6 @@ export default function Dashboard() {
         guardarRows={guardarRowsObrasTotales}      
         obrastotal={obrastotales}     
         totalpaginas={Math.ceil(rowsobrastotales.length/cantidadcards)} 
-        //paginaactual={paginaactual}  
-        //guardarPaginaActual={guardarPaginaActual}
-        //paginafinal={paginafinal}
-        //guardarPaginaFinal={guardarPaginaFinal}
-        //page={page}
-        //setPage={setPage}
         datosgenerales={datosgenerales}
         guardarDatosGenerales={guardarDatosGenerales}
         cantidadcards={cantidadcards}
@@ -239,8 +228,6 @@ export default function Dashboard() {
         tipobusqueda={tipobusqueda}
         guardarTipoBusqueda={guardarTipoBusqueda}
         seleccionpor={'obra'}
-        //errorconsulta={errorconsulta}
-       // guardarErrorConsulta={guardarErrorConsulta}
       />
     }else if (nivel_acceso === 0 && numero_componente === 3){
       return <ObrasCotizadasAdmin
@@ -249,21 +236,13 @@ export default function Dashboard() {
         rowsobrascotizadas={rowsobrascotizadas}      
         guardarRowsObrasCotizadas={guardarRowsObrasCotizadas}        
         obrascotizadas={obrascotizadas}
-        guardarObrasCotizadas={guardarObrasCotizadas}        
-        //paginaactual={paginaactual}  
-        //guardarPaginaActual={guardarPaginaActual}
-        //paginafinal={paginafinal}
-        //guardarPaginaFinal={guardarPaginaFinal}
-        //page={page}
-        //setPage={setPage}
+        guardarObrasCotizadas={guardarObrasCotizadas}  
         datosgenerales={datosgenerales}
         guardarDatosGenerales={guardarDatosGenerales}
         cantidadcards={cantidadcards}
         bandObrasCotizadas={true}
         tipobusqueda={tipobusqueda}
         guardarTipoBusqueda={guardarTipoBusqueda}
-        //errorconsulta={errorconsulta}
-       // guardarErrorConsulta={guardarErrorConsulta}
       />
     }else if (nivel_acceso === 0 && numero_componente === 4){
       return <DetalleObraAdmin
@@ -284,12 +263,6 @@ export default function Dashboard() {
         guardarRows={guardarRowsObrasDisponibles}            
         obrastotal={obrasdisponibles}
         totalpaginas={Math.ceil(rowsobrasdisponibles.length/cantidadcards)}   
-        //paginaactual={paginaactual}  
-        //guardarPaginaActual={guardarPaginaActual}
-        //paginafinal={paginafinal}
-        //guardarPaginaFinal={guardarPaginaFinal}
-        //page={page}
-        //setPage={setPage}
         datosgenerales={datosgenerales}
         guardarDatosGenerales={guardarDatosGenerales}
         cantidadcards={cantidadcards}
@@ -297,8 +270,6 @@ export default function Dashboard() {
         tipobusqueda={tipobusqueda}
         guardarTipoBusqueda={guardarTipoBusqueda}
         seleccionpor={'obra'}
-        //errorconsulta={errorconsulta}
-        //guardarErrorConsulta={guardarErrorConsulta}
       />
     }else if(nivel_acceso === 1 && numero_componente === 1){
       return <PerfilProv
@@ -313,12 +284,6 @@ export default function Dashboard() {
         guardarRows={guardarRowsObrasCotizadas}        
         obrastotal={obrascotizadas}
         totalpaginas={Math.ceil(rowsobrascotizadas.length/cantidadcards)} 
-        //paginaactual={paginaactual}  
-        //guardarPaginaActual={guardarPaginaActual}
-        //paginafinal={paginafinal}
-        //guardarPaginaFinal={guardarPaginaFinal}
-        //page={page}
-        //setPage={setPage}
         datosgenerales={datosgenerales}
         guardarDatosGenerales={guardarDatosGenerales}
         cantidadcards={cantidadcards}
@@ -326,8 +291,6 @@ export default function Dashboard() {
         tipobusqueda={tipobusqueda}
         guardarTipoBusqueda={guardarTipoBusqueda}
         seleccionpor={'cotizacion'}
-        //errorconsulta={errorconsulta}
-        //guardarErrorConsulta={guardarErrorConsulta}
       />
     }else if(nivel_acceso === 1 && numero_componente === 3){
       return <CotizarObraProv
@@ -369,17 +332,15 @@ export default function Dashboard() {
             <Menu />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" align="center" noWrap className={classes.title}>
-            {         
+            {
               nivel_acceso === 0 ? 'ADMINISTRACIÓN' : 'PROVEEDOR'
             }
-            
-          </Typography>          
+          </Typography>
           <IconButton color="inherit">
             <Badge olor="secondary">
               <ExitToApp onClick={salirlogin} />
             </Badge>
           </IconButton>
-         
         </Toolbar>
       </AppBar>
       <Drawer
@@ -400,21 +361,16 @@ export default function Dashboard() {
         {
           nivel_acceso === 0
           ?
-          <ListItemsAdmin
-            //guardarPaginaActual={guardarPaginaActual}
-            //setPage={setPage}    
+          <ListItemsAdmin   
             datosgenerales={datosgenerales}        
             guardarDatosGenerales={guardarDatosGenerales}
             guardarRowsObrasTotales={guardarRowsObrasTotales}
             guardarRowsObrasCotizadas={guardarRowsObrasCotizadas}     
             obrastotales={obrastotales}            
-            guardarTipoBusqueda={guardarTipoBusqueda}            
-            //guardarErrorConsulta={guardarErrorConsulta}
+            guardarTipoBusqueda={guardarTipoBusqueda}      
           />
           :
-          <ListItemsProv
-            //guardarPaginaActual={guardarPaginaActual}
-            //setPage={setPage}       
+          <ListItemsProv      
             datosgenerales={datosgenerales}     
             guardarDatosGenerales={guardarDatosGenerales}
             obrasdisponibles={obrasdisponibles}
@@ -422,7 +378,6 @@ export default function Dashboard() {
             obrascotizadas={obrascotizadas}
             guardarRowsObrasCotizadas={guardarRowsObrasCotizadas}            
             guardarTipoBusqueda={guardarTipoBusqueda}
-            //guardarErrorConsulta={guardarErrorConsulta}
           />
         }
       </Drawer>

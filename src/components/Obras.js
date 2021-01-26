@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-const Obras = ( { datosgenerales, guardarDatosGenerales, titulo, siguientecomponente,/*paginaactual,guardarPaginaActual,*/ /*paginafinal, guardarPaginaFinal,*/cantidadcards,/*page, setPage,*/ totalpaginas, guardarObra, rows, guardarRows, obrastotal, obrascotizadas, bandObrasCotizadas, tipobusqueda, guardarTipoBusqueda, seleccionpor/*, errorconsulta, guardarErrorConsulta*/ } ) => {
+const Obras = ( { datosgenerales, guardarDatosGenerales, titulo, siguientecomponente, cantidadcards, totalpaginas, guardarObra, rows, guardarRows, obrastotal, obrascotizadas, bandObrasCotizadas, tipobusqueda, guardarTipoBusqueda, seleccionpor } ) => {
 
     const classes = useStyles();
 
@@ -48,7 +48,6 @@ const Obras = ( { datosgenerales, guardarDatosGenerales, titulo, siguientecompon
                         guardarFolio={guardarFolio}
                         obrastotal={obrastotal}
                         guardarRows={guardarRows}
-                        //guardarErrorConsulta={guardarErrorConsulta}
                         bandObrasCotizadas={bandObrasCotizadas}
                         tipobusqueda={tipobusqueda}
                         guardarTipoBusqueda={guardarTipoBusqueda}
@@ -68,19 +67,11 @@ const Obras = ( { datosgenerales, guardarDatosGenerales, titulo, siguientecompon
                             guardarObra={guardarObra}
                             siguientecomponente={siguientecomponente}
                             totalpaginas={totalpaginas}
-                            //paginaactual={paginaactual}
-                            //guardarPaginaActual={guardarPaginaActual}
-                            //paginafinal={paginafinal}
-                            //guardarPaginaFinal={guardarPaginaFinal}
-                            //page={page}
-                            //setPage={setPage}
                             datosgenerales={datosgenerales}
                             guardarDatosGenerales={guardarDatosGenerales}
                             cantidadcards={cantidadcards}
                             bandObrasCotizadas={bandObrasCotizadas}
                             seleccionpor={seleccionpor}
-                            //guardarComponente={guardarComponente}
-                            //componente={componente}
                         />
                     }
                     

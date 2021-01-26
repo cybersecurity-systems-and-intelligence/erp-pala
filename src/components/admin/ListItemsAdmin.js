@@ -5,14 +5,13 @@ import {ComponenteContext} from '../../context/ComponenteContext'
 import {guardarLS} from '../../libs/guardarLS'
 
 
-const ListItemsAdmin = ( { /*guardarPaginaActual, setPage,*/datosgenerales, guardarDatosGenerales, guardarRowsObrasTotales, guardarRowsObrasCotizadas, obrastotales, guardarTipoBusqueda, /* guardarErrorConsulta*/} ) => {
+const ListItemsAdmin = ( { datosgenerales, guardarDatosGenerales, guardarRowsObrasTotales, guardarRowsObrasCotizadas, obrastotales, guardarTipoBusqueda} ) => {
 
   const { componentecontx, guardarComponenteContx } = useContext(ComponenteContext)
   const { nivel_acceso, numero_ventana } = componentecontx
 
   const handleListItemClick = () => {
     guardarLS(nivel_acceso, 1, numero_ventana)
-    //guardarPaginaActual(0)
     guardarDatosGenerales({
       ...datosgenerales,
       paginaactual: 0,
@@ -24,12 +23,10 @@ const ListItemsAdmin = ( { /*guardarPaginaActual, setPage,*/datosgenerales, guar
       numero_componente: 1
     })
     guardarTipoBusqueda('Buscar por Folio Obra')
-    //guardarErrorConsulta(false)
   }
   
   const handleListItemClick2 = () => {    
     guardarLS(nivel_acceso, 0, numero_ventana)
-    //guardarPaginaActual(0)
     guardarDatosGenerales({
       ...datosgenerales,
       paginaactual: 0,
@@ -40,7 +37,6 @@ const ListItemsAdmin = ( { /*guardarPaginaActual, setPage,*/datosgenerales, guar
       numero_componente: 0
     })
     guardarTipoBusqueda('Buscar por Folio Obra')
-    //guardarErrorConsulta(false)
   }
 
   const handleListItemClick3 = () => {
@@ -52,22 +48,18 @@ const ListItemsAdmin = ( { /*guardarPaginaActual, setPage,*/datosgenerales, guar
     ))
     guardarRowsObrasTotales(obras)
     guardarLS(nivel_acceso, 2, numero_ventana)
-    //guardarPaginaActual(0)
     guardarDatosGenerales({
       ...datosgenerales,
       paginaactual: 0,
       page: 1,
-      //tipobusqueda: 'Buscar por Folio Obra',
       errorconsulta: false
     })
     guardarComponenteContx({
       ...componentecontx,
       numero_componente: 2
     })
-    //setPage(1)
     guardarTipoBusqueda('Buscar por Folio Obra')
     guardarRowsObrasCotizadas([])
-    //guardarErrorConsulta(false)
   }
 
   return (

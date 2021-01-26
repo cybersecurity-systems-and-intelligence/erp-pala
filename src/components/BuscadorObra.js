@@ -25,20 +25,16 @@ const SwitchPurple = withStyles({
 	track: {},
 })(Switch)
 
-const BuscadorObra = ({ datosgenerales, guardarDatosGenerales, folio, guardarFolio, obrastotal, guardarRows, /*guardarErrorConsulta,*/ bandObrasCotizadas, tipobusqueda, guardarTipoBusqueda }) => {
+const BuscadorObra = ({ datosgenerales, guardarDatosGenerales, folio, guardarFolio, obrastotal, guardarRows, bandObrasCotizadas, tipobusqueda, guardarTipoBusqueda }) => {
         
-    //const { tipobusqueda } = datosgenerales
     
     const consulta_ = (folio_, band) => {
         
         let consulta = []
-        if(band === 'Buscar por Folio Obra'){ 
-            console.log('2' ,folio_);                      
+        if(band === 'Buscar por Folio Obra'){                               
             consulta = obrastotal.filter(row => row.folio_obra.startsWith(folio_))
-        }else{            
-            console.log('3' ,folio_);    
-            consulta = obrastotal.filter(row => row.folio_cotizacion.startsWith(folio_))
-            console.log('C',consulta)
+        }else{                        
+            consulta = obrastotal.filter(row => row.folio_cotizacion.startsWith(folio_))            
         }
         
         if(consulta.length === 0){
@@ -46,10 +42,8 @@ const BuscadorObra = ({ datosgenerales, guardarDatosGenerales, folio, guardarFol
                 ...datosgenerales,
                 errorconsulta: true
             })
-            //guardarErrorConsulta(true)
             return
         }
-        //guardarErrorConsulta(false)
         guardarDatosGenerales({
             ...datosgenerales,
             errorconsulta: false
@@ -85,9 +79,7 @@ const BuscadorObra = ({ datosgenerales, guardarDatosGenerales, folio, guardarFol
     const handleChangeFolio = e => {
         
         
-        if(e.target.value.trim() === ""){            
-            //let obrasCard
-            //guardarErrorConsulta(false)
+        if(e.target.value.trim() === ""){     
             guardarDatosGenerales({
                 ...datosgenerales,
                 errorconsulta: false
