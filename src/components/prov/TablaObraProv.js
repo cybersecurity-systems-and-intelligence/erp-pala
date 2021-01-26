@@ -37,46 +37,46 @@ export default function TablaObraProv({ rows, guardarRows }) {
       label: 'Sub Categoria',
       minWidth: 100,
       align: 'right',
-      format: (value) => value.toLocaleString('en-US'),
     },
     {
       id: 'producto',
       label: 'Producto',
       minWidth: 170,
       align: 'right',
-      format: (value) => value.toLocaleString('en-US'),
     },
     {
       id: 'unidad',
       label: 'Unidad',
       minWidth: 100,
       align: 'right',
-      format: (value) => value.toFixed(2),
     },
     {
       id: 'requeridos',
       label: 'Requeridos',
       minWidth: 170,
       align: 'right',
-      format: (value) => value.toFixed(2),
+    },
+    {
+      id: 'costounitario',
+      label: 'Costo Unitario',
+      minWidth: 100,
+      align: 'right',
     },
     {
       id: 'anotaciones',
       label: 'Anotaciones',
       minWidth: 170,
       align: 'right',
-      format: (value) => value.toFixed(2),
-    },
+    },    
     {
       id: 'eliminar',
       label: 'eliminar',
       minWidth: 170,
       align: 'right',
-      format: (value) => value.toFixed(2),
     }
   ]
-  
-  
+
+
 
   const classes = useStyles();
   const [page, setPage] = useState(0);
@@ -124,17 +124,17 @@ export default function TablaObraProv({ rows, guardarRows }) {
                       <TableCell key={column.id} align={column.align}>
                         
                         { 
-                        column.id === 'eliminar' 
+                          column.id === 'eliminar' 
                         ? 
-                        <input 
-                          type='button'
-                          id={row.folioItem}
-                          value='Eliminar'
-                          variant="contained"
-                          color="primary"
-                          onClick={eliminarDato}
-                          className={classes.btn}
-                        /> : value }
+                          <input 
+                            type='button'
+                            id={row.folioItem}
+                            value='Eliminar'
+                            variant="contained"
+                            color="primary"
+                            onClick={eliminarDato}
+                            className={classes.btn}
+                          /> : value }
                       </TableCell>
                     );
                   })}

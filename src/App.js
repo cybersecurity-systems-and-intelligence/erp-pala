@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from 'react';
+import { Fragment, useContext } from 'react';
 import Login from './components/Login'
 import Checkout from './components/registro/Checkout'
 import Dashboard from './components/Dashboard'
@@ -10,19 +10,12 @@ function App() {
 
   const { numero_ventana } = componentecontx  
   
-
-  //const [ numerocomponente, guardarNumeroComponente ] = useState(0)
-  //const [ nivelacceso, guardarNivelAcceso ] = useState(0)
-
   const pagina = () => {
     switch (numero_ventana) {
       case 0:
         return <Login/>
       case 1:
         return <Dashboard/>
-        /*return <CrearObraAdmin
-          guardarNumeroComponente={guardarNumeroComponente}
-        />*/
       case 2:
         return <Checkout/>
       case 3:

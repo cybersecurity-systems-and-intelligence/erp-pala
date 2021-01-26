@@ -4,7 +4,8 @@ import { createDd } from './docdefinition'
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs
 
-export const createPDF = () => {
+export const createPDF = (obra) => {
+	/*
 	const dd = {
 		folio: 12345,
 		fecha: '21-03-2001',
@@ -49,6 +50,6 @@ export const createPDF = () => {
 			},
 		],
 	}
-
-	return pdfMake.createPdf(createDd(dd)).open()
+	*/
+	return pdfMake.createPdf(createDd(obra)).open()
 }

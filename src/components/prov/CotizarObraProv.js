@@ -238,8 +238,8 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
             <CssBaseline />      
             <main className={classes.layout}>
                 <Paper className={classes.paper}>
-                <Typography align="center">
-                    <p className={classes.rb1} >COTIZACIÓN DE OBRA<hr className={classes.hr}/></p> 
+                    <Typography align="center">
+                        <h3 className={classes.rb1} >COTIZACIÓN DE OBRA<hr className={classes.hr}/></h3> 
                     </Typography>
                     <br/>
                     <br/>

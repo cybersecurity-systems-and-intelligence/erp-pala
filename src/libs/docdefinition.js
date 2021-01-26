@@ -4,24 +4,23 @@ import { ctable } from './createTable'
 const images = `data:image/png;base64,${image64}`
 
 export const createDd = data => {
+	
 	const {
-		folio,
-		fecha,
-		obra,
-		usuario,
-		creador,
-		email,
+		folio_cotizacion,
+		fecha_creacion,
+		nombre_obra,
+		nombre_prov,
+		nombre_contacto_prov,
+		correo_prov,
 		contacto,
-		vigencia,
-		sostenimiento,
-		condiciones,
-		moneda,
+		dias_sostenimiento_propuesta,
+		condiciones_comerciales,
 		total,
-		totaliva,
-	} = data
+		total_IVA,
+	} = data[0]
 
-	const arr = data.materiales
-
+	const arr = data[0].materiales_cotizacion
+	
 	const dd = {
 		content: [
 			{
@@ -38,17 +37,17 @@ export const createDd = data => {
 						style: 'titles',
 					},
 					{
-						text: folio,
+						text: folio_cotizacion,
 					},
 					{
 						text: '\n',
 					},
 					{
-						text: 'fecha:  ',
+						text: 'fecha de cotizacion:  ',
 						style: 'titles',
 					},
 					{
-						text: fecha,
+						text: fecha_creacion,
 					},
 					{
 						text: '\n',
@@ -58,7 +57,7 @@ export const createDd = data => {
 						style: 'titles',
 					},
 					{
-						text: obra,
+						text: nombre_obra,
 					},
 					{
 						text: '\n',
@@ -68,7 +67,7 @@ export const createDd = data => {
 						style: 'titles',
 					},
 					{
-						text: usuario,
+						text: nombre_prov,
 					},
 					{
 						text: '\n',
@@ -78,7 +77,7 @@ export const createDd = data => {
 						style: 'titles',
 					},
 					{
-						text: creador,
+						text: nombre_contacto_prov,
 					},
 					{
 						text: '\n',
@@ -88,7 +87,7 @@ export const createDd = data => {
 						style: 'titles',
 					},
 					{
-						text: email,
+						text: correo_prov,
 					},
 					{
 						text: '\n',
@@ -104,21 +103,11 @@ export const createDd = data => {
 						text: '\n',
 					},
 					{
-						text: 'Fecha de vigencia de la propuesta:  ',
-						style: 'titles',
-					},
-					{
-						text: vigencia,
-					},
-					{
-						text: '\n',
-					},
-					{
 						text: 'Días de sostenimiento de oferta:  ',
 						style: 'titles',
 					},
 					{
-						text: sostenimiento,
+						text: dias_sostenimiento_propuesta,
 					},
 					{
 						text: '\n',
@@ -128,7 +117,7 @@ export const createDd = data => {
 						style: 'titles',
 					},
 					{
-						text: condiciones,
+						text: condiciones_comerciales,
 					},
 					{
 						text: '\n',
@@ -138,7 +127,7 @@ export const createDd = data => {
 						style: 'titles',
 					},
 					{
-						text: moneda,
+						text: 'MXN',
 					},
 					{
 						text: '\n',
@@ -148,7 +137,7 @@ export const createDd = data => {
 			{
 				text: '\n\n',
 			},
-			[ctable(data.materiales, arr)],
+			[ctable(data[0].materiales_cotizacion, arr)],
 			{
 				text: '\n',
 			},
@@ -159,7 +148,7 @@ export const createDd = data => {
 						style: 'stackedRight',
 					},
 					{
-						text: `Total Con IVA:  $${totaliva}`,
+						text: `Total Con IVA:  $${total_IVA}`,
 						style: 'stackedRight',
 					},
 				],

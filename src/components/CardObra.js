@@ -90,12 +90,13 @@ const CardObra = ({siguientecomponente, rows, cantidadcards, totalpaginas, pagin
       guardarPaginaFinal(cantidadcards*value) 
     };
 
-    const seleccionarObra = e => {      
+    const seleccionarObra = e => { 
+      let obraSeleccionada = []       
       if(nivel_acceso === 1 && siguientecomponente === 4 ){
-        createPDF()
-      }else{
-        let obraSeleccionada = []        
-      
+        obraSeleccionada = obrastotal.filter(row => row.folio_obra === e.target.id)
+        console.log(obraSeleccionada)
+        createPDF(obraSeleccionada)
+      }else{                    
         if (seleccionpor === "obra" ){
           obraSeleccionada = obrastotal.filter(row => row.folio_obra === e.target.id)
         }else{          
@@ -130,7 +131,7 @@ const CardObra = ({siguientecomponente, rows, cantidadcards, totalpaginas, pagin
             <Container className={classes.cardGrid} maxWidth="md">
             {/* End hero unit */}
             <Grid container spacing={2}>
-                {rows.slice(paginaactual, paginafinal).map((row) => (
+                {rows.slice(paginaactual, paginafinal).reverse().map((row) => (
                 <Grid item key={bandObrasCotizadas ? row.folioCotizacion:row.folioObra} xs={12} sm={6} md={4}>
                     <Card className={classes.card}>                  
                     <CardContent className={classes.cardContent}>

@@ -100,6 +100,7 @@ const useStyles = makeStyles((theme) => ({
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
+  
   drawerPaperClose: {
     overflowX: 'hidden',
     transition: theme.transitions.create('width', {
@@ -108,9 +109,11 @@ const useStyles = makeStyles((theme) => ({
     }),
     width: theme.spacing(7),
     [theme.breakpoints.up('sm')]: {
-      width: theme.spacing({drawerWidth}),
+      //width: theme.spacing({drawerWidth}),
+      width: theme.spacing(9),
     },
   },
+  
   appBarSpacer: theme.mixins.toolbar,
   content: {
     flexGrow: 3,
@@ -134,7 +137,7 @@ export default function Dashboard() {
   const decoded = jwt_decode(resultado)
   
 
-  const classes = useStyles();
+  const classes = useStyles()
 
   const { componentecontx, guardarComponenteContx } = useContext(ComponenteContext)
 
