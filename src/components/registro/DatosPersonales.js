@@ -1,8 +1,10 @@
 import { Fragment } from 'react';
-import { Grid, TextField } from '@material-ui/core';
-import { schema } from '../../libs/validarDatos'
-import { createMuiTheme } from '@material-ui/core/styles';
+
+import { Grid, TextField, createMuiTheme } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
+
+import { schema } from '../../libs/validarDatos'
+
 
 const theme = createMuiTheme({
     palette: {
@@ -28,70 +30,32 @@ export default function DatosPersonales({
   const changeDatosPersonales = e => {
     guardarDatos({
       ...datos,
-      [e.target.name]: e.target.value.trim()
+      [e.target.name]: e.target.value
     })
   }
 
   const inputPropsCorreo = () =>{
     const { error } = schema.validate({correo: correo})    
-    if ( error ){
-      guardarErroresDatos({
-        ...erroresdatos,
-        errorCorreo: true
-      })
-    }else{
-      guardarErroresDatos({
-        ...erroresdatos,
-        errorCorreo: false
-      })
-    }   
+    error ? guardarErroresDatos({...erroresdatos, errorCorreo: true }) : guardarErroresDatos({...erroresdatos, errorCorreo: false })
+      
   }
 
   const inputPropsNombreContacto = () =>{
-    const { error } = schema.validate({letras: nombreContacto})    
-    if ( error ){
-      guardarErroresDatos({
-        ...erroresdatos,
-        errorNombreContacto: true
-      })
-    }else{
-      guardarErroresDatos({
-        ...erroresdatos,
-        errorNombreContacto: false
-      })
-    }   
+    const { error } = schema.validate({letras: nombreContacto})   
+    error ? guardarErroresDatos({...erroresdatos, errorNombreContacto: true }) : guardarErroresDatos({...erroresdatos, errorNombreContacto: false }) 
+       
   }
 
   const inputPropsTelefonoFijo = () =>{
     const { error } = schema.validate({telefono: telefonoFijo})
-
-    if ( error ){
-      guardarErroresDatos({
-        ...erroresdatos,
-        errorTelefonoFijo: true
-      })
-    }else{
-      guardarErroresDatos({
-        ...erroresdatos,
-        errorTelefonoFijo: false
-      })
-    }   
+    error ? guardarErroresDatos({...erroresdatos, errorTelefonoFijo: true }) : guardarErroresDatos({...erroresdatos, errorTelefonoFijo: false }) 
+   
   }
 
   const inputPropsTelefonoMovil = () =>{
     const { error } = schema.validate({telefono: telefonoMovil})
-
-    if ( error ){
-      guardarErroresDatos({
-        ...erroresdatos,
-        errorTelefonoMovil: true
-      })
-    }else{
-      guardarErroresDatos({
-        ...erroresdatos,
-        errorTelefonoMovil: false
-      })
-    }   
+    error ? guardarErroresDatos({...erroresdatos, errorTelefonoMovil: true }) : guardarErroresDatos({...erroresdatos, errorTelefonoMovil: false }) 
+     
   }
 
 

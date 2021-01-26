@@ -79,7 +79,11 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
     const [ categorias, guardarCategorias] = useState([])
     const [ subcategorias, guardarSubCategorias ] = useState([])
     const [ productos, guardarProductos ] = useState([])
-    const [ datos, guardarDatos ] = useState({        
+    const [ datosextras, guardarDatosExtras ] = useState({
+        sostenimiento: 1,
+        condiciones: '',
+    })
+    const [ datos, guardarDatos ] = useState({
         folioItem: '',
         categoria: '',
         subcategoria: '',
@@ -87,9 +91,7 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
         unidad: '',
         requeridos: 0,
         costounitario: '',
-        anotaciones: '',
-        sostenimiento: 1,
-        condiciones: '',
+        anotaciones: '',        
         eliminar: ''
     })
     const [ rows, guardarRows ] = useState([])
@@ -98,7 +100,8 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
     const [ bandbotonregistrar, guardarBandBotonRegistrar ] = useState(true)
     
     // Destructuring de los state
-    const { categoria, subcategoria, producto, sostenimiento, condiciones } = datos
+    const { categoria, subcategoria, producto } = datos
+    const { sostenimiento, condiciones } = datosextras
     const { bandError, mensajeError } = error
 
 
@@ -247,6 +250,8 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
                     <FormularioCotizarObraProv
                         datos={datos}
                         guardarDatos={guardarDatos}
+                        datosextras={datosextras}
+                        guardarDatosExtras={guardarDatosExtras}
                         guardarError={guardarError}
                         rows={rows}
                         guardarRows={guardarRows}

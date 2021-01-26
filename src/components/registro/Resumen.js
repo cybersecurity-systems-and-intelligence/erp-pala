@@ -1,4 +1,5 @@
 import { Fragment } from 'react';
+
 import { makeStyles, Typography, List, ListItem, ListItemText } from '@material-ui/core';
 
 
@@ -6,13 +7,6 @@ const useStyles = makeStyles((theme) => ({
   listItem: {
     padding: theme.spacing(1, 0),
   },
-  total: {
-    fontWeight: 700,
-  },
-  title: {
-  
-  },
-
   rb1:{
     alignItems: 'center',
     textAlign: 'center'
@@ -43,8 +37,8 @@ export default function Resumen({datos}) {
   return (
     <Fragment>
       <Typography align="center">
-                    <h3 className={classes.rb1} >RESUMEN DE DATOS<hr className={classes.hr}/></h3> 
-                    </Typography>
+        <h3 className={classes.rb1} >RESUMEN DE DATOS<hr className={classes.hr}/></h3> 
+      </Typography>
      
       <List disablePadding>
         <ListItem className={classes.listItem} key={nombreMoralFisica}>

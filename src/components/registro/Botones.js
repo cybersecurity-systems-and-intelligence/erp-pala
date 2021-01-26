@@ -25,13 +25,12 @@ const Botones = ({ activeStep, steps, handleNext, handleBack }) => {
     return ( 
         <div className={classes.buttons}>
             {activeStep !== 0 && (
-            <Button onClick={handleBack} className={classes.button}>
-                Atras
-            </Button>
+                <Button onClick={handleBack} className={classes.button}>
+                    Atras
+                </Button>
             )}
             <Button
-                variant="contained"
-               
+                variant="contained"               
                 onClick={handleNext}
                 className={classes.button}
             >

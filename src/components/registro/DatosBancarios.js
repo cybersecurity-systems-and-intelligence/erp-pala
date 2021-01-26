@@ -1,8 +1,10 @@
 import { Fragment } from 'react';
-import { Grid, TextField } from '@material-ui/core';
-import { schema } from '../../libs/validarDatos'
-import { createMuiTheme } from '@material-ui/core/styles';
+
+import { Grid, TextField, createMuiTheme } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
+
+import { schema } from '../../libs/validarDatos'
+
 
 const theme = createMuiTheme({
     palette: {
@@ -31,33 +33,16 @@ export default function DatosBancarios({
   }
 
   const inputPropsNumeroClave= () =>{
-    const { error } = schema.validate({alfanumerico: numeroClave})    
-    if ( error ){
-      guardarErroresDatos({
-        ...erroresdatos,
-        errorNumeroClave: true
-      })
-    }else{
-      guardarErroresDatos({
-        ...erroresdatos,
-        errorNumeroClave: false
-      })
-    }   
+    const { error } = schema.validate({numerico: numeroClave})    
+
+    error ? guardarErroresDatos({...erroresdatos, errorNumeroClave: true }) : guardarErroresDatos({...erroresdatos, errorNumeroClave: false })
+   
   }
 
   const inputPropsCuenta= () =>{
-    const { error } = schema.validate({numerico: cuenta})    
-    if ( error ){
-      guardarErroresDatos({
-        ...erroresdatos,
-        errorCuenta: true
-      })
-    }else{
-      guardarErroresDatos({
-        ...erroresdatos,
-        errorCuenta: false
-      })
-    }   
+    const { error } = schema.validate({numerico: cuenta})   
+    error ? guardarErroresDatos({...erroresdatos, errorCuenta: true }) : guardarErroresDatos({...erroresdatos, errorCuenta: false }) 
+       
   }
 
   return (

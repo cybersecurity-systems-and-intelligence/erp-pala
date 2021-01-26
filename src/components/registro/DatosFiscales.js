@@ -1,8 +1,10 @@
 import { Fragment } from 'react';
-import { Grid, TextField } from '@material-ui/core';
-import { schema } from '../../libs/validarDatos'
-import { createMuiTheme } from '@material-ui/core/styles';
+
+import { Grid, TextField, createMuiTheme } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
+
+import { schema } from '../../libs/validarDatos'
+
 
 const theme = createMuiTheme({
     palette: {
@@ -30,22 +32,13 @@ export default function DatosFiscales({
     const changeDatosFiscales = e => {
         guardarDatos({
             ...datos,
-            [e.target.name]: e.target.value.trim()
+            [e.target.name]: e.target.value
         })
     }
     const inputPropsRFC = () =>{
         const { error } = schema.validate({rfc: rfc})
-        if ( error ){
-            guardarErroresDatos({
-                ...erroresdatos,
-                errorRfc: true
-            })
-        }else{
-            guardarErroresDatos({
-                ...erroresdatos,
-                errorRfc: false
-            })
-        }
+        error ? guardarErroresDatos({...erroresdatos, errorRfc: true }) : guardarErroresDatos({...erroresdatos, errorRfc: false })
+        
         guardarDatos({
             ...datos,
             rfc: rfc.toUpperCase()
@@ -53,45 +46,21 @@ export default function DatosFiscales({
     }
     const inputPropsCp = () =>{
         const { error } = schema.validate({cp: cp})
-        if ( error ){
-            guardarErroresDatos({
-                ...erroresdatos,
-                errorCp: true
-            })
-        }else{
-            guardarErroresDatos({
-                ...erroresdatos,
-                errorCp: false
-            })
-        }      
+
+        error ? guardarErroresDatos({...erroresdatos, errorCp: true }) : guardarErroresDatos({...erroresdatos, errorCp: false })
+          
     }
     const inputPropsColonia = () =>{
         const { error } = schema.validate({alfanumerico: colonia})
-        if ( error ){
-            guardarErroresDatos({
-                ...erroresdatos,
-                errorColonia: true
-            })
-        }else{
-            guardarErroresDatos({
-                ...erroresdatos,
-                errorColonia: false
-            })
-        }      
+
+        error ? guardarErroresDatos({...erroresdatos, errorColonia: true }) : guardarErroresDatos({...erroresdatos, errorColonia: false })
+           
     }
     const inputPropsCiudad = () =>{
         const { error } = schema.validate({ciudad: ciudad})
-        if ( error ){
-            guardarErroresDatos({
-                ...erroresdatos,
-                errorCiudad: true
-            })
-        }else{
-            guardarErroresDatos({
-                ...erroresdatos,
-                errorCiudad: false
-            })
-        }      
+
+        error ? guardarErroresDatos({...erroresdatos, errorCiudad: true }) : guardarErroresDatos({...erroresdatos, errorCiudad: false })
+            
         guardarDatos({
             ...datos,
             ciudad: ciudad.toLowerCase().replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())))
@@ -100,17 +69,8 @@ export default function DatosFiscales({
     const inputPropsEstado = () =>{
         const { error } = schema.validate({letras: estado})
 
-        if ( error ){
-            guardarErroresDatos({
-                ...erroresdatos,
-                errorEstado: true
-            })
-        }else{
-            guardarErroresDatos({
-                ...erroresdatos,
-                errorEstado: false
-            })
-        }      
+        error ? guardarErroresDatos({...erroresdatos, errorEstado: true }) : guardarErroresDatos({...erroresdatos, errorEstado: false })
+            
         guardarDatos({
             ...datos,
             estado: estado.toLowerCase().replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())))

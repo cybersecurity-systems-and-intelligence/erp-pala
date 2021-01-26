@@ -1,7 +1,10 @@
 import { Fragment, useState, useEffect, useContext } from 'react';
+
 import { IconButton, makeStyles, withStyles, CssBaseline, Grid, Paper, Stepper, Step, StepLabel, Typography, StepConnector } from '@material-ui/core';
-import {Cancel, Check} from '@material-ui/icons';
+import { Cancel, Check } from '@material-ui/icons';
 import axios from 'axios'
+import clsx from 'clsx';
+
 import DatosFiscales from './DatosFiscales';
 import DatosBancarios from './DatosBancarios';
 import DatosPersonales from './DatosPersonales';
@@ -10,6 +13,7 @@ import Error from '../Error'
 import Copyright from '../Copyright'
 import Resumen from './Resumen'
 import Modal from '../Modal'
+
 import {
   validarVaciosDatosFiscales,
   validarVaciosDatosPersonales,
@@ -19,8 +23,8 @@ import {
   verificarFormatoDatosBancarios
 } from '../../libs/validarDatos'
 import {guardarLS} from '../../libs/guardarLS'
+
 import {ComponenteContext} from '../../context/ComponenteContext'
-import clsx from 'clsx';
 
 const useStyles = makeStyles((theme) => ({
   layout: {
@@ -48,7 +52,6 @@ const useStyles = makeStyles((theme) => ({
   stepper: {
     padding: theme.spacing(3, 0, 5),
   },
-
   root: {
     '& > *': {
       margin: theme.spacing(1),
@@ -58,7 +61,6 @@ const useStyles = makeStyles((theme) => ({
   input: {
     display: 'none',
   },
-
   rb1:{
     alignItems: 'center',
     textAlign: 'center'
@@ -140,9 +142,10 @@ function QontoStepIcon(props) {
 const steps = ['Datos Fiscales', 'Datos Personales', 'Datos Bancarios', 'Resumen'];
 
 export default function Checkout() {    
-  const classes = useStyles();
+  const classes = useStyles()
 
   const { guardarComponenteContx } = useContext(ComponenteContext)
+
   const [ activeStep, setActiveStep ] = useState(0);
   const [ error, guardarError ] = useState({
     bandError: false,
@@ -162,7 +165,7 @@ export default function Checkout() {
     errorCuenta: false
   })  
   const [ banddatosapi, guardarBandDatosApi ] = useState(false)
-  const [openmodal, setOpenModal] = useState(false);
+  const [ openmodal, setOpenModal ] = useState(false)
   const [ datos, guardarDatos ] = useState({
     nombreMoralFisica: '',
     rfc: '',
@@ -244,22 +247,7 @@ export default function Checkout() {
             numero_componente: null,
             numero_ventana: 0,
             nivel_acceso: null,
-          })
-          /*
-
-
-
-
-
-
-          //guardarNumeroComponente(1)  
-
-
-
-
-
-
-          */        
+          })     
         }catch{
           guardarBandDatosApi(false)
           alert("El correo ya ha sido registrado")
@@ -342,7 +330,7 @@ export default function Checkout() {
         funcGuardarError(true, band[1])
         return
       }
-    }   
+    }
     funcGuardarError(false, '')    
     if(activeStep === steps.length-1){
       setOpenModal(true)    

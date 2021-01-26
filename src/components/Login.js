@@ -1,11 +1,16 @@
 import { useState, useContext } from 'react';
-import { createMuiTheme, Link, Grid, Box, Typography, makeStyles, Container, Button, CssBaseline, TextField} from '@material-ui/core';
+
+import { createMuiTheme, Link, Grid, Typography, makeStyles, Container, Button, CssBaseline, TextField} from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
 import axios from 'axios'
 import jwt_decode from 'jwt-decode'
+
 import Error from './Error'
+
 import { ComponenteContext } from '../context/ComponenteContext'
+
 import { guardarLS } from '../libs/guardarLS'
+
 import imagenes from '../asets/img/imagenes';
 
 const useStyles = makeStyles((theme) => ({
@@ -95,8 +100,8 @@ const Login = () => {
                     numero_ventana: 1,
                     numero_componente: 1
                 })
-            }else{
-                alert("no se ha podido acceder")
+            }else{            
+                guardarError(true) 
                 return
             }            
         }
@@ -117,7 +122,6 @@ const Login = () => {
     }
 
     const registarse = () => {
-
         guardarLS(null, null, 2)
         guardarComponenteContx({
             ...componentecontx,
@@ -179,7 +183,7 @@ const Login = () => {
                         variant="contained"
                         className={classes.submit}
                     >
-                    Ingresar
+                        Ingresar
                     </Button>                
                     <Grid container>
                         <Grid item xs>

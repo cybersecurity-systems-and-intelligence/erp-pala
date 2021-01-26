@@ -29,9 +29,17 @@ const ButtonComponent = styled('button')({
     }
 });
 
-const FormularioCotizarObraProv = ({ guardarBandBotonRegistrar, guardarRows, rows, guardarError, categorias, subcategorias, productos, datos, guardarDatos, classes}) => {
+const FormularioCotizarObraProv = ({ guardarBandBotonRegistrar, guardarRows, rows, guardarError, categorias, subcategorias, productos, datos, guardarDatos, classes, datosextras, guardarDatosExtras }) => {
 
-    const { folioItem, categoria, subcategoria, producto, unidad, costounitario, requeridos, anotaciones, sostenimiento, condiciones } = datos
+    const { folioItem, categoria, subcategoria, producto, unidad, costounitario, requeridos, anotaciones } = datos
+    const { sostenimiento, condiciones } = datosextras
+
+    const handleChangeDatosExtras = e => {               
+        guardarDatosExtras({
+            ...datosextras,
+            [e.target.name]: e.target.value
+        })
+    }
 
     const handleChange = e => {
                
@@ -83,7 +91,7 @@ const FormularioCotizarObraProv = ({ guardarBandBotonRegistrar, guardarRows, row
                         name="sostenimiento"
                         label="Días de sostenimiento"                        
                         value={sostenimiento}
-                        onChange={handleChange}
+                        onChange={handleChangeDatosExtras}
                         type='number'
                         fullWidth
                         color="secondary"         
@@ -95,7 +103,7 @@ const FormularioCotizarObraProv = ({ guardarBandBotonRegistrar, guardarRows, row
                         name="condiciones"
                         label="Condiciones"                        
                         value={condiciones}
-                        onChange={handleChange}
+                        onChange={handleChangeDatosExtras}
                         fullWidth    
                         color="secondary"                                         
                     />
