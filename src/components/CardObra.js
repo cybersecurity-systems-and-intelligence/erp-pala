@@ -30,7 +30,6 @@ const useStyles = makeStyles((theme) => ({
       transition: theme.transitions.create('transform','background','transition', {
         duration: theme.transitions.duration.enteringScreen,
       }),
-      transition: 'transform .5s',
       transform: 'scale(1.1)',
       color: 'black'
       
@@ -65,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
       transition: theme.transitions.create('transition','background', {
         duration: theme.transitions.duration.enteringScreen,
       }),
-        transition: 'all 0.1s ease',
+        //transition: 'all 0.1s ease',
         background: 'linear-gradient(#d4e157,#B3D233)',
         color:'black'
      },
@@ -123,7 +122,7 @@ const CardObra = ({siguientecomponente, rows, cantidadcards, totalpaginas,datosg
             <Container className={classes.cardGrid} maxWidth="md">
             {/* End hero unit */}
             <Grid container spacing={2}>
-                {rows.slice(paginaactual, paginafinal).reverse().map((row) => (
+                {rows.slice(paginaactual, paginafinal).map((row) => (
                 <Grid item key={bandObrasCotizadas ? row.folioCotizacion:row.folioObra} xs={12} sm={6} md={4}>
                     <Card className={classes.card}>                  
                     <CardContent className={classes.cardContent}>

@@ -1,6 +1,5 @@
 import { Fragment, useState, useEffect, useContext } from 'react';
 import { makeStyles, CssBaseline, Paper, Button, Typography, Grid } from '@material-ui/core';
-import Axios from 'axios'
 import Copyright from '../Copyright'
 import TablaObrasAdmin from './TablaObrasAdmin'
 import Error from '../Error'
@@ -8,6 +7,7 @@ import Modal from '../Modal'
 import FormularioRegistroObrasAdmin from './FormularioRegistroObrasAdmin'
 import DatosPrincipalesObrasAdmin from './DatosPrincipalesObrasAdmin'
 import {ComponenteContext} from '../../context/ComponenteContext'
+import { llamada } from '../../libs/llamadas'
 
 const useStyles = makeStyles((theme) => ({   
     layout: {
@@ -51,9 +51,7 @@ const useStyles = makeStyles((theme) => ({
         boxShadow:'2px 2px 5px #999',
         height:'8px',
         borderRadius: '5px',
-        marginTop:'1px',
-        alignItems: 'center',
-        textAlign: 'center'
+        marginTop:'1px'
        },
 }));
 
@@ -105,7 +103,7 @@ const CrearObraAdmin = ( { guardarActualizarCards } ) => {
 
     useEffect(() => {        
         const consultarAPI = async () => {
-            const resultado = await Axios('https://apicotizacion.herokuapp.com/api/items')
+            const resultado = await llamada('https://apicotizacion.herokuapp.com/api/items', 'get')
             const res = [...new Set(resultado.data.items.map(e => (e.categoria)))]
             guardarItems(resultado.data.items)
             guardarCategorias(res)
@@ -149,10 +147,10 @@ const CrearObraAdmin = ( { guardarActualizarCards } ) => {
         const resultado = items.filter(e => e.nombre === producto)
                
         resultado.map(e => (guardarDatos({
-               ...datos,
-               unidad: e.unidades,
-               folioItem: e.folio
-            })))
+            ...datos,
+            unidad: e.unidades,
+            folioItem: e.folio
+        })))
         //eslint-disable-next-line
     }, [producto])
 
@@ -168,17 +166,13 @@ const CrearObraAdmin = ( { guardarActualizarCards } ) => {
                     "creador_obra": "quien sabe",
                     "materiales_obra": materiales
                 }
-                let resultadoAPI = await Axios.post('https://apicotizacion.herokuapp.com/api/obras', {objeto})
-                //guardarNumeroComponenteDashboardAdmin(2)
+                let resultadoAPI = await llamada('https://apicotizacion.herokuapp.com/api/obras', 'post', objeto)
+
                 guardarActualizarCards(Math.floor(Math.random() * 1000) + 1)
                 guardarComponenteContx({
                     ...componentecontx,
                     numero_componente: 2
                 })
-                // guardarComponente({
-                //     ...componente,
-                //     numero_componente: 2
-                // })
                 
             }catch(err){
                 guardarBandDatosApi(false)

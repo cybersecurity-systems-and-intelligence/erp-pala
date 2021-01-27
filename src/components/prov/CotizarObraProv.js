@@ -1,14 +1,13 @@
 import { Fragment, useState, useEffect, useContext } from 'react';
 import { makeStyles, CssBaseline, Paper, Button, Typography, Grid } from '@material-ui/core';
-import Axios from 'axios'
 import jwt_decode from 'jwt-decode'
 import Copyright from '../Copyright'
 import TablaObraProv from './TablaObraProv'
 import Error from '../Error'
 import Modal from '../Modal'
 import FormularioCotizarObraProv from './FormularioCotizarObraProv'
-import {ComponenteContext} from '../../context/ComponenteContext'
-
+import { ComponenteContext } from '../../context/ComponenteContext'
+import { llamada } from '../../libs/llamadas'
 
 const useStyles = makeStyles((theme) => ({
   
@@ -16,13 +15,6 @@ const useStyles = makeStyles((theme) => ({
       width: 'auto',
       marginLeft: theme.spacing(1),
       marginRight: theme.spacing(1),
-      /*
-      [theme.breakpoints.up(1000 + theme.spacing(2) * 2)]: {    
-        width: 1000,    
-        marginLeft: 'auto',
-        marginRight: 'auto',
-      },
-      */
     },
     paper: {
       marginTop: theme.spacing(3),
@@ -60,8 +52,6 @@ const useStyles = makeStyles((theme) => ({
         height:'8px',
         borderRadius: '5px',
         marginTop:'1px',
-        alignItems: 'center',
-        textAlign: 'center'
        },
 }));
 
@@ -183,34 +173,24 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
 
                 const resultado = JSON.parse(localStorage.getItem('jwt'))
                 const decoded = jwt_decode(resultado);        
-                
-                let resultadoAPI = await Axios.post('https://apicotizacion.herokuapp.com/api/cotizaciones', {                    
+
+                const objeto = {
                     "nombre_obra": obra.nombre_obra,
                     "folio_obra": obra.folio_obra,
                     "correo_prov": decoded.correo,
                     'dias_sostenimiento_propuesta': sostenimiento,
                     'condiciones_comerciales': condiciones,
                     "materiales_cotizacion": materiales                    
-                })
-                //guardarNumeroComponenteDashboardProv(2)
+                }
+                
+                let resultadoAPI = await llamada('https://apicotizacion.herokuapp.com/api/cotizaciones', 'post', objeto)
+
                 guardarActualizarCards(Math.floor(Math.random() * 500) + 1)
                 guardarComponenteContx({
                     ...componentecontx,
                     numero_componente: 2
                 })
                 
-                /*
-
-
-
-                guardarComponente({
-                    ...componente,
-                    numero_componente: 2
-                })
-
-
-
-                */
             }catch(err){
                 guardarBandDatosApi(false)
                 alert("La obra ya ha sido registrada")

@@ -21,8 +21,6 @@ const useStyles = makeStyles((theme) => ({
     height:'8px',
     borderRadius: '5px',
     marginTop:'1px',
-    alignItems: 'center',
-    textAlign: 'center'
    },
 
 }));

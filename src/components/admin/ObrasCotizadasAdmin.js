@@ -1,13 +1,15 @@
 import { Fragment, useEffect } from 'react';
-import axios from 'axios'
+
 import Obras from '../Obras'
+
+import { llamada } from '../../libs/llamadas'
 
 const ObrasCotizadasAdmin = ({obra, datosgenerales, guardarDatosGenerales, cantidadcards, guardarObra, rowsobrascotizadas, guardarRowsObrasCotizadas, obrascotizadas, guardarObrasCotizadas, tipobusqueda, guardarTipoBusqueda}) => {
     const {folio_obra} = obra
 
     useEffect(() => {
         const consultarAPI = async() => {
-            const respObrasCoti = await axios.get(`https://apicotizacion.herokuapp.com/api/cotizaciones/${folio_obra}`)
+            const respObrasCoti = await llamada(`https://apicotizacion.herokuapp.com/api/cotizaciones/${folio_obra}`, 'get')
             const obrasCoti = respObrasCoti.data.Cotizacion.map(obra => (
                 {
                   folioObra: obra.folio_obra,

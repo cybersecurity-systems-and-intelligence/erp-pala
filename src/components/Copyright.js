@@ -5,7 +5,7 @@ const Copyright = () => {
     return (
         <Typography variant="body2" color="textSecondary" align="center">
             <div>
-            <img style={{width: 60}} src={imagenes.imgjpg} />
+            <img style={{width: 60}} src={imagenes.imgjpg} alt='PALA' />
           </div>
             {'Copyright © '}
             <Link color="inherit" href="http://www.localhost:3000/">

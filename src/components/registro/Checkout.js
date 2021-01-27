@@ -2,7 +2,6 @@ import { Fragment, useState, useEffect, useContext } from 'react';
 
 import { IconButton, makeStyles, withStyles, CssBaseline, Grid, Paper, Stepper, Step, StepLabel, Typography, StepConnector } from '@material-ui/core';
 import { Cancel, Check } from '@material-ui/icons';
-import axios from 'axios'
 import clsx from 'clsx';
 
 import DatosFiscales from './DatosFiscales';
@@ -23,6 +22,7 @@ import {
   verificarFormatoDatosBancarios
 } from '../../libs/validarDatos'
 import {guardarLS} from '../../libs/guardarLS'
+import { llamada } from '../../libs/llamadas'
 
 import {ComponenteContext} from '../../context/ComponenteContext'
 
@@ -219,27 +219,29 @@ export default function Checkout() {
         const { correo, password, nombreContacto, telefonoFijo, telefonoMovil} = datos        
         const { numeroClave, cuenta, razonSocial } = datos
         
+        const objeto = {
+          "nombre_prov": nombreMoralFisica,
+          "rfc_prov": rfc,
+          "direccion_fiscal_prov": direccionFiscal,
+          "direccion_oficina_prov": direccionOficina,
+          "calle_referencia1_prov": calleReferencia1,
+          "calle_referencia2_prov": calleReferencia2,
+          "codigo_postal_prov": cp,
+          "colonia_prov": colonia,
+          "ciudad_prov": ciudad,
+          "estado_prov": estado,
+          "correo_prov": correo,
+          "nombre_contacto_prov": nombreContacto,   
+          "telefono_fijo_prov": telefonoFijo,
+          "telefono_movil_prov": telefonoMovil,
+          "numero_clave_prov": numeroClave,
+          "cuenta_prov": cuenta,
+          "razon_social_prov": razonSocial,
+          "password_prov": password
+        }
+
         try{
-          await axios.post('https://apicotizacion.herokuapp.com/api/proveedores', {
-            "nombre_prov": nombreMoralFisica,
-            "rfc_prov": rfc,
-            "direccion_fiscal_prov": direccionFiscal,
-            "direccion_oficina_prov": direccionOficina,
-            "calle_referencia1_prov": calleReferencia1,
-            "calle_referencia2_prov": calleReferencia2,
-            "codigo_postal_prov": cp,
-            "colonia_prov": colonia,
-            "ciudad_prov": ciudad,
-            "estado_prov": estado,
-            "correo_prov": correo,
-            "nombre_contacto_prov": nombreContacto,   
-            "telefono_fijo_prov": telefonoFijo,
-            "telefono_movil_prov": telefonoMovil,
-            "numero_clave_prov": numeroClave,
-            "cuenta_prov": cuenta,
-            "razon_social_prov": razonSocial,
-            "password_prov": password
-          })
+          await llamada('https://apicotizacion.herokuapp.com/api/proveedores', 'post', objeto)
 
           ///guardarLS(null, null, null)
 

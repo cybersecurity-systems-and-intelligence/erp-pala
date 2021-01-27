@@ -35,3 +35,26 @@ export const formatArray = arr => {
 	})
 	return arrayFormated
 }
+
+
+export const formatCardProv = ( respObrasDisp, respObrasCoti ) => {
+	const obrasDisp = respObrasDisp.map(obra => (
+        {
+        folioObra: obra.folio_obra,
+        nombreObra: obra.nombre_obra                    
+        }
+    ))
+    const obrasCoti = respObrasCoti.map(obra => (
+        {
+        folioObra: obra.folio_obra,
+        folioCotizacion: obra.folio_cotizacion,
+        nombreObra: obra.nombre_obra,
+        }
+	))
+	const respuesta = {
+		obrasDisp,
+		obrasCoti
+	}
+	
+	return respuesta
+}

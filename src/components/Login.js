@@ -2,7 +2,6 @@ import { useState, useContext } from 'react';
 
 import { createMuiTheme, Link, Grid, Typography, makeStyles, Container, Button, CssBaseline, TextField} from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
-import axios from 'axios'
 import jwt_decode from 'jwt-decode'
 
 import Error from './Error'
@@ -10,6 +9,7 @@ import Error from './Error'
 import { ComponenteContext } from '../context/ComponenteContext'
 
 import { guardarLS } from '../libs/guardarLS'
+import { llamada } from '../libs/llamadas'
 
 import imagenes from '../asets/img/imagenes';
 
@@ -84,10 +84,11 @@ const Login = () => {
     
     const consultarAPI = async () => {
         try{
-            const consulta = await axios.post('https://apicotizacion.herokuapp.com/api/autorizacion', {
+            const objeto = {
                 correo: email,
                 password: password
-            })
+            }
+            const consulta = await llamada('https://apicotizacion.herokuapp.com/api/autorizacion', 'post', objeto)
                                
             const {nivel_acceso} = jwt_decode(consulta.data.jwToken);
 
@@ -136,7 +137,7 @@ const Login = () => {
             <CssBaseline />
             <div className={classes.paper}>
                 <div>
-                    <img style={{width: 200}} src={imagenes.imgjpg} />
+                    <img style={{width: 200}} src={imagenes.imgjpg} alt='PALA' />
                 </div>
                 <Typography component="h1" variant="h5" className={classes.letra}>
                     INICIA SESIÓN
@@ -155,7 +156,7 @@ const Login = () => {
                             required
                             fullWidth
                             id="email"
-                            label="Email Address"
+                            label="Correo:"
                             name="email"
                             autoComplete="email"
                             autoFocus
@@ -169,7 +170,7 @@ const Login = () => {
                             required
                             fullWidth
                             name="password"
-                            label="Password"
+                            label="Contraseña:"
                             type="password"
                             id="password"
                             autoComplete="current-password"

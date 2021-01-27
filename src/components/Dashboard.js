@@ -4,7 +4,6 @@ import { makeStyles, CssBaseline, Drawer, AppBar, Toolbar, Typography, IconButto
 import { Menu, ChevronLeft, ExitToApp } from '@material-ui/icons';
 import clsx from 'clsx';
 import jwt_decode from 'jwt-decode'
-import axios from 'axios'
 
 import imagenes from '../asets/img/imagenes';
 
@@ -23,8 +22,7 @@ import Obras from './Obras'
 
 import {ComponenteContext} from '../context/ComponenteContext'
 
-import { guardarLS } from '../libs/guardarLS'
-import { llamada } from '../libs/llamadas'
+import { cargarDatosProv, cargarDatosAdmin } from '../libs/cargarDatosDash'
 
 
 const drawerWidth = 240
@@ -164,37 +162,20 @@ export default function Dashboard() {
     
     const consultarAPI = async () => {
       if( nivel_acceso === 0){        
-        const respObrasTotales = await llamada('https://apicotizacion.herokuapp.com/api/obras', 'get')
-        const obrasTotales = respObrasTotales.data.Obras.map(obra => (
-          {
-            folioObra: obra.folio_obra,
-            nombreObra: obra.nombre_obra                    
-          }
-        ))
-        guardarObrasTotales(respObrasTotales.data.Obras)
+        
+        const { respObrasTotales, obrasTotales } = await cargarDatosAdmin()
+
+        guardarObrasTotales(respObrasTotales)
         guardarRowsObrasTotales(obrasTotales)
       }else if (nivel_acceso === 1){
-        const respObrasDisp = await llamada('https://apicotizacion.herokuapp.com/api/obras/vigentes', 'get')
-        const respObrasCoti = await llamada(`https://apicotizacion.herokuapp.com/api/cotizaciones/cotizadas/${decoded.correo}`, 'get')
-        const respPerfil = await llamada(`https://apicotizacion.herokuapp.com/api/proveedores/datos_personales/${decoded.correo}`, 'get')
-        const obrasDisp = respObrasDisp.data.Obras.map(obra => (
-          {
-            folioObra: obra.folio_obra,
-            nombreObra: obra.nombre_obra                    
-          }
-        ))
-        const obrasCoti = respObrasCoti.data.Obras.map(obra => (
-          {
-            folioObra: obra.folio_obra,
-            folioCotizacion: obra.folio_cotizacion,
-            nombreObra: obra.nombre_obra,
-          }
-        ))
-        guardarObrasDisponibles(respObrasDisp.data.Obras)
-        guardarObrasCotizadas(respObrasCoti.data.Obras)
+
+        const {respObrasDisp, obrasDisp, respObrasCoti, obrasCoti, respPerfil} = await cargarDatosProv(decoded.correo)
+        
+        guardarObrasDisponibles(respObrasDisp)
+        guardarObrasCotizadas(respObrasCoti)
         guardarRowsObrasDisponibles(obrasDisp)
         guardarRowsObrasCotizadas(obrasCoti)
-        guardarPerfil(respPerfil.data.datos_personales)
+        guardarPerfil(respPerfil)
       }
     }
     consultarAPI()
@@ -352,7 +333,7 @@ export default function Dashboard() {
       >
        <div className={classes.toolbarIcon}>
           <div>
-            <img style={{width: 160, right:'30%', marginRight:'5px'}} src={imagenes.imgjpg} />
+            <img alt='PALA' style={{width: 160, right:'30%', marginRight:'5px'}} src={imagenes.imgjpg} />
           </div>
           <IconButton onClick={handleDrawerClose}>
             <ChevronLeft />
@@ -386,7 +367,7 @@ export default function Dashboard() {
         
         <div className={classes.appBarSpacer} />   
         
-      <img style={{width: 170, marginTop:"20px"}} src={imagenes.imgjpg} />
+      <img alt='PALA' style={{width: 170, marginTop:"20px"}} src={imagenes.imgjpg} />
          
             {
               nivel_acceso === 0 ? paginaAdmin() : paginaUsuario()

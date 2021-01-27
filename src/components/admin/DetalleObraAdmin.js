@@ -53,9 +53,7 @@ const useStyles = makeStyles((theme) => ({
             boxShadow:'2px 2px 5px #999',
             height:'8px',
             borderRadius: '5px',
-            marginTop:'1px',
-            alignItems: 'center',
-            textAlign: 'center'
+            marginTop:'1px'
            }, 
     root: {
         width: '100%',
