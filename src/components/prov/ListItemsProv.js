@@ -3,6 +3,7 @@ import { ListItem, List, ListItemIcon, ListItemText } from '@material-ui/core/';
 import { ListAlt, Person, Add } from '@material-ui/icons';
 import {ComponenteContext} from '../../context/ComponenteContext'
 import {guardarLS} from '../../libs/guardarLS'
+import { formatCardFolioCoti,formatCardFolioObra } from '../../libs/formatters'
 
 const ListItemsProv = ( { datosgenerales, guardarDatosGenerales, obrasdisponibles, guardarRowsObrasDisponibles, obrascotizadas, guardarRowsObrasCotizadas, guardarTipoBusqueda} ) => {
 
@@ -27,12 +28,7 @@ const ListItemsProv = ( { datosgenerales, guardarDatosGenerales, obrasdisponible
   
   const handleClickObrasDisp = () => {   
      
-    const obras = obrasdisponibles.map(obra => (
-      {
-        folioObra: obra.folio_obra,
-        nombreObra: obra.nombre_obra                    
-      }
-    ))
+    const obras = formatCardFolioObra(obrasdisponibles)
     
     guardarLS( nivel_acceso, 0, numero_ventana)
     guardarDatosGenerales({
@@ -50,13 +46,7 @@ const ListItemsProv = ( { datosgenerales, guardarDatosGenerales, obrasdisponible
   }
 
   const handleClickObrasCoti = () => {
-    const obras = obrascotizadas.map(obra => (
-      {
-        folioObra: obra.folio_obra,
-        folioCotizacion: obra.folio_cotizacion,
-        nombreObra: obra.nombre_obra                    
-      }
-    ))
+    const obras = formatCardFolioCoti(obrascotizadas)
       
     guardarLS( nivel_acceso, 2, numero_ventana)
     guardarDatosGenerales({

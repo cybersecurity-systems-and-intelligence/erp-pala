@@ -37,7 +37,7 @@ const Obras = ( { datosgenerales, guardarDatosGenerales, titulo, siguientecompon
             <CssBaseline />
             <main className={classes.layout}>
                 <Paper className={classes.paper}>
-                    <Typography component="h1" variant="h4" align="center">
+                    <Typography variant="h4" align="center" component='div'>
                         {titulo}
                     </Typography>
                     <br/>
@@ -61,15 +61,21 @@ const Obras = ( { datosgenerales, guardarDatosGenerales, titulo, siguientecompon
                         <Error mensaje={'no se ha encontrado'}/> 
                         : 
                         <CardObra
-                            rows={rows}
-                            obrastotal={obrastotal}
-                            obrascotizadas={obrascotizadas}
-                            guardarObra={guardarObra}
+                            //guardarRows={guardarRows}
                             siguientecomponente={siguientecomponente}
+                            rows={rows}
+                            cantidadcards={cantidadcards}
+                            obrastotal={obrastotal}
                             totalpaginas={totalpaginas}
                             datosgenerales={datosgenerales}
                             guardarDatosGenerales={guardarDatosGenerales}
-                            cantidadcards={cantidadcards}
+                            //obrascotizadas={obrascotizadas}
+                            
+                            guardarObra={guardarObra}
+                            
+                            
+                            
+                            
                             bandObrasCotizadas={bandObrasCotizadas}
                             seleccionpor={seleccionpor}
                         />

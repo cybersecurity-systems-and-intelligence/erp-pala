@@ -1,13 +1,17 @@
 import { Fragment, useState, useEffect, useContext } from 'react';
 import { makeStyles, CssBaseline, Paper, Button, Typography, Grid } from '@material-ui/core';
+
 import Copyright from '../Copyright'
 import TablaObrasAdmin from './TablaObrasAdmin'
 import Error from '../Error'
 import Modal from '../Modal'
 import FormularioRegistroObrasAdmin from './FormularioRegistroObrasAdmin'
 import DatosPrincipalesObrasAdmin from './DatosPrincipalesObrasAdmin'
+
 import {ComponenteContext} from '../../context/ComponenteContext'
+
 import { llamada } from '../../libs/llamadas'
+import { listaCategorias, listaSubCategorias, listaProductos } from '../../libs/formatters'
 
 const useStyles = makeStyles((theme) => ({   
     layout: {
@@ -101,15 +105,14 @@ const CrearObraAdmin = ( { guardarActualizarCards } ) => {
     const { nombreObra, direccionObra, dependenciaObra } = datosprincipalesobra
     
 
-    useEffect(() => {        
+    useEffect(() => {
         const consultarAPI = async () => {
             const resultado = await llamada('https://apicotizacion.herokuapp.com/api/items', 'get')
-            const res = [...new Set(resultado.data.items.map(e => (e.categoria)))]
+            
             guardarItems(resultado.data.items)
-            guardarCategorias(res)
+            guardarCategorias(listaCategorias(resultado.data.items))
         }
         consultarAPI()
-        
     }, [])
 
     useEffect(() => {
@@ -119,8 +122,8 @@ const CrearObraAdmin = ( { guardarActualizarCards } ) => {
     }, [rows])
 
     useEffect(() => {
-        const resultado = items.filter(e => e.categoria === categoria)
-        guardarSubCategorias([...new Set(resultado.map(e => (e.subcategoria)))]) 
+        
+        guardarSubCategorias(listaSubCategorias(items, categoria)) 
         guardarDatos({
             ...datos,
             folioItem: '',
@@ -132,8 +135,8 @@ const CrearObraAdmin = ( { guardarActualizarCards } ) => {
     }, [categoria])
 
     useEffect(() => {
-        const resultado = items.filter(e => e.subcategoria === subcategoria)
-        guardarProductos([...new Set(resultado.map(e => (e.nombre)))]) 
+        
+        guardarProductos(listaProductos(items, subcategoria)) 
         guardarDatos({
             ...datos,
             folioItem: '',
@@ -226,8 +229,9 @@ const CrearObraAdmin = ( { guardarActualizarCards } ) => {
             <CssBaseline />      
             <main className={classes.layout}>
                 <Paper className={classes.paper}>
-                    <Typography align="center">
-                    <h3 className={classes.rb1} >REGISTRO DE OBRAS<hr className={classes.hr}/></h3> 
+                    <Typography align="center" component="span">
+                        <h3 className={classes.rb1} >REGISTRO DE OBRAS</h3>
+                        <hr className={classes.hr}/>
                     </Typography>
                     <br/>
                     <br/>

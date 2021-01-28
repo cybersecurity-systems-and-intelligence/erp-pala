@@ -299,7 +299,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className={classes.root}  align="center">
+    <div className={classes.root} align="center">
       <CssBaseline />
       <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
         <Toolbar className={classes.toolbar}>
@@ -331,7 +331,7 @@ export default function Dashboard() {
         }}
         open={open}
       >
-       <div className={classes.toolbarIcon}>
+        <div className={classes.toolbarIcon}>
           <div>
             <img alt='PALA' style={{width: 160, right:'30%', marginRight:'5px'}} src={imagenes.imgjpg} />
           </div>
@@ -367,7 +367,7 @@ export default function Dashboard() {
         
         <div className={classes.appBarSpacer} />   
         
-      <img alt='PALA' style={{width: 170, marginTop:"20px"}} src={imagenes.imgjpg} />
+        <img alt='PALA' style={{width: 170, marginTop:"20px"}} src={imagenes.imgjpg} />
          
             {
               nivel_acceso === 0 ? paginaAdmin() : paginaUsuario()

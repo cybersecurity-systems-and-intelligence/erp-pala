@@ -36,25 +36,37 @@ export const formatArray = arr => {
 	return arrayFormated
 }
 
-
-export const formatCardProv = ( respObrasDisp, respObrasCoti ) => {
-	const obrasDisp = respObrasDisp.map(obra => (
+export const formatCardFolioObra = ( respObrasDisp ) => {
+	const folioObra = respObrasDisp.map(obra => (
         {
         folioObra: obra.folio_obra,
-        nombreObra: obra.nombre_obra                    
+        nombreObra: obra.nombre_obra
         }
     ))
-    const obrasCoti = respObrasCoti.map(obra => (
+	return folioObra
+}
+
+export const formatCardFolioCoti = (respObrasCoti) => {
+	const folioCoti = respObrasCoti.map(obra => (
         {
         folioObra: obra.folio_obra,
         folioCotizacion: obra.folio_cotizacion,
         nombreObra: obra.nombre_obra,
         }
 	))
-	const respuesta = {
-		obrasDisp,
-		obrasCoti
-	}
-	
-	return respuesta
+	return folioCoti
+}
+
+export const listaCategorias = (obra) => {
+	return [...new Set(obra.map(e => (e.categoria)))]
+}
+
+export const listaSubCategorias = (obra, categoria) => {
+	const resultado = obra.filter(e => e.categoria === categoria)
+	return [...new Set(resultado.map(e => (e.subcategoria)))]
+}
+
+export const listaProductos = (obra, subcategoria) => {
+	const resultado = obra.filter(e => e.subcategoria === subcategoria)
+	return [...new Set(resultado.map(e => (e.producto ? e.producto: e.nombre)))]
 }

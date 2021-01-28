@@ -1,4 +1,4 @@
-import {Grid, TextField } from '@material-ui/core';
+import {Grid, TextField, makeStyles } from '@material-ui/core';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 
@@ -8,10 +8,16 @@ const theme = createMuiTheme({
         main: '#b3d233',
       },
     },
-  });
+});
 
+const useStyles = makeStyles({
+    ancho: {
+        width: '100%'
+    }
+})
 const DatosPrincipalesObrasAdmin = ({ datosprincipalesobra, guardarDatosPrincipalesObra, erroresdatos, guardarErroresDatos }) => {
 
+    const classes = useStyles()
     const { nombreObra, direccionObra, dependenciaObra } = datosprincipalesobra
 
     const { errorNombreObra, errorDireccionObra, errorDependenciaObra } = erroresdatos
@@ -35,7 +41,7 @@ const DatosPrincipalesObrasAdmin = ({ datosprincipalesobra, guardarDatosPrincipa
                         label="Nombre de Obra"
                         value={nombreObra}
                         onChange={handleChange}         
-                        fullWidth
+                        className={classes.ancho}
                         color="secondary"
                     />
                 </Grid>
@@ -48,7 +54,7 @@ const DatosPrincipalesObrasAdmin = ({ datosprincipalesobra, guardarDatosPrincipa
                         label="Direccion de Obra"
                         value={direccionObra}
                         onChange={handleChange}         
-                        fullWidth
+                        className={classes.ancho}
                         color="secondary"
                     />                      
             </Grid>
@@ -61,7 +67,7 @@ const DatosPrincipalesObrasAdmin = ({ datosprincipalesobra, guardarDatosPrincipa
                         label="Dependencia de Obra"
                         value={dependenciaObra}
                         onChange={handleChange}         
-                        fullWidth
+                        className={classes.ancho}
                         color="secondary"
                     />                     
                 </Grid>                

@@ -162,17 +162,17 @@ export default function DetalleObraAdmin({ obra }) {
     }, [checks])
 
     const registrar = () => {
-        
+        //console.log(checks);
     }
   
 
     const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+        setPage(newPage);
     };
 
     const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
+        setRowsPerPage(+event.target.value);
+        setPage(0);
     };
 
   const seleccionarFolio = e => {
@@ -191,7 +191,7 @@ export default function DetalleObraAdmin({ obra }) {
         <main className={classes.layout}>
             <Paper className={classes.paper}>
 
-            <Typography align="center">
+            <Typography align="center" component='div'>
                     <h3 className={classes.rb1} >REQUISICIÓN DE OBRAS<hr className={classes.hr}/></h3> 
                     </Typography>
                 <br/>
@@ -214,7 +214,7 @@ export default function DetalleObraAdmin({ obra }) {
                             <TableBody >
                                 {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                                     return (
-                                    <TableRow  hover role="checkbox" tabIndex={-1} key={row.code}>
+                                    <TableRow  hover role="checkbox" tabIndex={-1} key={row.folioItem}>
                                         {columns.map((column) => {
                                         const value = row[column.id]
                                         return (
@@ -223,7 +223,8 @@ export default function DetalleObraAdmin({ obra }) {
                                                 column.id === 'seleccionar'
                                             ?
                                             <Checkbox
-                                                checked={checks[row.folioItem]}
+                                                value={checks[row.folioItem]}
+                                                value={checks[row.folioItem] ? true : false}
                                                 id={row.folioItem}
                                                 variant="contained"
                                                 color="secondary"

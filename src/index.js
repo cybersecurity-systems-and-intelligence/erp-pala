@@ -5,11 +5,11 @@ import reportWebVitals from './reportWebVitals';
 import ComponenteProvider from './context/ComponenteContext'
 
 ReactDOM.render(
-  <React.StrictMode>
+  //<React.StrictMode>
     <ComponenteProvider>
       <App />
-    </ComponenteProvider>
-  </React.StrictMode>,
+    </ComponenteProvider>,
+  //</React.StrictMode>,
   document.getElementById('root')
 );
 

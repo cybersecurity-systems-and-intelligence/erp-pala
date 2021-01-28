@@ -1,7 +1,4 @@
-import { InputLabel, Select, MenuItem, Grid, TextField } from '@material-ui/core';
-import { Add } from '@material-ui/icons/'
-import { styled } from '@material-ui/core/styles';
-import { createMuiTheme } from '@material-ui/core/styles';
+import { InputLabel, makeStyles, Select, MenuItem, Grid, TextField, styled, createMuiTheme } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
 
 const theme = createMuiTheme({
@@ -10,8 +7,12 @@ const theme = createMuiTheme({
         main: '#b3d233',
       },
     },
-  });
-
+});
+const useStyles = makeStyles({
+    ancho: {
+        width: '100%'
+    }
+})
 
 
 const ButtonComponent = styled('button')({
@@ -24,6 +25,7 @@ const ButtonComponent = styled('button')({
     borderRadius: '5px',
     cursor: 'pointer',
     fontSize:'15px',
+    textAlign: 'center',
 
     '&:hover': {
         background: 'linear-gradient(#b3d233, #d4e157)',
@@ -32,6 +34,8 @@ const ButtonComponent = styled('button')({
 
 const FormularioRegistroObras = ({ datos, guardarDatos, guardarError, rows, guardarRows, guardarBandBotonRegistrar, categorias, subcategorias, productos, classes }) => {
 
+    const css = useStyles()
+    
     const { folioItem, categoria, subcategoria, producto, unidad, requeridos, anotaciones } = datos
 
     const submitTabla = e => {
@@ -88,116 +92,115 @@ const FormularioRegistroObras = ({ datos, guardarDatos, guardarError, rows, guar
             onSubmit={submitTabla}
         >
             <ThemeProvider theme={theme}>
-            <Grid container spacing={3}>                
-                <Grid item xs={12} md={3}>
-                    <TextField                                              
-                        disabled          
-                        id="folioItem"
-                        name="folioItem"
-                        label="Folio Item"
-                        value={folioItem}
-                        onChange={handleChange}         
-                        fullWidth
-                        color="secondary"
-                    />
+                <Grid container spacing={3}>                
+                    <Grid item xs={12} md={3}>
+                        <TextField                                              
+                            disabled          
+                            id="folioItem"
+                            name="folioItem"
+                            label="Folio Item"
+                            value={folioItem}
+                            onChange={handleChange}                                     
+                            className={css.ancho}
+                            color="secondary"
+                        />
+                    </Grid>
+                    <Grid item xs={12} md={3}>                        
+                        <InputLabel id="categoria">Categoría</InputLabel>
+                        <Select
+                            required
+                            id="categoria"
+                            name='categoria'
+                            value={categoria}
+                            onChange={handleChange}
+                            className={css.ancho}
+                            color="secondary"
+                        >
+                            {
+                                categorias.map(item => <MenuItem key={item} value={item}>{item}</MenuItem>)
+                            }
+                        </Select>                       
+                    </Grid>
+                    <Grid item xs={12} md={3}>                        
+                        <InputLabel id="subcategoria">Sub Categoría</InputLabel>
+                        <Select
+                            required
+                            id="subcategoria"
+                            name='subcategoria'
+                            value={subcategoria}
+                            onChange={handleChange}
+                            className={css.ancho}
+                            color="secondary"                    >
+                            {
+                                subcategorias.map(item => <MenuItem key={item} value={item}>{item}</MenuItem>)
+                            }
+                        </Select>                       
+                    </Grid>
+                    <Grid item xs={12} md={3}>                        
+                        <InputLabel id="producto">Producto</InputLabel>
+                        <Select
+                            required
+                            id="producto"
+                            name='producto'
+                            value={producto}
+                            onChange={handleChange}
+                            className={css.ancho}
+                            color="secondary"
+                        >
+                            {
+                                productos.map(item => <MenuItem key={item} value={item}>{item}</MenuItem>)
+                            }                                    
+                        </Select>                       
+                    </Grid>
                 </Grid>
-                <Grid item xs={12} md={3}>                        
-                    <InputLabel id="categoria">Categoría</InputLabel>
-                    <Select
-                        required
-                        id="categoria"
-                        name='categoria'
-                        value={categoria}
-                        onChange={handleChange}
-                        fullWidth
-                        color="secondary"
-                    >
-                        {
-                            categorias.map(item => <MenuItem value={item}>{item}</MenuItem>)
-                        }
-                    </Select>                       
+                <Grid container spacing={3}>                        
+                    <Grid item xs={12} md={3}>
+                        <TextField                                    
+                            id="unidad"
+                            name="unidad"
+                            label="Unidad"
+                            disabled
+                            value={unidad}
+                            onChange={handleChange}
+                            className={css.ancho}
+                            color="secondary"                                    
+                        />
+                    </Grid>
+                    <Grid item xs={12} md={3}>
+                        <TextField
+                            required
+                            id="requeridos"
+                            name="requeridos"
+                            label="Requeridos"
+                            value={requeridos}
+                            onChange={handleChange}
+                            type='number'
+                            className={css.ancho}
+                            color="secondary"                              
+                        />
+                    </Grid>
+                    <Grid item xs={12} md={3}>
+                        <TextField
+                            required
+                            id="anotaciones"
+                            name="anotaciones"
+                            label="Anotaciones"
+                            value={anotaciones}
+                            onChange={handleChange}
+                            className={css.ancho}
+                            color="secondary"                                 
+                        />
+                    </Grid>
+                    <Grid item xs={12} md={3}>
+                    <ButtonComponent
+                        className={classes.btn, css.ancho}
+                        type='submit'                    
+                        
+                        >
+                            + AÑADIR
+                        </ButtonComponent>
+                    </Grid>
                 </Grid>
-                <Grid item xs={12} md={3}>                        
-                    <InputLabel id="subcategoria">Sub Categoría</InputLabel>
-                    <Select
-                        required
-                        id="subcategoria"
-                        name='subcategoria'
-                        value={subcategoria}
-                        onChange={handleChange}
-                        fullWidth
-                        color="secondary"                    >
-                        {
-                            subcategorias.map(item => <MenuItem value={item}>{item}</MenuItem>)
-                        }
-                    </Select>                       
-                </Grid>
-                <Grid item xs={12} md={3}>                        
-                    <InputLabel id="producto">Producto</InputLabel>
-                    <Select
-                        required
-                        id="producto"
-                        name='producto'
-                        value={producto}
-                        onChange={handleChange}
-                        fullWidth
-                        color="secondary"
-                    >
-                        {
-                            productos.map(item => <MenuItem value={item}>{item}</MenuItem>)
-                        }                                    
-                    </Select>                       
-                </Grid>
-            </Grid>
-            <Grid container spacing={3}>                        
-                <Grid item xs={12} md={3}>
-                    <TextField                                    
-                        id="unidad"
-                        name="unidad"
-                        label="Unidad"
-                        disabled
-                        value={unidad}
-                        onChange={handleChange}
-                        fullWidth
-                        color="secondary"                                    
-                    />
-                </Grid>
-                <Grid item xs={12} md={3}>
-                    <TextField
-                        required
-                        id="requeridos"
-                        name="requeridos"
-                        label="Requeridos"
-                        value={requeridos}
-                        onChange={handleChange}
-                        type='number'
-                        fullWidth
-                        color="secondary"                              
-                    />
-                </Grid>
-                <Grid item xs={12} md={3}>
-                    <TextField
-                        required
-                        id="anotaciones"
-                        name="anotaciones"
-                        label="Anotaciones"
-                        value={anotaciones}
-                        onChange={handleChange}
-                        fullWidth
-                        color="secondary"                                 
-                    />
-                </Grid>
-                <Grid item xs={12} md={3}>
-                <ButtonComponent
-                    className={classes.btn}
-                    type='submit'
-                    fullWidth
-                    startIcon={<Add />}
-                    >
-                        AÑADIR
-                    </ButtonComponent>
-                </Grid>
-            </Grid>
             </ThemeProvider>
         </form>
      );

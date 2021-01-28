@@ -3,7 +3,7 @@ import { ListItem, List, ListItemIcon, ListItemText, } from '@material-ui/core/'
 import { Person, ListAlt, Add } from '@material-ui/icons';
 import {ComponenteContext} from '../../context/ComponenteContext'
 import {guardarLS} from '../../libs/guardarLS'
-
+import { formatCardFolioObra } from '../../libs/formatters'
 
 const ListItemsAdmin = ( { datosgenerales, guardarDatosGenerales, guardarRowsObrasTotales, guardarRowsObrasCotizadas, obrastotales, guardarTipoBusqueda} ) => {
 
@@ -40,12 +40,8 @@ const ListItemsAdmin = ( { datosgenerales, guardarDatosGenerales, guardarRowsObr
   }
 
   const handleListItemClick3 = () => {
-    const obras = obrastotales.map(obra => (
-      {
-        folioObra: obra.folio_obra,
-        nombreObra: obra.nombre_obra                    
-      }
-    ))
+
+    const obras = formatCardFolioObra(obrastotales)
     guardarRowsObrasTotales(obras)
     guardarLS(nivel_acceso, 2, numero_ventana)
     guardarDatosGenerales({

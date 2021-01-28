@@ -1,4 +1,4 @@
-import { Fragment, useContext } from 'react';
+import { Fragment, useContext, useEffect } from 'react';
 import { Card, Container, CardActions, CardContent, Grid, Typography, makeStyles }  from '@material-ui/core/';
 import {Pagination} from '@material-ui/lab/';
 import cloneDeep from 'lodash/cloneDeep';
@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     transition: 'transform .2s',
 
     '&:hover': {
-      transition: theme.transitions.create('transform','background','transition', {
+      transition: theme.transitions.create('transform', {
         duration: theme.transitions.duration.enteringScreen,
       }),
       transform: 'scale(1.1)',
@@ -61,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
 
 
     '&:hover': {
-      transition: theme.transitions.create('transition','background', {
+      transition: theme.transitions.create('background', {
         duration: theme.transitions.duration.enteringScreen,
       }),
         //transition: 'all 0.1s ease',
@@ -73,18 +73,34 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-const CardObra = ({siguientecomponente, rows, cantidadcards, totalpaginas,datosgenerales, guardarDatosGenerales, obrastotal, guardarObra, bandObrasCotizadas, seleccionpor }) => {
+const CardObra = ({
+  siguientecomponente,
+  rows,
+  cantidadcards,
+  totalpaginas,
+  datosgenerales,
+  guardarDatosGenerales,
+  obrastotal,
+  guardarObra,
+  bandObrasCotizadas,
+  seleccionpor 
+}) => {
 
 
     const classes = useStyles();
-    const { paginaactual, page, paginafinal } = datosgenerales
+    let { paginaactual, page, paginafinal } = datosgenerales
     
     
     const { componentecontx, guardarComponenteContx } = useContext(ComponenteContext)
 
     const { nivel_acceso } = componentecontx
 
+    useEffect(() => {
+      
+    }, [])
+
     const handleChange = (event, value) => {
+      
       guardarDatosGenerales({
         ...datosgenerales,
         paginaactual: (cantidadcards*value)-cantidadcards,
@@ -100,7 +116,8 @@ const CardObra = ({siguientecomponente, rows, cantidadcards, totalpaginas,datosg
         const obraSeleccionada = copia.filter(row => row.folio_cotizacion === e.target.id)        
         createPDF(obraSeleccionada)
       }else{         
-        let obraSeleccionada = []             
+        let obraSeleccionada = []    
+               
         if (seleccionpor === "obra" ){
           obraSeleccionada = obrastotal.filter(row => row.folio_obra === e.target.id)
         }else{          
@@ -168,7 +185,7 @@ const CardObra = ({siguientecomponente, rows, cantidadcards, totalpaginas,datosg
                justify="center"
             >
               <div className={classes.root}>
-                <Pagination count={totalpaginas} page={page} onChange={handleChange} />
+                <Pagination count={totalpaginas} page={page} onChange={handleChange} ></Pagination>
               </div>
             </Grid>
         </main>

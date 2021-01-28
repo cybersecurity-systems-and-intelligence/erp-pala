@@ -3,7 +3,7 @@ import imagenes from '../asets/img/imagenes';
 
 const Copyright = () => {
     return (
-        <Typography variant="body2" color="textSecondary" align="center">
+        <Typography variant="body2" color="textSecondary" align="center" component='div'>
             <div>
             <img style={{width: 60}} src={imagenes.imgjpg} alt='PALA' />
           </div>

@@ -8,6 +8,7 @@ import Modal from '../Modal'
 import FormularioCotizarObraProv from './FormularioCotizarObraProv'
 import { ComponenteContext } from '../../context/ComponenteContext'
 import { llamada } from '../../libs/llamadas'
+import { listaCategorias, listaSubCategorias, listaProductos } from '../../libs/formatters'
 
 const useStyles = makeStyles((theme) => ({
   
@@ -98,8 +99,8 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
     useEffect(() => {     
         
         const consultarAPI = async () => {                
-            const res = [...new Set(obra.materiales_obra.map(e => (e.categoria)))]            
-            guardarCategorias(res)
+                     
+            guardarCategorias(listaCategorias(obra.materiales_obra))
         }
         consultarAPI()
         //eslint-disable-next-line
@@ -112,9 +113,8 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
     }, [rows])
 
     useEffect(() => {   
-        try{
-            const resultado = obra.materiales_obra.filter(e => e.categoria === categoria) 
-            guardarSubCategorias([...new Set(resultado.map(e => (e.subcategoria)))]) 
+        try{        
+            guardarSubCategorias(listaSubCategorias(obra.materiales_obra, categoria)) 
             guardarDatos({
                 ...datos,
                 folioItem: '',
@@ -132,8 +132,8 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
 
     useEffect(() => {
         try{
-            const resultado = obra.materiales_obra.filter(e => e.subcategoria === subcategoria)        
-            guardarProductos([...new Set(resultado.map(e => (e.producto)))]) 
+                    
+            guardarProductos(listaProductos(obra.materiales_obra, subcategoria)) 
             guardarDatos({
                 ...datos,
                 folioItem: '',
