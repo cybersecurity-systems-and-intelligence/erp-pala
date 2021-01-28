@@ -362,7 +362,7 @@ export default function Checkout() {
         <Grid container justify="flex-end">
           <input className={classes.input} id="cancel" type="button" onClick={cancel} />
           <label htmlFor="cancel">
-            <IconButton color="secondary" aria-label="cancel" component="span">
+            <IconButton color="" aria-label="cancel" component="span">
               <Cancel />
             </IconButton>
           </label>

@@ -144,13 +144,13 @@ const CardObra = ({
                     <Card className={classes.card}>                  
                     <CardContent className={classes.cardContent}>
                         <Typography gutterBottom variant="h5" component="h2">
-                          Folio Obra: {row.folioObra}
+                          Folio Obra:<br/> {row.folioObra}
                         </Typography>
                         {
                           bandObrasCotizadas
                           ?
                           <Typography gutterBottom variant="h6" component="h2">
-                            Folio Cotizacion: {row.folioCotizacion}
+                            Folio Cotizacion:<br/> {row.folioCotizacion}
                           </Typography>
                           :
                           null
