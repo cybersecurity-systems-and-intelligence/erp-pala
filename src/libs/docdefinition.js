@@ -1,4 +1,4 @@
-import { image64 } from '../images/logo'
+import { image64 } from '../asets/img/logo'
 import { ctable } from './createTable'
 import { formatArray } from './formatters'
 

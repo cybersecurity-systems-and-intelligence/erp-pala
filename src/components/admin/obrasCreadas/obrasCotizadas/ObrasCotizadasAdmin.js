@@ -1,11 +1,14 @@
 import { Fragment, useEffect, useState } from 'react';
 import { makeStyles,  CssBaseline, Typography, Paper } from '@material-ui/core/';
 
-import ObrasCotizadas from './ObrasCotizadas'
 import Copyright from '../../../Copyright'
 import Error from '../../../Error'
+import BuscadorObra from './BuscadorObra'
+import CardObra from './CardObra'
 
-import { cargarCotizaciones } from '../../../../libs/cargarDatosDash'
+import { cargarCotizaciones } from '../../../../libs/cargarDatos'
+import config from '../../../../config/config'
+import { formatCardFolioCoti } from '../../../../libs/formatters'
 
 const useStyles = makeStyles((theme) => ({   
    
@@ -37,70 +40,74 @@ const useStyles = makeStyles((theme) => ({
       }
 }))
 
-const ObrasCotizadasAdmin = ({obra, datosgenerales, guardarDatosGenerales, cantidadcards, guardarObra, rowsobrascotizadas, guardarRowsObrasCotizadas, obrascotizadas, guardarObrasCotizadas, tipobusqueda, guardarTipoBusqueda}) => {
-    const {folio_obra} = obra
-    const [ bandObras, guardarBandObras ] = useState(false)
+const ObrasCotizadasAdmin = ({ obra, guardarObra }) => {
     const classes = useStyles()
+
+    const { folio_obra } = obra
+       
+    const [ errorconsulta, guardarErrorConsulta ] = useState({
+        bandError: false,
+        msgError: ''
+    })
+    const [ rows, guardarRows ] = useState([])
+    const [ totalpaginas, guardarTotalPaginas ] = useState()
+    const [ obrascotizadas, guardarObrasCotizadas ] = useState([])
+
+    
+    const { bandError, msgError } = errorconsulta
 
     useEffect(() => {
         const consultarAPI = async() => {
-            const { respObrasCoti, obrasCoti} = await cargarCotizaciones(folio_obra) 
-            
-            guardarDatosGenerales({
-                ...datosgenerales,
-                paginaactual: 0,
-                page: 1,
-                paginafinal: cantidadcards
-            })
+            const { respObrasCoti } = await cargarCotizaciones(folio_obra) 
+            const obrasCoti = formatCardFolioCoti(respObrasCoti)
+                        
             guardarObrasCotizadas(respObrasCoti)              
-            guardarRowsObrasCotizadas(obrasCoti)
-            obrasCoti.length === 0 ? guardarBandObras(true): guardarBandObras(false)
-            console.log(obrasCoti.length);
+            guardarRows(obrasCoti)
+            obrasCoti.length === 0 ? guardarErrorConsulta({bandError: true, msgError: `No hay cotizaciones en la obra ${folio_obra}`}) : guardarErrorConsulta({bandError: false, msgError: ''})
         }
         consultarAPI()
         // eslint-disable-next-line
     }, [])
 
+    useEffect(() => {
+        const cantidadcards = config.CANTIDADCARDS
+        guardarTotalPaginas(Math.ceil(rows.length/cantidadcards))
+    }, [rows])
+
     return (
+        
         <Fragment>
-            {
-                bandObras 
-                ?
-                (
-                    <Fragment>
-                        <CssBaseline />
-                        <main className={classes.layout}>
-                            <Paper className={classes.paper}>
-                                <Typography variant="h4" align="center" component='div'>
-                                    Obras Cotizadass
-                                    <hr className={classes.hr}/>
-                                </Typography>
-                                <br/>
-                                <Error mensaje={`No hay cotizaciones en la obra ${folio_obra}`}/>                                
-                            </Paper>
-                        </main>
-                        <Copyright/>
-                    </Fragment>
-                )
-                :
-                <ObrasCotizadas              
-                    titulo={'Obras Cotizadas'}               
-                    siguientecomponente={4}
-                    guardarObra={guardarObra}
-                    rows={rowsobrascotizadas}            
-                    obrastotal={obrascotizadas}
-                    //obrascotizadas={obrascotizadas}
-                    totalpaginas={Math.ceil(rowsobrascotizadas.length/cantidadcards)} 
-                    datosgenerales={datosgenerales}
-                    guardarDatosGenerales={guardarDatosGenerales}
-                    cantidadcards={cantidadcards}
-                    bandObrasCotizadas={true}
-                    tipobusqueda={tipobusqueda}
-                    guardarTipoBusqueda={guardarTipoBusqueda}
-                    seleccionpor={"cotizacion"}
-                />               
-            }
-        </Fragment>
+            <CssBaseline />
+            <main className={classes.layout}>
+                <Paper className={classes.paper}>
+                    <Typography variant="h4" align="center" component='div'>
+                        {'Obras Cotizadas'}
+                    </Typography>
+                    <br/>
+                                                
+                    <BuscadorObra
+                        obrascotizadas={obrascotizadas}                                                                
+                        guardarRows={guardarRows}
+                        guardarErrorConsulta={guardarErrorConsulta}
+                    />
+                    <br/>
+                    {
+                        bandError
+                        ? 
+                        <Error mensaje={msgError}/> 
+                        : 
+                        <CardObra
+                            rows={rows}
+                            obrascotizadas={obrascotizadas}
+                            totalpaginas={totalpaginas}
+                            guardarObra={guardarObra}
+                        />
+                    }                            
+                </Paper>
+            </main>
+            <Copyright/>
+        </Fragment>              
+            
     );
 }
  

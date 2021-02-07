@@ -1,5 +1,4 @@
 const { llamada } = require('./llamadas')
-const { formatCardFolioCoti } = require('./formatters')
 
 export const cargarDatosProv = async(correo) => {
     const respObrasDisp = await llamada('https://apicotizacion.herokuapp.com/api/obras/vigentes', 'get')
@@ -16,25 +15,19 @@ export const cargarDatosProv = async(correo) => {
 }
 
 export const cargarDatosAdmin = async() => {
-    const respObrasTotales = await llamada('https://apicotizacion.herokuapp.com/api/obras', 'get')
-    
-    const obrasTotales = formatCardFolioCoti(respObrasTotales.data.Obras.reverse())
+    const respObrasCread = await llamada('https://apicotizacion.herokuapp.com/api/obras', 'get')
+        
     const respuesta = {
-        respObrasTotales: respObrasTotales.data.Obras,
-        obrasTotales: obrasTotales
+        respObrasCread: respObrasCread.data.Obras.reverse()
     }
     return respuesta
 }
 
 export const cargarCotizaciones = async(folio_obra) => {
     const respObrasCoti = await llamada(`https://apicotizacion.herokuapp.com/api/cotizaciones/${folio_obra}`, 'get')
-    const obrasCoti = formatCardFolioCoti(respObrasCoti.data.Cotizacion.reverse())
-
-    
 
     const respuesta = {
-        respObrasCoti: respObrasCoti.data.Cotizacion,
-        obrasCoti: obrasCoti
+        respObrasCoti: respObrasCoti.data.Cotizacion.reverse()
     }
     return respuesta
 }

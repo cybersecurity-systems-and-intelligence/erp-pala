@@ -23,8 +23,8 @@ import imagenes from '../asets/img/imagenes';
 
 import { ComponenteContext } from '../context/ComponenteContext'
 
-import { cargarDatosProv, cargarDatosAdmin } from '../libs/cargarDatosDash'
-import config from '../config/config'
+import { cargarDatosProv, cargarDatosAdmin } from '../libs/cargarDatos'
+
 
 const drawerWidth = 240
 
@@ -124,32 +124,21 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Dashboard() {
   
-  const classes = useStyles()
+  const classes = useStyles() 
+  
+  const [ open, setOpen ] = useState(false);
+  const [ obrasdisponibles, guardarObrasDisponibles ] = useState([])
+  const [ obrascotizadas, guardarObrasCotizadas ] = useState([])
+  const [ obrascreadas, guardarObrasCreadas ] = useState([])  
+  const [ actualizarcards, guardarActualizarCards ] = useState(0)  
+  const [ perfil, guardarPerfil ] = useState({})
+  const [ obra, guardarObra ] = useState({})
 
   const resultadoJwt = JSON.parse(localStorage.getItem('jwt'))
   const decoded = jwt_decode(resultadoJwt)    
 
   const { componentecontx, guardarComponenteContx } = useContext(ComponenteContext)
-  const { nivel_acceso, numero_componente } = componentecontx  
-
-  const cantidadcards = parseInt(config.CANTIDADCARDS)  
-  
-  const [ open, setOpen ] = useState(false);
-  const [ obrasdisponibles, guardarObrasDisponibles ] = useState([])
-  const [ obrascotizadas, guardarObrasCotizadas ] = useState([])
-  const [ obrastotales, guardarObrasTotales ] = useState([])
-  const [ rowsobrascotizadas, guardarRowsObrasCotizadas ] = useState([])
-  const [ rowsobrastotales, guardarRowsObrasTotales ] = useState([])
-  const [ actualizarcards, guardarActualizarCards ] = useState(0)
-  const [ tipobusqueda, guardarTipoBusqueda ] = useState('Buscar por Folio Obra')
-  const [ perfil, guardarPerfil ] = useState({})
-  const [ datosgenerales, guardarDatosGenerales ] = useState({
-    paginaactual: 0,
-    page: 1,
-    paginafinal: cantidadcards,
-    errorconsulta: false
-  })
-  const [ obra, guardarObra ] = useState({})
+  const { nivel_acceso, numero_componente } = componentecontx 
   
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -163,10 +152,9 @@ export default function Dashboard() {
     const consultarAPI = async () => {
       if( nivel_acceso === 0){        
         
-        const { respObrasTotales, obrasTotales } = await cargarDatosAdmin()
-
-        guardarObrasTotales(respObrasTotales)
-        guardarRowsObrasTotales(obrasTotales)
+        const { respObrasCread } = await cargarDatosAdmin()
+        
+        guardarObrasCreadas(respObrasCread)
       }else if (nivel_acceso === 1){
 
         const {respObrasDisp, respObrasCoti, respPerfil} = await cargarDatosProv(decoded.correo)
@@ -192,36 +180,14 @@ export default function Dashboard() {
         correo={decoded.correo}
       />
     }else if (nivel_acceso === 0 && numero_componente === 2){
-      return <ObrasCreadas        
-        titulo={<h5>OBRAS CREADAS<hr className={classes.hr}/></h5>}
-        siguientecomponente={3}
-        guardarObra={guardarObra}
-        rows={rowsobrastotales}  
-        guardarRows={guardarRowsObrasTotales}      
-        obrastotal={obrastotales}     
-        totalpaginas={Math.ceil(rowsobrastotales.length/cantidadcards)} 
-        datosgenerales={datosgenerales}
-        guardarDatosGenerales={guardarDatosGenerales}
-        cantidadcards={cantidadcards}
-        bandObrasCotizadas={false}
-        tipobusqueda={tipobusqueda}
-        guardarTipoBusqueda={guardarTipoBusqueda}
-        seleccionpor={'obra'}
+      return <ObrasCreadas
+        guardarObra={guardarObra}     
+        obrascreadas={obrascreadas}
       />
     }else if (nivel_acceso === 0 && numero_componente === 3){
       return <ObrasCotizadasAdmin
         obra={obra}
         guardarObra={guardarObra}
-        rowsobrascotizadas={rowsobrascotizadas}      
-        guardarRowsObrasCotizadas={guardarRowsObrasCotizadas}        
-        obrascotizadas={obrascotizadas}
-        guardarObrasCotizadas={guardarObrasCotizadas}  
-        datosgenerales={datosgenerales}
-        guardarDatosGenerales={guardarDatosGenerales}
-        cantidadcards={cantidadcards}
-        bandObrasCotizadas={true}
-        tipobusqueda={tipobusqueda}
-        guardarTipoBusqueda={guardarTipoBusqueda}
       />
     }else if (nivel_acceso === 0 && numero_componente === 4){
       return <DetalleObraAdmin
@@ -309,18 +275,7 @@ export default function Dashboard() {
           </IconButton>
         </div>
         {
-          nivel_acceso === 0
-          ?
-          <ListItemsAdmin   
-            datosgenerales={datosgenerales}        
-            guardarDatosGenerales={guardarDatosGenerales}
-            guardarRowsObrasTotales={guardarRowsObrasTotales}
-            guardarRowsObrasCotizadas={guardarRowsObrasCotizadas}     
-            obrastotales={obrastotales}            
-            guardarTipoBusqueda={guardarTipoBusqueda}      
-          />
-          :
-          <ListItemsProv/>
+          nivel_acceso === 0 ? <ListItemsAdmin /> : <ListItemsProv/>
         }
       </Drawer>
       

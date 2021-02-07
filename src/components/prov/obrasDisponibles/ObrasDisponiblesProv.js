@@ -47,7 +47,6 @@ const ObrasDisponiblesProv = ( { guardarObra, obrasdisponibles} ) => {
     const [ totalpaginas, guardarTotalPaginas ] = useState()
     const [ errorconsulta, guardarErrorConsulta ] = useState(false)
 
-
     useEffect(() => {
         const obrasDisp = formatCardFolioObra(obrasdisponibles)
         guardarRows(obrasDisp)

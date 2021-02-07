@@ -91,7 +91,6 @@ const CardObra = ({
     })    
     
     const { componentecontx, guardarComponenteContx } = useContext(ComponenteContext)
-
     const { paginaactual, page, paginafinal } = paginacioncard    
 
     const handleChange = (event, value) => {
@@ -104,9 +103,7 @@ const CardObra = ({
     };
 
     const seleccionarObra = e => {
-      let obraSeleccionada = []    
-              
-      obraSeleccionada = obrasdisponibles.filter(row => row.folio_obra === e.target.id)
+      const obraSeleccionada = obrasdisponibles.filter(row => row.folio_obra === e.target.id)
       
       const obra = obraSeleccionada[0]        
       

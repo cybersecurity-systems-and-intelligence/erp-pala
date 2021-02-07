@@ -1,9 +1,9 @@
-import { Fragment, useContext, useEffect } from 'react';
+import { Fragment, useState, useContext } from 'react';
 import { Card, Container, CardActions, CardContent, Grid, Typography, makeStyles }  from '@material-ui/core/';
 import {Pagination} from '@material-ui/lab/';
-import cloneDeep from 'lodash/cloneDeep';
+
 import {ComponenteContext} from '../../../../context/ComponenteContext'
-import {createPDF} from '../../../../libs/createPdf'
+import config from '../../../../config/config'
 
 const useStyles = makeStyles((theme) => ({
   cardGrid: {
@@ -74,35 +74,29 @@ const useStyles = makeStyles((theme) => ({
 
 
 const CardObra = ({
-  siguientecomponente,
-  rows,
-  cantidadcards,
+  rows,  
+  obrascotizadas,
   totalpaginas,
-  datosgenerales,
-  guardarDatosGenerales,
-  obrastotal,
   guardarObra,
-  bandObrasCotizadas,
-  seleccionpor 
 }) => {
 
 
     const classes = useStyles();
-    let { paginaactual, page, paginafinal } = datosgenerales
     
+    const cantidadcards = config.CANTIDADCARDS
+
+    const [ paginacioncard, guardarPaginacionCard ] = useState({
+      paginaactual: 0,
+      page: 1,
+      paginafinal: cantidadcards
+    })   
     
-    const { componentecontx, guardarComponenteContx } = useContext(ComponenteContext)
-
-    const { nivel_acceso } = componentecontx
-
-    useEffect(() => {
-      
-    }, [])
+    const { componentecontx, guardarComponenteContx } = useContext(ComponenteContext)    
+    const { paginaactual, page, paginafinal } = paginacioncard
 
     const handleChange = (event, value) => {
       
-      guardarDatosGenerales({
-        ...datosgenerales,
+      guardarPaginacionCard({
         paginaactual: (cantidadcards*value)-cantidadcards,
         page: value,
         paginafinal: cantidadcards*value
@@ -110,27 +104,17 @@ const CardObra = ({
     };
 
     const seleccionarObra = e => { 
-           
-      if(nivel_acceso === 1 && siguientecomponente === 4 ){
-        const copia = cloneDeep(obrastotal)
-        const obraSeleccionada = copia.filter(row => row.folio_cotizacion === e.target.id)        
-        createPDF(obraSeleccionada)
-      }else{         
-        let obraSeleccionada = []    
-               
-        if (seleccionpor === "obra" ){
-          obraSeleccionada = obrastotal.filter(row => row.folio_obra === e.target.id)
-        }else{          
-          obraSeleccionada = obrastotal.filter(row => row.folio_cotizacion === e.target.id)
-        }
-        const obra = obraSeleccionada[0]        
-        
-        guardarObra(obra)
-        guardarComponenteContx({
-          ...componentecontx,
-          numero_componente: siguientecomponente
-        })
-      }
+
+      const obraSeleccionada = obrascotizadas.filter(row => row.folio_cotizacion === e.target.id)
+      
+      const obra = obraSeleccionada[0]        
+      
+      guardarObra(obra)
+      guardarComponenteContx({
+        ...componentecontx,
+        numero_componente: 4
+      })
+      
     }
 
     return (
@@ -140,21 +124,17 @@ const CardObra = ({
             {/* End hero unit */}
             <Grid container spacing={2}>
                 {rows.slice(paginaactual, paginafinal).map((row) => (
-                <Grid item key={bandObrasCotizadas ? row.folioCotizacion:row.folioObra} xs={12} sm={6} md={4}>
+                <Grid item key={row.folioCotizacion} xs={12} sm={6} md={4}>
                     <Card className={classes.card}>                  
                     <CardContent className={classes.cardContent}>
                         <Typography gutterBottom variant="h5" component="h2">
                           Folio Obra:<br/> {row.folioObra}
                         </Typography>
-                        {
-                          bandObrasCotizadas
-                          ?
-                          <Typography gutterBottom variant="h6" component="h2">
-                            Folio Cotizacion:<br/> {row.folioCotizacion}
-                          </Typography>
-                          :
-                          null
-                        }
+                       
+                        <Typography gutterBottom variant="h6" component="h2">
+                          Folio Cotizacion:<br/> {row.folioCotizacion}
+                        </Typography>
+                         
                         <Typography>
                         {row.nombreObra}
                         </Typography>
@@ -163,7 +143,7 @@ const CardObra = ({
                         <CardActions>
                         <input
                             type='button'
-                            id={ seleccionpor === "obra" ? row.folioObra : row.folioCotizacion}
+                            id={ row.folioCotizacion }
                             value="Seleccionar"
                             onClick={seleccionarObra}
                             className={classes.btn}
@@ -172,12 +152,10 @@ const CardObra = ({
                     </Card>
                 </Grid>
                 ))}
-            </Grid>
-            
+            </Grid>            
 
             </Container>
-            <Grid
-              
+            <Grid              
                container
                spacing={0}
                direction="column"

@@ -1,9 +1,13 @@
-import { useState, Fragment } from 'react';
+import { useState, Fragment, useEffect } from 'react';
 import { makeStyles,  CssBaseline, Typography, Paper } from '@material-ui/core/';
+
 import Copyright from '../../Copyright'
-import CardObra from './CardObra'
 import Error from '../../Error'
 import BuscadorObra from './BuscadorObra'
+import CardObra from './CardObra'
+
+import { formatCardFolioObra } from '../../../libs/formatters'
+import config from '../../../config/config'
 
 const useStyles = makeStyles((theme) => ({   
    
@@ -21,38 +25,52 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: theme.spacing(6),
         padding: theme.spacing(3),
       },
+    },
+    hr:{
+        background: 'linear-gradient(#d4e157, #afb42b)',
+        alignItems: 'center',
+        textAlign: 'center',
+        width: '50%',
+        borderColor:'#d4e157',
+        boxShadow:'2px 2px 5px #999',
+        height:'8px',
+        borderRadius: '5px',
+        marginTop:'1px'
     }
 }))
 
-const ObrasCreadas = ( { datosgenerales, guardarDatosGenerales, titulo, siguientecomponente, cantidadcards, totalpaginas, guardarObra, rows, guardarRows, obrastotal, obrascotizadas, bandObrasCotizadas, tipobusqueda, guardarTipoBusqueda, seleccionpor } ) => {
+const ObrasCreadas = ( { obrascreadas, guardarObra } ) => {
 
     const classes = useStyles();
 
-    const [ folio, guardarFolio ] = useState()
-    const { errorconsulta } = datosgenerales
-    
+    const [ rows, guardarRows ] = useState([])
+    const [ totalpaginas, guardarTotalPaginas ] = useState()
+    const [ errorconsulta, guardarErrorConsulta ] = useState(false)
 
+    useEffect(() => {
+        const obrasCread = formatCardFolioObra(obrascreadas)
+        guardarRows(obrasCread)
+    }, [obrascreadas])
+
+    useEffect(() => {
+        const cantidadcards = config.CANTIDADCARDS
+        guardarTotalPaginas(Math.ceil(rows.length/cantidadcards))
+    }, [rows])
+    
     return (
         <Fragment>
             <CssBaseline />
             <main className={classes.layout}>
                 <Paper className={classes.paper}>
                     <Typography variant="h4" align="center" component='div'>
-                        {titulo}
+                        <h5>OBRAS CREADAS<hr className={classes.hr}/></h5>
                     </Typography>
-                    <br/>
-                    
+                    <br/>                    
                     
                     <BuscadorObra
-                        folio={folio}
-                        guardarFolio={guardarFolio}
-                        obrastotal={obrastotal}
+                        obrascreadas={obrascreadas}
                         guardarRows={guardarRows}
-                        bandObrasCotizadas={bandObrasCotizadas}
-                        tipobusqueda={tipobusqueda}
-                        guardarTipoBusqueda={guardarTipoBusqueda}
-                        datosgenerales={datosgenerales}
-                        guardarDatosGenerales={guardarDatosGenerales}
+                        guardarErrorConsulta={guardarErrorConsulta}
                     />
                     <br/>
                     {
@@ -60,24 +78,11 @@ const ObrasCreadas = ( { datosgenerales, guardarDatosGenerales, titulo, siguient
                         ? 
                         <Error mensaje={'no se ha encontrado'}/> 
                         : 
-                        <CardObra
-                            //guardarRows={guardarRows}
-                            siguientecomponente={siguientecomponente}
+                        <CardObra                           
                             rows={rows}
-                            cantidadcards={cantidadcards}
-                            obrastotal={obrastotal}
+                            obrascreadas={obrascreadas}                                                    
                             totalpaginas={totalpaginas}
-                            datosgenerales={datosgenerales}
-                            guardarDatosGenerales={guardarDatosGenerales}
-                            //obrascotizadas={obrascotizadas}
-                            
                             guardarObra={guardarObra}
-                            
-                            
-                            
-                            
-                            bandObrasCotizadas={bandObrasCotizadas}
-                            seleccionpor={seleccionpor}
                         />
                     }
                     
