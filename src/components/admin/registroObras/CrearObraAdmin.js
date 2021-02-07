@@ -1,17 +1,17 @@
 import { Fragment, useState, useEffect, useContext } from 'react';
 import { makeStyles, CssBaseline, Paper, Button, Typography, Grid } from '@material-ui/core';
 
-import Copyright from '../Copyright'
+import Copyright from '../../Copyright'
 import TablaObrasAdmin from './TablaObrasAdmin'
-import Error from '../Error'
-import Modal from '../Modal'
+import Error from '../../Error'
+import Modal from '../../Modal'
 import FormularioRegistroObrasAdmin from './FormularioRegistroObrasAdmin'
 import DatosPrincipalesObrasAdmin from './DatosPrincipalesObrasAdmin'
 
-import {ComponenteContext} from '../../context/ComponenteContext'
+import {ComponenteContext} from '../../../context/ComponenteContext'
 
-import { llamada } from '../../libs/llamadas'
-import { listaCategorias, listaSubCategorias, listaProductos } from '../../libs/formatters'
+import { llamada } from '../../../libs/llamadas'
+import { listaCategorias, listaSubCategorias, listaProductos } from '../../../libs/formatters'
 
 const useStyles = makeStyles((theme) => ({   
     layout: {
@@ -169,6 +169,7 @@ const CrearObraAdmin = ( { guardarActualizarCards } ) => {
                     "creador_obra": "quien sabe",
                     "materiales_obra": materiales
                 }
+                // eslint-disable-next-line
                 let resultadoAPI = await llamada('https://apicotizacion.herokuapp.com/api/obras', 'post', objeto)
 
                 guardarActualizarCards(Math.floor(Math.random() * 1000) + 1)

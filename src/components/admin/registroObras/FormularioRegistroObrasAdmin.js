@@ -193,9 +193,9 @@ const FormularioRegistroObras = ({ datos, guardarDatos, guardarError, rows, guar
                     </Grid>
                     <Grid item xs={12} md={3}>
                     <ButtonComponent
+                        // eslint-disable-next-line
                         className={classes.btn, css.ancho}
-                        type='submit'                    
-                        
+                        type='submit'
                         >
                             + AÑADIR
                         </ButtonComponent>

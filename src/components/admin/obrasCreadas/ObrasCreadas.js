@@ -1,8 +1,8 @@
 import { useState, Fragment } from 'react';
 import { makeStyles,  CssBaseline, Typography, Paper } from '@material-ui/core/';
-import Copyright from './Copyright'
+import Copyright from '../../Copyright'
 import CardObra from './CardObra'
-import Error from './Error'
+import Error from '../../Error'
 import BuscadorObra from './BuscadorObra'
 
 const useStyles = makeStyles((theme) => ({   
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-const Obras = ( { datosgenerales, guardarDatosGenerales, titulo, siguientecomponente, cantidadcards, totalpaginas, guardarObra, rows, guardarRows, obrastotal, obrascotizadas, bandObrasCotizadas, tipobusqueda, guardarTipoBusqueda, seleccionpor } ) => {
+const ObrasCreadas = ( { datosgenerales, guardarDatosGenerales, titulo, siguientecomponente, cantidadcards, totalpaginas, guardarObra, rows, guardarRows, obrastotal, obrascotizadas, bandObrasCotizadas, tipobusqueda, guardarTipoBusqueda, seleccionpor } ) => {
 
     const classes = useStyles();
 
@@ -88,4 +88,4 @@ const Obras = ( { datosgenerales, guardarDatosGenerales, titulo, siguientecompon
     );
 }
 
-export default Obras;
+export default ObrasCreadas;

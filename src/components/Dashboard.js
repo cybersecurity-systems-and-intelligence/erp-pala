@@ -5,25 +5,26 @@ import { Menu, ChevronLeft, ExitToApp } from '@material-ui/icons';
 import clsx from 'clsx';
 import jwt_decode from 'jwt-decode'
 
-import imagenes from '../asets/img/imagenes';
-
 import ListItemsAdmin from './admin/ListItemsAdmin';
-import PerfilAdmin from './admin/PerfilAdmin'
-import CrearObraAdmin from './admin/CrearObraAdmin'
-import ObrasCotizadasAdmin from './admin/ObrasCotizadasAdmin'
-import DetalleObraAdmin from './admin/DetalleObraAdmin'
+import PerfilAdmin from './admin/perfil/PerfilAdmin'
+import CrearObraAdmin from './admin/registroObras/CrearObraAdmin'
+import ObrasCreadas from './admin/obrasCreadas/ObrasCreadas'
+import ObrasCotizadasAdmin from './admin/obrasCreadas/obrasCotizadas/ObrasCotizadasAdmin'
+import DetalleObraAdmin from './admin/obrasCreadas/obrasCotizadas/requisicionObras/DetalleObraAdmin'
+
 
 import ListItemsProv from './prov/ListItemsProv'
-import PerfilProv from './prov/PerfilProv'
-import CotizarObraProv from './prov/CotizarObraProv'
-import DetalleObraCotizadaProv from './prov/DetalleObraCotizadaProv'
+import PerfilProv from './prov/perfil/PerfilProv'
+import CotizarObraProv from './prov/obrasDisponibles/cotizacionObra/CotizarObraProv'
+import ObrasDisponiblesProv from './prov/obrasDisponibles/ObrasDisponiblesProv'
+import ObrasCotizadas from './prov/obrasCotizadas/ObrasCotizadas'
 
-import Obras from './Obras'
+import imagenes from '../asets/img/imagenes';
 
-import {ComponenteContext} from '../context/ComponenteContext'
+import { ComponenteContext } from '../context/ComponenteContext'
 
 import { cargarDatosProv, cargarDatosAdmin } from '../libs/cargarDatosDash'
-
+import config from '../config/config'
 
 const drawerWidth = 240
 
@@ -131,13 +132,12 @@ export default function Dashboard() {
   const { componentecontx, guardarComponenteContx } = useContext(ComponenteContext)
   const { nivel_acceso, numero_componente } = componentecontx  
 
-  const cantidadcards = 12
+  const cantidadcards = parseInt(config.CANTIDADCARDS)  
   
   const [ open, setOpen ] = useState(false);
   const [ obrasdisponibles, guardarObrasDisponibles ] = useState([])
   const [ obrascotizadas, guardarObrasCotizadas ] = useState([])
   const [ obrastotales, guardarObrasTotales ] = useState([])
-  const [ rowsobrasdisponibles, guardarRowsObrasDisponibles ] = useState([])
   const [ rowsobrascotizadas, guardarRowsObrasCotizadas ] = useState([])
   const [ rowsobrastotales, guardarRowsObrasTotales ] = useState([])
   const [ actualizarcards, guardarActualizarCards ] = useState(0)
@@ -169,12 +169,10 @@ export default function Dashboard() {
         guardarRowsObrasTotales(obrasTotales)
       }else if (nivel_acceso === 1){
 
-        const {respObrasDisp, obrasDisp, respObrasCoti, obrasCoti, respPerfil} = await cargarDatosProv(decoded.correo)
-        
+        const {respObrasDisp, respObrasCoti, respPerfil} = await cargarDatosProv(decoded.correo)
+
         guardarObrasDisponibles(respObrasDisp)
-        guardarObrasCotizadas(respObrasCoti)
-        guardarRowsObrasDisponibles(obrasDisp)
-        guardarRowsObrasCotizadas(obrasCoti)
+        guardarObrasCotizadas(respObrasCoti)    
         guardarPerfil(respPerfil)
       }
     }
@@ -194,7 +192,7 @@ export default function Dashboard() {
         correo={decoded.correo}
       />
     }else if (nivel_acceso === 0 && numero_componente === 2){
-      return <Obras        
+      return <ObrasCreadas        
         titulo={<h5>OBRAS CREADAS<hr className={classes.hr}/></h5>}
         siguientecomponente={3}
         guardarObra={guardarObra}
@@ -234,53 +232,24 @@ export default function Dashboard() {
     }
   }
 
-  const paginaUsuario = () => {
+  const paginaProv = () => {
     if(nivel_acceso === 1 && numero_componente === 0){
-      return <Obras
-        titulo={<h5>OBRAS DISPONIBLES<hr className={classes.hr}/></h5>}
-        siguientecomponente={3}
+      return <ObrasDisponiblesProv
         guardarObra={guardarObra}
-        rows={rowsobrasdisponibles}  
-        guardarRows={guardarRowsObrasDisponibles}            
-        obrastotal={obrasdisponibles}
-        totalpaginas={Math.ceil(rowsobrasdisponibles.length/cantidadcards)}   
-        datosgenerales={datosgenerales}
-        guardarDatosGenerales={guardarDatosGenerales}
-        cantidadcards={cantidadcards}
-        bandObrasCotizadas={false}
-        tipobusqueda={tipobusqueda}
-        guardarTipoBusqueda={guardarTipoBusqueda}
-        seleccionpor={'obra'}
+        obrasdisponibles={obrasdisponibles}
       />
     }else if(nivel_acceso === 1 && numero_componente === 1){
       return <PerfilProv
         perfil={perfil}
       />
     }else if(nivel_acceso === 1 && numero_componente === 2){   
-      return <Obras
-        titulo={<h5>OBRAS COTIZADAS<hr className={classes.hr}/></h5>}
-        siguientecomponente={4}
-        guardarObra={guardarObra}
-        rows={rowsobrascotizadas}      
-        guardarRows={guardarRowsObrasCotizadas}        
-        obrastotal={obrascotizadas}
-        totalpaginas={Math.ceil(rowsobrascotizadas.length/cantidadcards)} 
-        datosgenerales={datosgenerales}
-        guardarDatosGenerales={guardarDatosGenerales}
-        cantidadcards={cantidadcards}
-        bandObrasCotizadas={true}
-        tipobusqueda={tipobusqueda}
-        guardarTipoBusqueda={guardarTipoBusqueda}
-        seleccionpor={'cotizacion'}
+      return <ObrasCotizadas              
+        obrascotizadas={obrascotizadas}
       />
     }else if(nivel_acceso === 1 && numero_componente === 3){
       return <CotizarObraProv
         obra={obra}
         guardarActualizarCards={guardarActualizarCards}
-      />
-    }else if(nivel_acceso === 1 && numero_componente === 4){
-      return <DetalleObraCotizadaProv
-        obra={obra}
       />
     }
     else{
@@ -351,15 +320,7 @@ export default function Dashboard() {
             guardarTipoBusqueda={guardarTipoBusqueda}      
           />
           :
-          <ListItemsProv      
-            datosgenerales={datosgenerales}     
-            guardarDatosGenerales={guardarDatosGenerales}
-            obrasdisponibles={obrasdisponibles}
-            guardarRowsObrasDisponibles={guardarRowsObrasDisponibles}                  
-            obrascotizadas={obrascotizadas}
-            guardarRowsObrasCotizadas={guardarRowsObrasCotizadas}            
-            guardarTipoBusqueda={guardarTipoBusqueda}
-          />
+          <ListItemsProv/>
         }
       </Drawer>
       
@@ -370,7 +331,7 @@ export default function Dashboard() {
         <img alt='PALA' style={{width: 170, marginTop:"20px"}} src={imagenes.imgjpg} />
          
             {
-              nivel_acceso === 0 ? paginaAdmin() : paginaUsuario()
+              nivel_acceso === 0 ? paginaAdmin() : paginaProv()
             }
       </main>
     </div>

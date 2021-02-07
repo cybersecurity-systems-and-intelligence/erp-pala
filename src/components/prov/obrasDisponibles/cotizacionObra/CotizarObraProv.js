@@ -1,14 +1,14 @@
 import { Fragment, useState, useEffect, useContext } from 'react';
 import { makeStyles, CssBaseline, Paper, Button, Typography, Grid } from '@material-ui/core';
 import jwt_decode from 'jwt-decode'
-import Copyright from '../Copyright'
+import Copyright from '../../../Copyright'
 import TablaObraProv from './TablaObraProv'
-import Error from '../Error'
-import Modal from '../Modal'
+import Error from '../../../Error'
+import Modal from '../../../Modal'
 import FormularioCotizarObraProv from './FormularioCotizarObraProv'
-import { ComponenteContext } from '../../context/ComponenteContext'
-import { llamada } from '../../libs/llamadas'
-import { listaCategorias, listaSubCategorias, listaProductos } from '../../libs/formatters'
+import { ComponenteContext } from '../../../../context/ComponenteContext'
+import { llamada } from '../../../../libs/llamadas'
+import { listaCategorias, listaSubCategorias, listaProductos } from '../../../../libs/formatters'
 
 const useStyles = makeStyles((theme) => ({
   
@@ -182,7 +182,7 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
                     'condiciones_comerciales': condiciones,
                     "materiales_cotizacion": materiales                    
                 }
-                
+                // eslint-disable-next-line
                 let resultadoAPI = await llamada('https://apicotizacion.herokuapp.com/api/cotizaciones', 'post', objeto)
 
                 guardarActualizarCards(Math.floor(Math.random() * 500) + 1)

@@ -1,6 +1,6 @@
 import { useState, Fragment, useEffect } from 'react';
 import { makeStyles, Grid, Button, CssBaseline, Typography, Checkbox, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@material-ui/core/';
-import Copyright from '../Copyright'
+import Copyright from '../../../../Copyright'
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 
@@ -133,6 +133,7 @@ export default function DetalleObraAdmin({ obra }) {
 
     const [ page, setPage ] = useState(0)
     const [ rowsPerPage, setRowsPerPage ] = useState(10)
+    // eslint-disable-next-line
     const [ rows, guardarRows ] = useState(obra.materiales_cotizacion)
     const [ checks, guardarChecks ] = useState({})
     const [ bandbotonregistrar, guardarBandBotonRegistrar ] = useState(true)
@@ -223,7 +224,7 @@ export default function DetalleObraAdmin({ obra }) {
                                                 column.id === 'seleccionar'
                                             ?
                                             <Checkbox
-                                                value={checks[row.folioItem]}
+                                                //value={checks[row.folioItem]}
                                                 value={checks[row.folioItem] ? true : false}
                                                 id={row.folioItem}
                                                 variant="contained"

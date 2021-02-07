@@ -1,11 +1,11 @@
 import { Fragment, useEffect, useState } from 'react';
 import { makeStyles,  CssBaseline, Typography, Paper } from '@material-ui/core/';
 
-import Obras from '../Obras'
-import Copyright from '../Copyright'
-import Error from '../Error'
+import ObrasCotizadas from './ObrasCotizadas'
+import Copyright from '../../../Copyright'
+import Error from '../../../Error'
 
-import { cargarCotizaciones } from '../../libs/cargarDatosDash'
+import { cargarCotizaciones } from '../../../../libs/cargarDatosDash'
 
 const useStyles = makeStyles((theme) => ({   
    
@@ -72,7 +72,7 @@ const ObrasCotizadasAdmin = ({obra, datosgenerales, guardarDatosGenerales, canti
                         <main className={classes.layout}>
                             <Paper className={classes.paper}>
                                 <Typography variant="h4" align="center" component='div'>
-                                    Obras Cotizadas
+                                    Obras Cotizadass
                                     <hr className={classes.hr}/>
                                 </Typography>
                                 <br/>
@@ -83,7 +83,7 @@ const ObrasCotizadasAdmin = ({obra, datosgenerales, guardarDatosGenerales, canti
                     </Fragment>
                 )
                 :
-                <Obras              
+                <ObrasCotizadas              
                     titulo={'Obras Cotizadas'}               
                     siguientecomponente={4}
                     guardarObra={guardarObra}

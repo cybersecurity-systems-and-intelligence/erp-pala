@@ -24,6 +24,8 @@ import {
 import {guardarLS} from '../../libs/guardarLS'
 import { llamada } from '../../libs/llamadas'
 
+import imagenes from '../../asets/img/imagenes'
+
 import {ComponenteContext} from '../../context/ComponenteContext'
 
 const useStyles = makeStyles((theme) => ({
@@ -366,6 +368,9 @@ export default function Checkout() {
               <Cancel />
             </IconButton>
           </label>
+          </Grid>
+          <Grid  container justify="center" >
+            <img style={{width: 160}} src={imagenes.imgjpg} alt='PALA' />
           </Grid>
           <Typography>
       <h3 className={classes.rb1} >REGISTRO DE PROVEEDORES<hr className={classes.hr}/></h3> 
