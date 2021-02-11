@@ -1,5 +1,5 @@
 import { Fragment, useState, useEffect, useContext } from 'react';
-import { makeStyles, CssBaseline, Paper, Button, Typography, Grid } from '@material-ui/core';
+import { makeStyles, Fade, CssBaseline, Paper, Button, Typography, Grid } from '@material-ui/core';
 
 import Copyright from '../../Copyright'
 import TablaObrasAdmin from './TablaObrasAdmin'
@@ -229,65 +229,68 @@ const CrearObraAdmin = ( { guardarActualizarCards } ) => {
         <Fragment>
             <CssBaseline />      
             <main className={classes.layout}>
-                <Paper className={classes.paper}>
-                    <Typography align="center" component="span">
-                        <h3 className={classes.rb1} >REGISTRO DE OBRAS</h3>
-                        <hr className={classes.hr}/>
-                    </Typography>
-                    <br/>
-                    <br/>
-                    { bandError ? <Error mensaje={mensajeError}/> : null }
-                    <br/>
-                    <DatosPrincipalesObrasAdmin
-                        datosprincipalesobra={datosprincipalesobra}
-                        guardarDatosPrincipalesObra={guardarDatosPrincipalesObra}
-                        erroresdatos={erroresdatos}
-                        guardarErroresDatos={guardarErroresDatos}
-                    />
-                    <br/>
-                    <br/>
-                    <br/>
-                    <FormularioRegistroObrasAdmin
-                        datos={datos}
-                        guardarDatos={guardarDatos}
-                        guardarError={guardarError}
-                        rows={rows}
-                        guardarRows={guardarRows}
-                        guardarBandBotonRegistrar={guardarBandBotonRegistrar}
-                        categorias={categorias}
-                        subcategorias={subcategorias}
-                        productos={productos}
-                        classes={classes}
-                    />
-                    <br/>
-                    <br/>
-                    <br/> 
-                    <TablaObrasAdmin
-                        rows={rows}
-                        guardarRows={guardarRows}
-                        guardarBandBotonRegistrar={guardarBandBotonRegistrar}
-                    />
-                    <br/>
-                    <Grid container justify="flex-end" spacing={3}>
-                        <Grid item xs={3}>
-                            <Button 
-                                className={classes.btnregistrar}
-                                disabled={bandbotonregistrar}
-                                variant="contained"
-                                color="primary"
-                                onClick={registrar}
-                                dir="rtl"
-                            >Registrar</Button>
+                <Fade in={true}>
+                    <Paper className={classes.paper}>
+                        <Typography align="center" component="span">
+                            <h3 className={classes.rb1} >REGISTRO DE OBRAS</h3>
+                            <hr className={classes.hr}/>
+                        </Typography>
+                        <br/>
+                        <br/>
+                        { bandError ? <Error mensaje={mensajeError}/> : null }
+                        <br/>
+                        <DatosPrincipalesObrasAdmin
+                            datosprincipalesobra={datosprincipalesobra}
+                            guardarDatosPrincipalesObra={guardarDatosPrincipalesObra}
+                            erroresdatos={erroresdatos}
+                            guardarErroresDatos={guardarErroresDatos}
+                        />
+                        <br/>
+                        <br/>
+                        <br/>
+                        <FormularioRegistroObrasAdmin
+                            datos={datos}
+                            guardarDatos={guardarDatos}
+                            guardarError={guardarError}
+                            rows={rows}
+                            guardarRows={guardarRows}
+                            guardarBandBotonRegistrar={guardarBandBotonRegistrar}
+                            categorias={categorias}
+                            subcategorias={subcategorias}
+                            productos={productos}
+                            classes={classes}
+                        />
+                        <br/>
+                        <br/>
+                        <br/> 
+                        <TablaObrasAdmin
+                            rows={rows}
+                            guardarRows={guardarRows}
+                            guardarBandBotonRegistrar={guardarBandBotonRegistrar}
+                        />
+                        <br/>
+                        <Grid container justify="flex-end" spacing={3}>
+                            <Grid item xs={3}>
+                                <Button 
+                                    className={classes.btnregistrar}
+                                    disabled={bandbotonregistrar}
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={registrar}
+                                    dir="rtl"
+                                >Registrar</Button>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                    <Modal
-                        openmodal={openmodal}
-                        setOpenModal={setOpenModal}
-                        guardarBandDatosApi={guardarBandDatosApi}
-                    />
-                </Paper>
-                <Copyright />
+                        <Modal
+                            openmodal={openmodal}
+                            setOpenModal={setOpenModal}
+                            guardarBandDatosApi={guardarBandDatosApi}
+                        />
+                    </Paper>
+                    
+                </Fade>
             </main>
+            <Copyright />
         </Fragment>
      )
 }

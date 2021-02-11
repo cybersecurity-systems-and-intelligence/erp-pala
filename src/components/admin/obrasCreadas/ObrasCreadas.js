@@ -1,5 +1,5 @@
 import { useState, Fragment, useEffect } from 'react';
-import { makeStyles,  CssBaseline, Typography, Paper } from '@material-ui/core/';
+import { Fade, makeStyles,  CssBaseline, Typography, Paper } from '@material-ui/core/';
 
 import Copyright from '../../Copyright'
 import Error from '../../Error'
@@ -50,43 +50,45 @@ const ObrasCreadas = ( { obrascreadas, guardarObra } ) => {
     useEffect(() => {
         const obrasCread = formatCardFolioObra(obrascreadas)
         guardarRows(obrasCread)
-    }, [obrascreadas])
+    }, [ obrascreadas ])
 
     useEffect(() => {
         const cantidadcards = config.CANTIDADCARDS
         guardarTotalPaginas(Math.ceil(rows.length/cantidadcards))
-    }, [rows])
+    }, [ rows ])
     
     return (
         <Fragment>
             <CssBaseline />
             <main className={classes.layout}>
-                <Paper className={classes.paper}>
-                    <Typography variant="h4" align="center" component='div'>
-                        <h5>OBRAS CREADAS<hr className={classes.hr}/></h5>
-                    </Typography>
-                    <br/>                    
-                    
-                    <BuscadorObra
-                        obrascreadas={obrascreadas}
-                        guardarRows={guardarRows}
-                        guardarErrorConsulta={guardarErrorConsulta}
-                    />
-                    <br/>
-                    {
-                        errorconsulta
-                        ? 
-                        <Error mensaje={'no se ha encontrado'}/> 
-                        : 
-                        <CardObra                           
-                            rows={rows}
-                            obrascreadas={obrascreadas}                                                    
-                            totalpaginas={totalpaginas}
-                            guardarObra={guardarObra}
+                <Fade in={true}>
+                    <Paper className={classes.paper}>
+                        <Typography variant="h4" align="center" component='div'>
+                            <h5>OBRAS CREADAS<hr className={classes.hr}/></h5>
+                        </Typography>
+                        <br/>                    
+                        
+                        <BuscadorObra
+                            obrascreadas={obrascreadas}
+                            guardarRows={guardarRows}
+                            guardarErrorConsulta={guardarErrorConsulta}
                         />
-                    }
-                    
-                </Paper>
+                        <br/>
+                        {
+                            errorconsulta
+                            ? 
+                            <Error mensaje={'no se ha encontrado'}/> 
+                            : 
+                            <CardObra                           
+                                rows={rows}
+                                obrascreadas={obrascreadas}                                                    
+                                totalpaginas={totalpaginas}
+                                guardarObra={guardarObra}
+                            />
+                        }
+                        
+                    </Paper>
+                </Fade>
             </main>
             <Copyright/>
         </Fragment>

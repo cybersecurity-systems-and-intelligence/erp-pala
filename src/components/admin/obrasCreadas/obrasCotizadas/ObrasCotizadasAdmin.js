@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useState } from 'react';
-import { makeStyles,  CssBaseline, Typography, Paper } from '@material-ui/core/';
+import { Fade, makeStyles,  CssBaseline, Typography, Paper } from '@material-ui/core/';
 
 import Copyright from '../../../Copyright'
 import Error from '../../../Error'
@@ -79,31 +79,33 @@ const ObrasCotizadasAdmin = ({ obra, guardarObra }) => {
         <Fragment>
             <CssBaseline />
             <main className={classes.layout}>
-                <Paper className={classes.paper}>
-                    <Typography variant="h4" align="center" component='div'>
-                        {'Obras Cotizadas'}
-                    </Typography>
-                    <br/>
-                                                
-                    <BuscadorObra
-                        obrascotizadas={obrascotizadas}                                                                
-                        guardarRows={guardarRows}
-                        guardarErrorConsulta={guardarErrorConsulta}
-                    />
-                    <br/>
-                    {
-                        bandError
-                        ? 
-                        <Error mensaje={msgError}/> 
-                        : 
-                        <CardObra
-                            rows={rows}
-                            obrascotizadas={obrascotizadas}
-                            totalpaginas={totalpaginas}
-                            guardarObra={guardarObra}
+                <Fade in={true}>
+                    <Paper className={classes.paper}>
+                        <Typography variant="h4" align="center" component='div'>
+                            {'Obras Cotizadas'}
+                        </Typography>
+                        <br/>
+                                                    
+                        <BuscadorObra
+                            obrascotizadas={obrascotizadas}                                                                
+                            guardarRows={guardarRows}
+                            guardarErrorConsulta={guardarErrorConsulta}
                         />
-                    }                            
-                </Paper>
+                        <br/>
+                        {
+                            bandError
+                            ? 
+                            <Error mensaje={msgError}/> 
+                            : 
+                            <CardObra
+                                rows={rows}
+                                obrascotizadas={obrascotizadas}
+                                totalpaginas={totalpaginas}
+                                guardarObra={guardarObra}
+                            />
+                        }                            
+                    </Paper>
+                </Fade>
             </main>
             <Copyright/>
         </Fragment>              

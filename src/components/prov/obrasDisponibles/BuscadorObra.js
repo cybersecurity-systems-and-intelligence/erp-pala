@@ -13,13 +13,13 @@ const theme = createMuiTheme({
 });
 
 
-const BuscadorObra = ({ obrasdisponibles, guardarRows, guardarErrorConsulta}) => {
+const BuscadorObra = ({ obrasdisponibles, guardarRows, guardarErrorConsulta }) => {
         
     const [ folio, guardarFolio ] = useState()
 
     const consulta_ = (folio_) => {
         
-        const consulta = obrasdisponibles.filter(row => row.folio_obra.startsWith(folio_))
+        const consulta = obrasdisponibles.filter(row => row.folio_obra.toLowerCase().startsWith(folio_))
                 
         if(consulta.length === 0){
             guardarErrorConsulta(true)
@@ -33,7 +33,7 @@ const BuscadorObra = ({ obrasdisponibles, guardarRows, guardarErrorConsulta}) =>
     
     const handleChangeFolio = e => {
         
-        const folio = e.target.value
+        const folio = e.target.value.toLowerCase()
         if(folio.trim() === ""){     
             guardarErrorConsulta(false)                   
             const obrasCard = formatCardFolioObra(obrasdisponibles)   

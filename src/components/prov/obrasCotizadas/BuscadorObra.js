@@ -33,9 +33,9 @@ const BuscadorObra = ({ obrascotizadas, guardarRows, guardarErrorConsulta }) => 
         
         let consulta = []
         if(band === 'Buscar por Folio Obra'){                               
-            consulta = obrascotizadas.filter(row => row.folio_obra.startsWith(folio_))
+            consulta = obrascotizadas.filter(row => row.folio_obra.toLowerCase().startsWith(folio_))
         }else{                        
-            consulta = obrascotizadas.filter(row => row.folio_cotizacion.startsWith(folio_))            
+            consulta = obrascotizadas.filter(row => row.folio_cotizacion.toLowerCase().startsWith(folio_))            
         }
         
         if(consulta.length === 0){
@@ -58,7 +58,7 @@ const BuscadorObra = ({ obrascotizadas, guardarRows, guardarErrorConsulta }) => 
     
     const handleChangeFolio = e => {
         
-        const folio_ = e.target.value
+        const folio_ = e.target.value.toLowerCase()
         if(folio_.trim() === ""){     
             guardarErrorConsulta(false)
             

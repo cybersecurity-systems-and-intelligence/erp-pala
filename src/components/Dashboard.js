@@ -155,41 +155,41 @@ export default function Dashboard() {
         const { respObrasCread } = await cargarDatosAdmin()
         
         guardarObrasCreadas(respObrasCread)
-      }else if (nivel_acceso === 1){
+      }else if ( nivel_acceso === 1 ){
 
-        const {respObrasDisp, respObrasCoti, respPerfil} = await cargarDatosProv(decoded.correo)
+        const { respObrasDisp, respObrasCoti, respPerfil } = await cargarDatosProv(decoded.correo)
 
-        guardarObrasDisponibles(respObrasDisp)
-        guardarObrasCotizadas(respObrasCoti)    
-        guardarPerfil(respPerfil)
+        guardarObrasDisponibles( respObrasDisp )
+        guardarObrasCotizadas( respObrasCoti )    
+        guardarPerfil( respPerfil )
       }
     }
     consultarAPI()
     //eslint-disable-next-line
-  }, [actualizarcards])
+  }, [ actualizarcards ])
 
   
 
   const paginaAdmin = () => {
-    if (nivel_acceso === 0 && numero_componente === 0){
+    if ( nivel_acceso === 0 && numero_componente === 0 ){
       return <CrearObraAdmin
         guardarActualizarCards={guardarActualizarCards}
       />
-    }else if (nivel_acceso === 0 && numero_componente === 1){
+    }else if ( nivel_acceso === 0 && numero_componente === 1 ){
       return <PerfilAdmin
         correo={decoded.correo}
       />
-    }else if (nivel_acceso === 0 && numero_componente === 2){
+    }else if ( nivel_acceso === 0 && numero_componente === 2 ){
       return <ObrasCreadas
         guardarObra={guardarObra}     
         obrascreadas={obrascreadas}
       />
-    }else if (nivel_acceso === 0 && numero_componente === 3){
+    }else if ( nivel_acceso === 0 && numero_componente === 3 ){
       return <ObrasCotizadasAdmin
         obra={obra}
         guardarObra={guardarObra}
       />
-    }else if (nivel_acceso === 0 && numero_componente === 4){
+    }else if ( nivel_acceso === 0 && numero_componente === 4 ){
       return <DetalleObraAdmin
         obra={obra}
       />
@@ -199,20 +199,20 @@ export default function Dashboard() {
   }
 
   const paginaProv = () => {
-    if(nivel_acceso === 1 && numero_componente === 0){
+    if( nivel_acceso === 1 && numero_componente === 0 ){
       return <ObrasDisponiblesProv
         guardarObra={guardarObra}
         obrasdisponibles={obrasdisponibles}
       />
-    }else if(nivel_acceso === 1 && numero_componente === 1){
+    }else if( nivel_acceso === 1 && numero_componente === 1 ){
       return <PerfilProv
         perfil={perfil}
       />
-    }else if(nivel_acceso === 1 && numero_componente === 2){   
+    }else if( nivel_acceso === 1 && numero_componente === 2 ){   
       return <ObrasCotizadas              
         obrascotizadas={obrascotizadas}
       />
-    }else if(nivel_acceso === 1 && numero_componente === 3){
+    }else if( nivel_acceso === 1 && numero_componente === 3 ){
       return <CotizarObraProv
         obra={obra}
         guardarActualizarCards={guardarActualizarCards}

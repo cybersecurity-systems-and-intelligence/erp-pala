@@ -1,5 +1,5 @@
 import { Fragment, useState, useEffect, useContext } from 'react';
-import { makeStyles, CssBaseline, Paper, Button, Typography, Grid } from '@material-ui/core';
+import { makeStyles, Fade, CssBaseline, Paper, Button, Typography, Grid } from '@material-ui/core';
 import jwt_decode from 'jwt-decode'
 import Copyright from '../../../Copyright'
 import TablaObraProv from './TablaObraProv'
@@ -220,56 +220,58 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
         <Fragment>
             <CssBaseline />      
             <main className={classes.layout}>
-                <Paper className={classes.paper}>
-                    <Typography align="center">
-                        <h3 className={classes.rb1} >COTIZACIÓN DE OBRA<hr className={classes.hr}/></h3> 
-                    </Typography>
-                    <br/>
-                    <br/>
-                    { bandError ? <Error mensaje={mensajeError}/> : null }                    
-                    <FormularioCotizarObraProv
-                        datos={datos}
-                        guardarDatos={guardarDatos}
-                        datosextras={datosextras}
-                        guardarDatosExtras={guardarDatosExtras}
-                        guardarError={guardarError}
-                        rows={rows}
-                        guardarRows={guardarRows}
-                        guardarBandBotonRegistrar={guardarBandBotonRegistrar}
-                        categorias={categorias}
-                        subcategorias={subcategorias}
-                        productos={productos}
-                        classes={classes}
-                    />
-                    <br/>
-                    <br/>
-                    <br/> 
-                    <TablaObraProv
-                        rows={rows}
-                        guardarRows={guardarRows}
-                        guardarBandBotonRegistrar={guardarBandBotonRegistrar}
-                    />
-                    <br/>
-                    <Grid container justify="flex-end" spacing={3}>
-                        <Grid item xs={3}>
-                            <Button 
-                                className={classes.btnregistrar}
-                                disabled={bandbotonregistrar}
-                                variant="contained"
-                                color="primary"
-                                onClick={registrar}
-                                dir="rtl"
-                            >Registrar</Button>
+                <Fade in={true}>
+                    <Paper className={classes.paper}>
+                        <Typography align="center">
+                            <h3 className={classes.rb1} >COTIZACIÓN DE OBRA<hr className={classes.hr}/></h3> 
+                        </Typography>
+                        <br/>
+                        <br/>
+                        { bandError ? <Error mensaje={mensajeError}/> : null }                    
+                        <FormularioCotizarObraProv
+                            datos={datos}
+                            guardarDatos={guardarDatos}
+                            datosextras={datosextras}
+                            guardarDatosExtras={guardarDatosExtras}
+                            guardarError={guardarError}
+                            rows={rows}
+                            guardarRows={guardarRows}
+                            guardarBandBotonRegistrar={guardarBandBotonRegistrar}
+                            categorias={categorias}
+                            subcategorias={subcategorias}
+                            productos={productos}
+                            classes={classes}
+                        />
+                        <br/>
+                        <br/>
+                        <br/> 
+                        <TablaObraProv
+                            rows={rows}
+                            guardarRows={guardarRows}
+                            guardarBandBotonRegistrar={guardarBandBotonRegistrar}
+                        />
+                        <br/>
+                        <Grid container justify="flex-end" spacing={3}>
+                            <Grid item xs={3}>
+                                <Button 
+                                    className={classes.btnregistrar}
+                                    disabled={bandbotonregistrar}
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={registrar}
+                                    dir="rtl"
+                                >Registrar</Button>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                    <Modal
-                        openmodal={openmodal}
-                        setOpenModal={setOpenModal}
-                        guardarBandDatosApi={guardarBandDatosApi}
-                    />
-                </Paper>
-                <Copyright />
+                        <Modal
+                            openmodal={openmodal}
+                            setOpenModal={setOpenModal}
+                            guardarBandDatosApi={guardarBandDatosApi}
+                        />
+                    </Paper>                
+                </Fade>
             </main>
+            <Copyright />
         </Fragment>
      )
 }

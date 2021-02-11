@@ -19,7 +19,7 @@ const BuscadorObra = ({ obrascotizadas, guardarRows, guardarErrorConsulta }) => 
 
     const consulta_ = (folio_) => {
         
-        const consulta = obrascotizadas.filter(row => row.folio_cotizacion.startsWith(folio_))
+        const consulta = obrascotizadas.filter(row => row.folio_cotizacion.toLowerCase().startsWith(folio_))
                 
         if(consulta.length === 0){
             guardarErrorConsulta({bandError: true, msgError: 'No se ha encontrado'})
@@ -34,7 +34,7 @@ const BuscadorObra = ({ obrascotizadas, guardarRows, guardarErrorConsulta }) => 
     
     const handleChangeFolio = e => {
         
-        const folio_ = e.target.value
+        const folio_ = e.target.value.toLowerCase()
         if(folio_.trim() === ""){     
             guardarErrorConsulta({bandError: false, msgError: ''})
             

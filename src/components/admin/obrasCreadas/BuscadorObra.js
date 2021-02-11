@@ -19,7 +19,7 @@ const BuscadorObra = ({ obrascreadas, guardarRows, guardarErrorConsulta}) => {
 
     const consulta_ = (folio_) => {
         
-        const consulta = obrascreadas.filter(row => row.folio_obra.startsWith(folio_))
+        const consulta = obrascreadas.filter(row => row.folio_obra.toLowerCase().startsWith(folio_))
        
         
         if(consulta.length === 0){
@@ -35,7 +35,7 @@ const BuscadorObra = ({ obrascreadas, guardarRows, guardarErrorConsulta}) => {
     
     const handleChangeFolio = e => {
         
-        const folio_ = e.target.value
+        const folio_ = e.target.value.toLowerCase()
         if(folio_.trim() === ""){     
 
             guardarErrorConsulta(false)                   

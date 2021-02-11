@@ -1,5 +1,5 @@
 import { useState, Fragment, useEffect } from 'react';
-import { makeStyles, Grid, Button, CssBaseline, Typography, Checkbox, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@material-ui/core/';
+import { Fade, makeStyles, Grid, Button, CssBaseline, Typography, Checkbox, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@material-ui/core/';
 import Copyright from '../../../../Copyright'
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
@@ -190,82 +190,84 @@ export default function DetalleObraAdmin({ obra }) {
          <ThemeProvider theme={theme}>
         <CssBaseline />      
         <main className={classes.layout}>
-            <Paper className={classes.paper}>
+            <Fade in={true}>
+                <Paper className={classes.paper}>
 
-            <Typography align="center" component='div'>
-                    <h3 className={classes.rb1} >REQUISICIÓN DE OBRAS<hr className={classes.hr}/></h3> 
-                    </Typography>
-                <br/>
-                <Paper className={classes.root}>
-                    <TableContainer  className={classes.container}>
-                        <Table stickyHeader aria-label="sticky table">
-                            <TableHead>
-                                <TableRow>
-                                    {columns.map((column) => (
-                                    <TableCell
-                                        key={column.id}
-                                        align={column.align}
-                                        style={{ minWidth: column.minWidth }}
-                                    >
-                                        {column.label}
-                                    </TableCell>
-                                    ))}
-                                </TableRow>
-                            </TableHead>
-                            <TableBody >
-                                {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                                    return (
-                                    <TableRow  hover role="checkbox" tabIndex={-1} key={row.folioItem}>
-                                        {columns.map((column) => {
-                                        const value = row[column.id]
-                                        return (
-                                            <TableCell key={column.id} align={column.align}>
-                                            {
-                                                column.id === 'seleccionar'
-                                            ?
-                                            <Checkbox
-                                                //value={checks[row.folioItem]}
-                                                value={checks[row.folioItem] ? true : false}
-                                                id={row.folioItem}
-                                                variant="contained"
-                                                color="secondary"
-                                                onClick={seleccionarFolio}
-                                            /> : value }
-                                            </TableCell>
-                                        );
-                                        })}
+                <Typography align="center" component='div'>
+                        <h3 className={classes.rb1} >REQUISICIÓN DE OBRAS<hr className={classes.hr}/></h3> 
+                        </Typography>
+                    <br/>
+                    <Paper className={classes.root}>
+                        <TableContainer  className={classes.container}>
+                            <Table stickyHeader aria-label="sticky table">
+                                <TableHead>
+                                    <TableRow>
+                                        {columns.map((column) => (
+                                        <TableCell
+                                            key={column.id}
+                                            align={column.align}
+                                            style={{ minWidth: column.minWidth }}
+                                        >
+                                            {column.label}
+                                        </TableCell>
+                                        ))}
                                     </TableRow>
-                                    );
-                                })}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                    <TablePagination
-                    rowsPerPageOptions={[10, 25, 100]}
-                    component="div"
-                    count={rows.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onChangePage={handleChangePage}
-                    onChangeRowsPerPage={handleChangeRowsPerPage}
-                    />
-                </Paper>
-                <br/>
-                <Grid container justify="flex-end" spacing={3}>
-                    <Grid item xs={3}>
-                        <Button 
-                            className={classes.btnregistrar}
-                            disabled={bandbotonregistrar}
-                            variant="contained"
-                            color="primary"
-                            onClick={registrar}
-                            dir="rtl"
-                        >Registrar</Button>
+                                </TableHead>
+                                <TableBody >
+                                    {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                                        return (
+                                        <TableRow  hover role="checkbox" tabIndex={-1} key={row.folioItem}>
+                                            {columns.map((column) => {
+                                            const value = row[column.id]
+                                            return (
+                                                <TableCell key={column.id} align={column.align}>
+                                                {
+                                                    column.id === 'seleccionar'
+                                                ?
+                                                <Checkbox
+                                                    //value={checks[row.folioItem]}
+                                                    value={checks[row.folioItem] ? true : false}
+                                                    id={row.folioItem}
+                                                    variant="contained"
+                                                    color="secondary"
+                                                    onClick={seleccionarFolio}
+                                                /> : value }
+                                                </TableCell>
+                                            );
+                                            })}
+                                        </TableRow>
+                                        );
+                                    })}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                        <TablePagination
+                        rowsPerPageOptions={[10, 25, 100]}
+                        component="div"
+                        count={rows.length}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onChangePage={handleChangePage}
+                        onChangeRowsPerPage={handleChangeRowsPerPage}
+                        />
+                    </Paper>
+                    <br/>
+                    <Grid container justify="flex-end" spacing={3}>
+                        <Grid item xs={3}>
+                            <Button 
+                                className={classes.btnregistrar}
+                                disabled={bandbotonregistrar}
+                                variant="contained"
+                                color="primary"
+                                onClick={registrar}
+                                dir="rtl"
+                            >Registrar</Button>
+                        </Grid>
                     </Grid>
-                </Grid>
-            </Paper>
-            <Copyright />
-        </main>
+                </Paper>            
+                </Fade>
+            </main>
+        <Copyright />
         </ThemeProvider>
     </Fragment>
     
