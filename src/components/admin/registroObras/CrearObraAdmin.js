@@ -71,22 +71,16 @@ const CrearObraAdmin = ( { guardarActualizarCards } ) => {
         mensajeError: ''
     })
     const [ items, guardarItems ] = useState([])
-    const [ categorias, guardarCategorias] = useState([])
-    const [ subcategorias, guardarSubCategorias ] = useState([])
-    const [ productos, guardarProductos ] = useState([])
     const [ datos, guardarDatos ] = useState({        
-        folioItem: '',
-        categoria: '',
-        subcategoria: '',
-        producto: '',
+        clave: '',
+        descripcion: '',
+        cantidad: '',
         unidad: '',
-        requeridos: 0,
-        anotaciones: '',
         eliminar: ''
     })
     const [ rows, guardarRows ] = useState([])
     const [ banddatosapi, guardarBandDatosApi ] = useState(false)
-    const [openmodal, setOpenModal] = useState(false)
+    const [ openmodal, setOpenModal ] = useState(false)
     const [ bandbotonregistrar, guardarBandBotonRegistrar ] = useState(true)
     const [ datosprincipalesobra, guardarDatosPrincipalesObra ] = useState({
         nombreObra: '',
@@ -100,20 +94,9 @@ const CrearObraAdmin = ( { guardarActualizarCards } ) => {
     })
     
     // Destructuring de los state
-    const { categoria, subcategoria, producto } = datos
     const { bandError, mensajeError } = error
     const { nombreObra, direccionObra, dependenciaObra } = datosprincipalesobra
     
-
-    useEffect(() => {
-        const consultarAPI = async () => {
-            const resultado = await llamada('https://apicotizacion.herokuapp.com/api/items', 'get')
-            
-            guardarItems(resultado.data.items)
-            guardarCategorias(listaCategorias(resultado.data.items))
-        }
-        consultarAPI()
-    }, [])
 
     useEffect(() => {
         if(rows.length === 0){
@@ -121,41 +104,6 @@ const CrearObraAdmin = ( { guardarActualizarCards } ) => {
         }
     }, [rows])
 
-    useEffect(() => {
-        
-        guardarSubCategorias(listaSubCategorias(items, categoria)) 
-        guardarDatos({
-            ...datos,
-            folioItem: '',
-            subcategoria: '',
-            producto: '',
-            unidad: ''
-        })       
-        //eslint-disable-next-line
-    }, [categoria])
-
-    useEffect(() => {
-        
-        guardarProductos(listaProductos(items, subcategoria)) 
-        guardarDatos({
-            ...datos,
-            folioItem: '',
-            producto: '',
-            unidad: ''
-        })
-        //eslint-disable-next-line
-    }, [subcategoria])
-
-    useEffect(() => {
-        const resultado = items.filter(e => e.nombre === producto)
-               
-        resultado.map(e => (guardarDatos({
-            ...datos,
-            unidad: e.unidades,
-            folioItem: e.folio
-        })))
-        //eslint-disable-next-line
-    }, [producto])
 
     useEffect(() => {
         const consultarAPI = async () => {
@@ -255,9 +203,6 @@ const CrearObraAdmin = ( { guardarActualizarCards } ) => {
                             rows={rows}
                             guardarRows={guardarRows}
                             guardarBandBotonRegistrar={guardarBandBotonRegistrar}
-                            categorias={categorias}
-                            subcategorias={subcategorias}
-                            productos={productos}
                             classes={classes}
                         />
                         <br/>

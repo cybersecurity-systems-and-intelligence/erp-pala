@@ -5,7 +5,6 @@ export const llamada = async (ruta, tipo, objeto={}) => {
     
     switch(tipo){
         case 'get':
-            //return await axios.get(ruta)
             return await axios(
                 {
                     method: 'get', //you can set what request you want to be
@@ -17,7 +16,6 @@ export const llamada = async (ruta, tipo, objeto={}) => {
                 }
             )
         case 'post':
-            //return await axios.post(ruta, {headers={'Autorizado': jwt}}, {objeto})
             return await axios(
                 {
                     method: 'post', //you can set what request you want to be

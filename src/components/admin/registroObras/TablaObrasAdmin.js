@@ -29,42 +29,21 @@ const useStyles = makeStyles({
 export default function TablaObrasAdmin({ rows, guardarRows }) {
 
   const columns = [
-    { id: 'folioItem', label: 'Folio Item', minWidth: 100 },
-    { id: 'categoria', label: 'Categoria', minWidth: 100 },
-    {
-      id: 'subcategoria',
-      label: 'Sub Categoria',
-      minWidth: 100,
-      align: 'right',
-      format: (value) => value.toLocaleString('en-US'),
-    },
-    {
-      id: 'producto',
-      label: 'Producto',
-      minWidth: 170,
-      align: 'right',
-      format: (value) => value.toLocaleString('en-US'),
-    },
+    { id: 'clave', label: 'Clave', minWidth: 100 },
+    { id: 'descripcion', label: 'Descripcion', minWidth: 100 },
     {
       id: 'unidad',
       label: 'Unidad',
       minWidth: 100,
       align: 'right',
-      format: (value) => value.toFixed(2),
+      format: (value) => value.toLocaleString('en-US'),
     },
     {
-      id: 'requeridos',
-      label: 'Requeridos',
+      id: 'cantidad',
+      label: 'Cantidad',
       minWidth: 170,
       align: 'right',
-      format: (value) => value.toFixed(2),
-    },
-    {
-      id: 'anotaciones',
-      label: 'Anotaciones',
-      minWidth: 170,
-      align: 'right',
-      format: (value) => value.toFixed(2),
+      format: (value) => value.toLocaleString('en-US'),
     },
     {
       id: 'eliminar',
@@ -91,7 +70,7 @@ export default function TablaObrasAdmin({ rows, guardarRows }) {
   };
 
   const eliminarDato = e => {
-    const dato_eliminado = rows.filter(row => row.folioItem !== e.target.id)
+    const dato_eliminado = rows.filter(row => row.clave !== e.target.id)
     guardarRows([...dato_eliminado])
     
   }
@@ -117,7 +96,7 @@ export default function TablaObrasAdmin({ rows, guardarRows }) {
               
             {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
               return (
-                <TableRow hover role="checkbox" tabIndex={-1} key={row.folioItem}>                  
+                <TableRow hover role="checkbox" tabIndex={-1} key={row.clave}>                  
                   {columns.map((column) => {
                     const value = row[column.id];
                     return (
@@ -127,7 +106,7 @@ export default function TablaObrasAdmin({ rows, guardarRows }) {
                         ? 
                         <input 
                           type='button'
-                          id={row.folioItem}
+                          id={row.clave}
                           value='Eliminar'
                           variant="contained"
                           color="primary"
