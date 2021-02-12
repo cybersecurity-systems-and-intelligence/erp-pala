@@ -73,6 +73,7 @@ const FormularioRegistroObras = ({ guardarError, rows, guardarRows, guardarBandB
         if(res.data.items.length > 0) {
             guardarRows([...res.data.items])
             guardarError({ bandError: false, mensajeError: '' })
+            guardarBandBotonRegistrar(false)
             return
         }else{
             guardarError({ bandError: true, mensajeError: 'Debe ingresar un archivo csv con la estructura correcta' })
@@ -90,7 +91,7 @@ const FormularioRegistroObras = ({ guardarError, rows, guardarRows, guardarBandB
                                 <InputBtnComponent ref={register} type="file" name="file" accept='.csv'/>                                
                             </Grid>
                             <Grid item xs={12} md={3}>
-                                <ButtonComponent>Subir</ButtonComponent>
+                                <ButtonComponent>Cargar</ButtonComponent>
                             </Grid>
                         </Grid>               
                 </ThemeProvider>

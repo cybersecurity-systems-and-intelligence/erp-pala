@@ -100,6 +100,7 @@ const CrearObraAdmin = ( { guardarActualizarCards } ) => {
 
     useEffect(() => {
         if(rows.length === 0){
+            console.log('hoola');
             guardarBandBotonRegistrar(true)
         }
     }, [rows])
