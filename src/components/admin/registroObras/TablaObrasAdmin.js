@@ -40,7 +40,7 @@ export default function TablaObrasAdmin({ rows, guardarRows }) {
     },
     {
       id: 'cantidad',
-      label: 'Cantidad',
+      label: 'Requeridos',
       minWidth: 170,
       align: 'right',
       format: (value) => value.toLocaleString('en-US'),

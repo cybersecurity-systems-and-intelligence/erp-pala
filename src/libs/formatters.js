@@ -11,22 +11,18 @@ const formatCurrency = x => {
 
 export const formatArray = arr => {
 	const arrayFormated = arr.map(el => {
-		el.Codigo = el.folioItem
-		el.Descripcion = el.producto
+		el.Codigo = el.clave
+		el.Descripcion = el.descripcion
 		el.Unidad = el.unidad
-		el.Observacion = el.anotaciones
-		el.Cantidad = el.requeridos
+		el.Cantidad = el.cantidad
 		el['Costo Unitario'] = formatCurrency(el.costounitario)
 		el.Subtotal = formatCurrency(el.subtotal)
 
-		delete el.folioItem
-		delete el.categoria
-		delete el.subcategoria
-		delete el.producto
+		delete el.clave
+		delete el.descripcion
 		delete el.unidad
-		delete el.requeridos
+		delete el.cantidad
 		delete el.costounitario
-		delete el.anotaciones
 		delete el.sostenimiento
 		delete el.condiciones
 		delete el.subtotal

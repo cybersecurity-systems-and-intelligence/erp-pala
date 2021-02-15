@@ -19,8 +19,9 @@ export const createDd = data => {
 		total,
 		total_IVA,
 	} = data[0]
+	console.log(data[0].materiales_cotizacion);
 	const arr = formatArray(data[0].materiales_cotizacion)
-	
+
 	const dd = {
 		content: [
 			{

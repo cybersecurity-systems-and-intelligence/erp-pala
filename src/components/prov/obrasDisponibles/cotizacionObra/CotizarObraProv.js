@@ -1,14 +1,16 @@
 import { Fragment, useState, useEffect, useContext } from 'react';
-import { makeStyles, Fade, CssBaseline, Paper, Button, Typography, Grid } from '@material-ui/core';
+import { makeStyles, Fade, CssBaseline, Paper, Typography } from '@material-ui/core';
 import jwt_decode from 'jwt-decode'
+
 import Copyright from '../../../Copyright'
-import TablaObraProv from './TablaObraProv'
+import SeleecionItems from './SeleecionItems'
+import CotizarItems from './CotizarItems'
 import Error from '../../../Error'
 import Modal from '../../../Modal'
 import FormularioCotizarObraProv from './FormularioCotizarObraProv'
+
 import { ComponenteContext } from '../../../../context/ComponenteContext'
 import { llamada } from '../../../../libs/llamadas'
-import { listaCategorias, listaSubCategorias, listaProductos } from '../../../../libs/formatters'
 
 const useStyles = makeStyles((theme) => ({
   
@@ -58,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
-    const classes = useStyles();
+    const classes = useStyles();   
 
     const { componentecontx, guardarComponenteContx } = useContext(ComponenteContext)
                 
@@ -67,100 +69,28 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
         bandError: false,
         mensajeError: ''
     })
-    const [ categorias, guardarCategorias] = useState([])
-    const [ subcategorias, guardarSubCategorias ] = useState([])
-    const [ productos, guardarProductos ] = useState([])
     const [ datosextras, guardarDatosExtras ] = useState({
         sostenimiento: 1,
         condiciones: '',
     })
-    const [ datos, guardarDatos ] = useState({
-        folioItem: '',
-        categoria: '',
-        subcategoria: '',
-        producto: '',
-        unidad: '',
-        requeridos: 0,
-        costounitario: '',
-        anotaciones: '',        
-        eliminar: ''
-    })
     const [ rows, guardarRows ] = useState([])
     const [ banddatosapi, guardarBandDatosApi ] = useState(false)
-    const [openmodal, setOpenModal] = useState(false)
-    const [ bandbotonregistrar, guardarBandBotonRegistrar ] = useState(true)
+    const [ openmodal, setOpenModal ] = useState(false)
+    const [ bandcomponente, guardarBandComponente ] = useState(false)
     
     // Destructuring de los state
-    const { categoria, subcategoria, producto } = datos
     const { sostenimiento, condiciones } = datosextras
     const { bandError, mensajeError } = error
 
 
     useEffect(() => {     
         
-        const consultarAPI = async () => {                
-                     
-            guardarCategorias(listaCategorias(obra.materiales_obra))
+        const consultarAPI = async () => {
+           guardarRows(obra.materiales_obra);
         }
         consultarAPI()
         //eslint-disable-next-line
     }, [])
-
-    useEffect(() => {
-        if(rows.length === 0){
-            guardarBandBotonRegistrar(true)
-        }
-    }, [rows])
-
-    useEffect(() => {   
-        try{        
-            guardarSubCategorias(listaSubCategorias(obra.materiales_obra, categoria)) 
-            guardarDatos({
-                ...datos,
-                folioItem: '',
-                subcategoria: '',
-                producto: '',
-                unidad: '',
-                requeridos: 0,
-                costounitario: '',
-                anotaciones: '',
-                eliminar: ''
-            })        
-        }catch{}
-        //eslint-disable-next-line
-    }, [categoria])
-
-    useEffect(() => {
-        try{
-                    
-            guardarProductos(listaProductos(obra.materiales_obra, subcategoria)) 
-            guardarDatos({
-                ...datos,
-                folioItem: '',
-                producto: '',
-                unidad: '',
-                requeridos: 0,
-                costounitario: '',
-                anotaciones: '',
-                eliminar: ''
-            })
-        }catch{}
-        //eslint-disable-next-line
-    }, [subcategoria])
-
-    useEffect(() => {
-        try{
-            const resultado = obra.materiales_obra.filter(e => e.producto === producto)
-                
-            resultado.map(e => (guardarDatos({
-                ...datos,
-                folioItem: e.folioItem,
-                unidad: e.unidad,
-                requeridos: e.requeridos
-                })))
-        }catch{}
-        //eslint-disable-next-line
-    }, [producto])
 
     useEffect(() => {
         const consultarAPI = async () => {
@@ -169,6 +99,7 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
 
                 let materiales = rows
                 materiales.map(material => delete material.eliminar);
+                
 
 
                 const resultado = JSON.parse(localStorage.getItem('jwt'))
@@ -182,6 +113,7 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
                     'condiciones_comerciales': condiciones,
                     "materiales_cotizacion": materiales                    
                 }
+                console.log(objeto);
                 // eslint-disable-next-line
                 let resultadoAPI = await llamada('https://apicotizacion.herokuapp.com/api/cotizaciones', 'post', objeto)
 
@@ -203,18 +135,7 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
         //eslint-disable-next-line
     }, [banddatosapi])
 
-    const registrar = () => {
-        if(condiciones.trim() === ''){
-            guardarError({ bandError: true, mensajeError: 'Todos los campos son obligadorios' })
-            return
-        }
-        if(sostenimiento < 1){
-            guardarError({ bandError: true, mensajeError: 'Los días de sostenimiento deben ser mayor a 0' })
-            return
-        }
-        guardarError({ bandError: false, mensajeError: '' })
-        setOpenModal(true)
-    }
+    
 
     return ( 
         <Fragment>
@@ -229,40 +150,32 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
                         <br/>
                         { bandError ? <Error mensaje={mensajeError}/> : null }                    
                         <FormularioCotizarObraProv
-                            datos={datos}
-                            guardarDatos={guardarDatos}
                             datosextras={datosextras}
                             guardarDatosExtras={guardarDatosExtras}
-                            guardarError={guardarError}
-                            rows={rows}
-                            guardarRows={guardarRows}
-                            guardarBandBotonRegistrar={guardarBandBotonRegistrar}
-                            categorias={categorias}
-                            subcategorias={subcategorias}
-                            productos={productos}
-                            classes={classes}
                         />
                         <br/>
                         <br/>
                         <br/> 
-                        <TablaObraProv
-                            rows={rows}
-                            guardarRows={guardarRows}
-                            guardarBandBotonRegistrar={guardarBandBotonRegistrar}
-                        />
-                        <br/>
-                        <Grid container justify="flex-end" spacing={3}>
-                            <Grid item xs={3}>
-                                <Button 
-                                    className={classes.btnregistrar}
-                                    disabled={bandbotonregistrar}
-                                    variant="contained"
-                                    color="primary"
-                                    onClick={registrar}
-                                    dir="rtl"
-                                >Registrar</Button>
-                            </Grid>
-                        </Grid>
+                        {
+                            bandcomponente 
+                            ?
+                            <CotizarItems
+                                rows={rows}
+                                guardarRows={guardarRows}
+                                guardarError={guardarError}
+                                datosextras={datosextras}
+                                setOpenModal={setOpenModal}
+                            />
+                            :
+                            <SeleecionItems
+                                rows={rows}
+                                guardarRows={guardarRows}
+                                guardarBandComponente={guardarBandComponente}
+                                obra={obra}
+                            />
+                        }
+                        
+                        <br/>                        
                         <Modal
                             openmodal={openmodal}
                             setOpenModal={setOpenModal}

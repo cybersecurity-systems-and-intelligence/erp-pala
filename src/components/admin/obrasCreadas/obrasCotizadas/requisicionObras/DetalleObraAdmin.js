@@ -14,11 +14,11 @@ const theme = createMuiTheme({
 
 const useStyles = makeStyles((theme) => ({ 
     layout: {
-        width: 'auto',
-        marginLeft: theme.spacing(1),
-        marginRight: theme.spacing(1),
-        },
-        paper: {
+            width: 'auto',
+            marginLeft: theme.spacing(1),
+            marginRight: theme.spacing(1),
+    },
+    paper: {
         marginTop: theme.spacing(3),
         marginBottom: theme.spacing(3),
         padding: theme.spacing(2),
@@ -27,34 +27,32 @@ const useStyles = makeStyles((theme) => ({
             marginBottom: theme.spacing(6),
             padding: theme.spacing(3),
         },
-        },
-        btnregistrar: {
-            float: 'right',
-            background: 'linear-gradient(#d4e157, #b3d233)',
-            color:'#424242',
-    
-            '&:hover': {
-                color:'#fff',
-                fontWeight: '800',
-            }
-    
-    
-        },
-        rb1:{
+    },
+    btnregistrar: {
+        float: 'right',
+        background: 'linear-gradient(#d4e157, #b3d233)',
+        color:'#424242',
+
+        '&:hover': {
+            color:'#fff',
+            fontWeight: '800',
+        }
+    },
+    rb1:{
             alignItems: 'center',
             textAlign: 'center'
-           },
-           hr:{
-            background: 'linear-gradient(#d4e157, #afb42b)',
-            alignItems: 'center',
-            textAlign: 'center',
-            width: '50%',
-            borderColor:'#d4e157',
-            boxShadow:'2px 2px 5px #999',
-            height:'8px',
-            borderRadius: '5px',
-            marginTop:'1px'
-           }, 
+    },
+    hr:{
+        background: 'linear-gradient(#d4e157, #afb42b)',
+        alignItems: 'center',
+        textAlign: 'center',
+        width: '50%',
+        borderColor:'#d4e157',
+        boxShadow:'2px 2px 5px #999',
+        height:'8px',
+        borderRadius: '5px',
+        marginTop:'1px'
+    }, 
     root: {
         width: '100%',
     },
