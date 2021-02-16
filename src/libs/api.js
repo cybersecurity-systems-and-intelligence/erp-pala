@@ -46,12 +46,6 @@ axios.interceptors.response.use(
 
 //Functions to make api calls
 const api = {
-    signup: (body) => {
-        return axios.post(`${baseUrl}/auth/signup`, body)
-    },
-    update: (body) => {
-        return axios.put(`${baseUrl}/user`, body)
-    },
     login: (body) => {
         return axios.post(`${baseUrl}/api/autorizacion`, {objeto: body})
     },
@@ -59,7 +53,7 @@ const api = {
         return axios.post(`${baseUrl}/api/autorizacion/refreshToken`, body)
     },
     logout: (body) => {
-        return axios.delete(`${baseUrl}/auth/logout`, { data: body })
+        return axios.delete(`${baseUrl}/api/autorizacion/logout`, { data: body })
     },
     obrasVigentes: () => {
         return axios.get(`${baseUrl}/api/obras/vigentes`)

@@ -229,9 +229,17 @@ export default function Dashboard() {
     }
   }
 
-  const salirlogin = () => {
-    localStorage.removeItem('jwt')
+  const salirlogin = async () => {
+    // localStorage.removeItem('jwt')
+    // localStorage.removeItem('componente')
+
+    const refreshToken = JSON.parse(localStorage.getItem("refreshToken"))
+    localStorage.removeItem("accessToken")
+    localStorage.removeItem("refreshToken")
     localStorage.removeItem('componente')
+   
+    await api.logout({refreshToken: refreshToken});
+
     guardarComponenteContx({
       nivel_acceso: null,
       numero_ventana: 0,

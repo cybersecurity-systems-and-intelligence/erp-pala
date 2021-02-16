@@ -1,6 +1,5 @@
-import { Fragment, useState, useEffect, useContext } from 'react';
+import { Fragment, useState, useEffect } from 'react';
 import { makeStyles, Fade, CssBaseline, Paper, Typography } from '@material-ui/core';
-import jwt_decode from 'jwt-decode'
 
 import Copyright from '../../../Copyright'
 import SeleecionItems from './SeleecionItems'
@@ -59,10 +58,8 @@ const useStyles = makeStyles((theme) => ({
 
 
 const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
-    const classes = useStyles();   
+    const classes = useStyles();
 
-    
-                
     // Creacion de states
     const [ error, guardarError ] = useState({
         bandError: false,
@@ -78,7 +75,6 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
     const [ bandcomponente, guardarBandComponente ] = useState(false)
     
     // Destructuring de los state
-    const { sostenimiento, condiciones } = datosextras
     const { bandError, mensajeError } = error
 
 
