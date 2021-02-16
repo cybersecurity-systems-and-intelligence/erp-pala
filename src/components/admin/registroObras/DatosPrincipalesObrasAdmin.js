@@ -31,7 +31,12 @@ const DatosPrincipalesObrasAdmin = ({ datosprincipalesobra, guardarDatosPrincipa
 
     return (       
         <ThemeProvider theme={theme}>
-            <Grid container spacing={3}>                
+            <Grid
+                container
+                spacing={3}
+                alignItems="center"
+                justify="center"
+            >                
                 <Grid item xs={12} md={3}>
                     <TextField                                              
                         required     

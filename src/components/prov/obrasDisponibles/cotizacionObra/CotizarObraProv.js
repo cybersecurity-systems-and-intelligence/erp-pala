@@ -9,8 +9,7 @@ import Error from '../../../Error'
 import Modal from '../../../Modal'
 import FormularioCotizarObraProv from './FormularioCotizarObraProv'
 
-import { ComponenteContext } from '../../../../context/ComponenteContext'
-import { llamada } from '../../../../libs/llamadas'
+
 
 const useStyles = makeStyles((theme) => ({
   
@@ -62,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
 const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
     const classes = useStyles();   
 
-    const { componentecontx, guardarComponenteContx } = useContext(ComponenteContext)
+    
                 
     // Creacion de states
     const [ error, guardarError ] = useState({
@@ -90,50 +89,7 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
         }
         consultarAPI()
         //eslint-disable-next-line
-    }, [])
-
-    useEffect(() => {
-        const consultarAPI = async () => {
-            try{
-                
-
-                let materiales = rows
-                materiales.map(material => delete material.eliminar);
-                
-
-
-                const resultado = JSON.parse(localStorage.getItem('jwt'))
-                const decoded = jwt_decode(resultado);        
-
-                const objeto = {
-                    "nombre_obra": obra.nombre_obra,
-                    "folio_obra": obra.folio_obra,
-                    "correo_prov": decoded.correo,
-                    'dias_sostenimiento_propuesta': sostenimiento,
-                    'condiciones_comerciales': condiciones,
-                    "materiales_cotizacion": materiales                    
-                }
-                console.log(objeto);
-                // eslint-disable-next-line
-                let resultadoAPI = await llamada('https://apicotizacion.herokuapp.com/api/cotizaciones', 'post', objeto)
-
-                guardarActualizarCards(Math.floor(Math.random() * 500) + 1)
-                guardarComponenteContx({
-                    ...componentecontx,
-                    numero_componente: 2
-                })
-                
-            }catch(err){
-                guardarBandDatosApi(false)
-                alert("La obra ya ha sido registrada")
-            }
-        }
-
-        if(banddatosapi && rows.length > 0){
-            consultarAPI()
-        }
-        //eslint-disable-next-line
-    }, [banddatosapi])
+    }, [])    
 
     
 
@@ -160,11 +116,14 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
                             bandcomponente 
                             ?
                             <CotizarItems
-                                rows={rows}
-                                guardarRows={guardarRows}
+                                rowsSeleccionadas={rows}
                                 guardarError={guardarError}
                                 datosextras={datosextras}
                                 setOpenModal={setOpenModal}
+                                obra={obra}
+                                guardarActualizarCards={guardarActualizarCards}
+                                guardarBandDatosApi={guardarBandDatosApi}
+                                banddatosapi={banddatosapi}
                             />
                             :
                             <SeleecionItems

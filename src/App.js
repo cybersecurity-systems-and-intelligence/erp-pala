@@ -3,7 +3,6 @@ import Login from './components/Login'
 import Checkout from './components/registro/Checkout'
 import Dashboard from './components/Dashboard'
 import { ComponenteContext } from './context/ComponenteContext'
-import _ from 'lodash'
 
 function App() {
 	const { componentecontx } = useContext(ComponenteContext)

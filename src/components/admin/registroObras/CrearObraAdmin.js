@@ -9,9 +9,7 @@ import FormularioRegistroObrasAdmin from './FormularioRegistroObrasAdmin'
 import DatosPrincipalesObrasAdmin from './DatosPrincipalesObrasAdmin'
 
 import {ComponenteContext} from '../../../context/ComponenteContext'
-
-import { llamada } from '../../../libs/llamadas'
-import { listaCategorias, listaSubCategorias, listaProductos } from '../../../libs/formatters'
+import api from '../../../libs/api'
 
 const useStyles = makeStyles((theme) => ({   
     layout: {
@@ -118,8 +116,9 @@ const CrearObraAdmin = ( { guardarActualizarCards } ) => {
                     "creador_obra": "quien sabe",
                     "materiales_obra": materiales
                 }
+                console.log(objeto);
                 // eslint-disable-next-line
-                let resultadoAPI = await llamada('https://apicotizacion.herokuapp.com/api/obras', 'post', objeto)
+                const resultadoAPI = await api.crearObraAdmin(objeto)                
 
                 guardarActualizarCards(Math.floor(Math.random() * 1000) + 1)
                 guardarComponenteContx({
@@ -128,6 +127,7 @@ const CrearObraAdmin = ( { guardarActualizarCards } ) => {
                 })
                 
             }catch(err){
+                console.log(err);
                 guardarBandDatosApi(false)
                 alert("La obra ya ha sido registrada")
             }

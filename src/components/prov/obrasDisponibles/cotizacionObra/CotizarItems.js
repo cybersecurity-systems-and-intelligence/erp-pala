@@ -1,6 +1,9 @@
-import { useState, useEffect, Fragment } from 'react';
+import { useState, useEffect, Fragment, useContext } from 'react';
 import { makeStyles, Grid, styled, Button, TextField, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@material-ui/core/';
 import { cloneDeep } from 'lodash'
+import jwt_decode from 'jwt-decode'
+import { ComponenteContext } from '../../../../context/ComponenteContext'
+import api from '../../../../libs/api'
 
 const useStyles = makeStyles({
   root: {
@@ -52,7 +55,7 @@ const ButtonComponent = styled('button')({
   }
 });
 
-export default function CotizarItems({ rows, guardarRows, guardarError, datosextras, setOpenModal }) {
+export default function CotizarItems({ rowsSeleccionadas, guardarError, datosextras, setOpenModal, obra, guardarActualizarCards, guardarBandDatosApi, banddatosapi }) {
 
   const columns = [
     { id: 'clave', label: 'Clave', minWidth: 100 },
@@ -86,6 +89,7 @@ export default function CotizarItems({ rows, guardarRows, guardarError, datosext
 
 
   const classes = useStyles();
+  const [ rows, guardarRows ] = useState([])
   const [ page, setPage ] = useState(0);
   const [rowsPerPage, setRowsPerPage ] = useState(10)
   const [ bandbotonregistrar, guardarBandBotonRegistrar ] = useState(true)
@@ -95,7 +99,53 @@ export default function CotizarItems({ rows, guardarRows, guardarError, datosext
   })
   const { clave, costounitario } = datos
   const { sostenimiento, condiciones } = datosextras
+  const { componentecontx, guardarComponenteContx } = useContext(ComponenteContext)
 
+  useEffect(() => {
+    guardarRows(rowsSeleccionadas)
+  }, [])
+
+  useEffect(() => {
+    const consultarAPI = async () => {
+      try{
+        let materiales = rows
+        materiales.map(material => delete material.eliminar);
+        
+
+
+        const resultado = JSON.parse(localStorage.getItem('accessToken'))
+        const decoded = jwt_decode(resultado);        
+
+        const objeto = {
+          "nombre_obra": obra.nombre_obra,
+          "folio_obra": obra.folio_obra,
+          "correo_prov": decoded.usuario.correo_usuario,
+          'dias_sostenimiento_propuesta': sostenimiento,
+          'condiciones_comerciales': condiciones,
+          "materiales_cotizacion": materiales                    
+        }
+        console.log(objeto);
+        // eslint-disable-next-line                
+        const resultadoAPI = await api.crearCotizacionProv(objeto)
+
+        guardarActualizarCards(Math.floor(Math.random() * 500) + 1)
+        guardarComponenteContx({
+            ...componentecontx,
+            numero_componente: 2
+        })
+          
+      }catch(err){
+          console.log(err);
+          guardarBandDatosApi(false)
+          alert("La obra ya ha sido registrada")
+      }
+    }
+
+    if(banddatosapi && rows.length > 0){
+        consultarAPI()
+    }
+    //eslint-disable-next-line
+  }, [banddatosapi])
 
   useEffect(() => {
     const res = cloneDeep(rows).filter(row => row.costounitario !== undefined)

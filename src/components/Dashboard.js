@@ -23,7 +23,7 @@ import imagenes from '../asets/img/imagenes';
 
 import { ComponenteContext } from '../context/ComponenteContext'
 
-import { cargarDatosProv, cargarDatosAdmin } from '../libs/cargarDatos'
+import api from '../libs/api'
 
 
 const drawerWidth = 240
@@ -134,8 +134,9 @@ export default function Dashboard() {
   const [ perfil, guardarPerfil ] = useState({})
   const [ obra, guardarObra ] = useState({})
 
-  const resultadoJwt = JSON.parse(localStorage.getItem('jwt'))
+  const resultadoJwt = JSON.parse(localStorage.getItem('accessToken'))
   const decoded = jwt_decode(resultadoJwt)    
+
 
   const { componentecontx, guardarComponenteContx } = useContext(ComponenteContext)
   const { nivel_acceso, numero_componente } = componentecontx 
@@ -152,16 +153,21 @@ export default function Dashboard() {
     const consultarAPI = async () => {
       if( nivel_acceso === 0){        
         
-        const { respObrasCread } = await cargarDatosAdmin()
         
-        guardarObrasCreadas(respObrasCread)
+        const respObrasCread = await api.cargarObrasAdmin()
+        console.log(respObrasCread);
+        guardarObrasCreadas(respObrasCread.data.Obras.reverse())
       }else if ( nivel_acceso === 1 ){
 
-        const { respObrasDisp, respObrasCoti, respPerfil } = await cargarDatosProv(decoded.correo)
-
-        guardarObrasDisponibles( respObrasDisp )
-        guardarObrasCotizadas( respObrasCoti )    
-        guardarPerfil( respPerfil )
+        
+        const correo = decoded.usuario.correo_usuario
+        const respObrasDisp = await api.obrasVigentes()
+        const respObrasCoti = await api.obrasCotizadasProv(correo)
+        const respPerfil = await api.perfilProv(correo)
+        console.log(respObrasCoti.data.Obras);
+        guardarObrasDisponibles( respObrasDisp.data.Obras.reverse() )
+        guardarObrasCotizadas( respObrasCoti.data.Obras.reverse() )    
+        guardarPerfil( respPerfil.data.datos_personales )
       }
     }
     consultarAPI()
@@ -177,7 +183,7 @@ export default function Dashboard() {
       />
     }else if ( nivel_acceso === 0 && numero_componente === 1 ){
       return <PerfilAdmin
-        correo={decoded.correo}
+        correo={decoded.usuario.correo_usuario}
       />
     }else if ( nivel_acceso === 0 && numero_componente === 2 ){
       return <ObrasCreadas

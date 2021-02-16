@@ -52,17 +52,3 @@ export const formatCardFolioCoti = (respObrasCoti) => {
 	))
 	return folioCoti
 }
-
-export const listaCategorias = (obra) => {
-	return [...new Set(obra.map(e => (e.categoria)))]
-}
-
-export const listaSubCategorias = (obra, categoria) => {
-	const resultado = obra.filter(e => e.categoria === categoria)
-	return [...new Set(resultado.map(e => (e.subcategoria)))]
-}
-
-export const listaProductos = (obra, subcategoria) => {
-	const resultado = obra.filter(e => e.subcategoria === subcategoria)
-	return [...new Set(resultado.map(e => (e.producto ? e.producto: e.nombre)))]
-}

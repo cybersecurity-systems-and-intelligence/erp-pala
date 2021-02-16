@@ -3,6 +3,7 @@ import { Fragment, useState, useEffect, useContext } from 'react';
 import { IconButton, makeStyles, withStyles, CssBaseline, Grid, Paper, Stepper, Step, StepLabel, Typography, StepConnector } from '@material-ui/core';
 import { Cancel, Check } from '@material-ui/icons';
 import clsx from 'clsx';
+import jwt_decode from 'jwt-decode'
 
 import DatosFiscales from './DatosFiscales';
 import DatosBancarios from './DatosBancarios';
@@ -22,7 +23,7 @@ import {
   verificarFormatoDatosBancarios
 } from '../../libs/validarDatos'
 import {guardarLS} from '../../libs/guardarLS'
-import { llamada } from '../../libs/llamadas'
+import api from '../../libs/api'
 
 import imagenes from '../../asets/img/imagenes'
 
@@ -242,15 +243,20 @@ export default function Checkout() {
           "password_prov": password
         }
 
-        try{
-          await llamada('https://apicotizacion.herokuapp.com/api/proveedores', 'post', objeto)
+        try{          
+          const consulta = await api.crearProv(objeto)
 
-          ///guardarLS(null, null, null)
+          const { accessToken, refreshToken } = consulta.data;          
+          
+          localStorage.setItem("accessToken", JSON.stringify(accessToken))
+          localStorage.setItem("refreshToken", JSON.stringify(refreshToken))
+          const { usuario } = jwt_decode(accessToken)
+          const { nivel_acceso_usuario } = usuario
 
           guardarComponenteContx({
-            numero_componente: null,
-            numero_ventana: 0,
-            nivel_acceso: null,
+            numero_componente: 1,
+            numero_ventana: 1,
+            nivel_acceso: nivel_acceso_usuario,
           })     
         }catch{
           guardarBandDatosApi(false)

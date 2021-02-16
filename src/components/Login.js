@@ -9,7 +9,7 @@ import Error from './Error'
 import { ComponenteContext } from '../context/ComponenteContext'
 
 import { guardarLS } from '../libs/guardarLS'
-import { llamada } from '../libs/llamadas'
+import api from '../libs/api'
 
 import imagenes from '../asets/img/imagenes';
 
@@ -81,23 +81,29 @@ const Login = () => {
             [e.target.name]: e.target.value
         })
     }
-    
+
     const consultarAPI = async () => {
         try{
             const objeto = {
                 correo: email,
                 password: password
             }
-            const consulta = await llamada('https://apicotizacion.herokuapp.com/api/autorizacion', 'post', objeto)
-                               
-            const {nivel_acceso} = jwt_decode(consulta.data.jwToken);
 
-            localStorage.setItem('jwt', JSON.stringify(consulta.data.jwToken))
+            const consulta = await api.login(objeto)                   
+
+            const { accessToken, refreshToken } = consulta.data;
+            console.log(consulta);
             
-            if ( nivel_acceso === 0 || nivel_acceso === 1 ){                                            
-                guardarLS(nivel_acceso, 1, 1)
+            localStorage.setItem("accessToken", JSON.stringify(accessToken))
+            localStorage.setItem("refreshToken", JSON.stringify(refreshToken))
+
+            const { usuario } = jwt_decode(accessToken)
+            const { nivel_acceso_usuario } = usuario
+
+            if ( nivel_acceso_usuario === 0 || nivel_acceso_usuario === 1 ){                                            
+                guardarLS(nivel_acceso_usuario, 1, 1)
                 guardarComponenteContx({
-                    nivel_acceso: nivel_acceso,
+                    nivel_acceso: nivel_acceso_usuario,
                     numero_ventana: 1,
                     numero_componente: 1
                 })

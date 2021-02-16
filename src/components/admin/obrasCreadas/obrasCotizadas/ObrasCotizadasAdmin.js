@@ -6,9 +6,10 @@ import Error from '../../../Error'
 import BuscadorObra from './BuscadorObra'
 import CardObra from './CardObra'
 
-import { cargarCotizaciones } from '../../../../libs/cargarDatos'
+
 import config from '../../../../config/config'
 import { formatCardFolioCoti } from '../../../../libs/formatters'
+import api from '../../../../libs/api'
 
 const useStyles = makeStyles((theme) => ({   
    
@@ -58,10 +59,12 @@ const ObrasCotizadasAdmin = ({ obra, guardarObra }) => {
 
     useEffect(() => {
         const consultarAPI = async() => {
-            const { respObrasCoti } = await cargarCotizaciones(folio_obra) 
-            const obrasCoti = formatCardFolioCoti(respObrasCoti)
+            
+            const respObrasCoti = await api.cargarCotizacionesAdmin(folio_obra)
+            console.log(respObrasCoti);
+            const obrasCoti = formatCardFolioCoti(respObrasCoti.data.Cotizacion.reverse())
                         
-            guardarObrasCotizadas(respObrasCoti)              
+            guardarObrasCotizadas(respObrasCoti.data.Cotizacion)              
             guardarRows(obrasCoti)
             obrasCoti.length === 0 ? guardarErrorConsulta({bandError: true, msgError: `No hay cotizaciones en la obra ${folio_obra}`}) : guardarErrorConsulta({bandError: false, msgError: ''})
         }
