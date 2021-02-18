@@ -254,7 +254,7 @@ export default function Dashboard() {
       return 'error 400'
     }
   }
-
+  console.log();
   const salirlogin = async () => {    
     const refreshToken = JSON.parse(localStorage.getItem("refreshToken"))
     localStorage.removeItem("accessToken")
