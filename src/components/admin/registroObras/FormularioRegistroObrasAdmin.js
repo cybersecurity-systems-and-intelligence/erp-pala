@@ -43,21 +43,7 @@ const ButtonComponent = styled('button')({
         color:'white'
     },
 })
-const InputBtnComponent = styled('input')({
-    height: '100%',
-    width: '100%',
-    color:'#000',
-    fontWeight: '700',
-    borderColor:'#d4e157',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    fontSize:'15px',
-    textAlign: 'center',
 
-    '&:hover': {
-        background: 'linear-gradient(#b3d233, #d4e157)',
-    }
-})
 
 const FormularioRegistroObras = ({ guardarError, rows, guardarRows, guardarBandBotonRegistrar, classes }) => {
 

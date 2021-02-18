@@ -2,6 +2,9 @@ import { useState, useEffect, Fragment } from 'react';
 import { makeStyles, TextField, Grid, Button, Checkbox, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@material-ui/core/';
 import { cloneDeep } from 'lodash'
 
+import { createMuiTheme } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/styles';
+
 const useStyles = makeStyles({
   root: {
     width: '100%',
@@ -34,6 +37,14 @@ const useStyles = makeStyles({
       color:'#000',
       fontWeight: '700',
     }
+  },
+});
+
+const theme = createMuiTheme({
+  palette: {
+    secondary: {
+      main: '#b3d233',
+    },
   },
 });
 
@@ -126,8 +137,11 @@ export default function SeleecionItems({ rows, guardarRows, guardarBandComponent
 
   return (
     <Fragment>
-      <Grid container spacing={1}>
-           
+      <Grid 
+          container spacing={1}
+          alignItems="center"
+          justify="center">
+          
            <Grid item xs={12} md={3}>
                <TextField
                    id="clave"
@@ -135,6 +149,7 @@ export default function SeleecionItems({ rows, guardarRows, guardarBandComponent
                    label="Clave"                  
                    value={clave}
                    onChange={handleChange}
+                   color="secondary"
                />
            </Grid>           
        </Grid>
@@ -167,14 +182,17 @@ export default function SeleecionItems({ rows, guardarRows, guardarBandComponent
                           { 
                             column.id === 'seleccionar' 
                           ? 
+                          <ThemeProvider theme={theme}>
                             <Checkbox
                               value={checks[row.clave] ? true : false}
                               id={row.clave}
                               value='Eliminar'
                               variant="contained"
-                              color="primary"
+                              color="secondary"
                               onClick={seleccionarFolio}
-                            /> : value }
+                            />
+                            </ThemeProvider>
+                             : value }
                         </TableCell>
                       );
                     })}

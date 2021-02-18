@@ -1,7 +1,8 @@
 import { useState, useEffect, Fragment, useContext } from 'react';
-import { makeStyles, Grid, styled, Button, TextField, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@material-ui/core/';
+import { makeStyles, createMuiTheme, Grid, styled, Button, TextField, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@material-ui/core/';
 import { cloneDeep } from 'lodash'
 import jwt_decode from 'jwt-decode'
+import { ThemeProvider } from '@material-ui/styles';
 
 import { ComponenteContext } from '../../../../context/ComponenteContext'
 import api from '../../../../libs/api'
@@ -41,19 +42,32 @@ const useStyles = makeStyles({
   },
 });
 const ButtonComponent = styled('button')({
-  height: '100%',
-  width: '100%',
+  height: '40px',
+  width: '70%',
   background: 'linear-gradient(#d4e157, #b3d233)',
   color:'#000',
-  fontWeight: '700',
+  fontWeight: '600',
   borderColor:'#d4e157',
   borderRadius: '5px',
   cursor: 'Pointer',
   fontSize:'15px',
+  marginTop:'10%',
 
   '&:hover': {
       background: 'linear-gradient(#b3d233, #d4e157)',
+      color:'#ffd'
   }
+});
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#b3d233',
+    },
+    secondary: {
+      main: '#d32f2f',
+    },
+  },
 });
 
 export default function CotizarItems({ rowsSeleccionadas, guardarError, datosextras, setOpenModal, obra, guardarActualizarCards, guardarBandDatosApi, banddatosapi }) {
@@ -230,10 +244,15 @@ export default function CotizarItems({ rowsSeleccionadas, guardarError, datosext
   
   return (
     <Fragment>
+      
       <form
         onSubmit={handleSubmit}
       >
-        <Grid container spacing={1}>           
+        <ThemeProvider theme={theme}>
+        <Grid container spacing={10}
+          alignItems="center"
+          justify="center"
+        >           
           <Grid item xs={12} md={3}>
             <TextField
               disabled
@@ -242,7 +261,7 @@ export default function CotizarItems({ rowsSeleccionadas, guardarError, datosext
               label="Clave"                        
               value={''+clave}
               fullWidth    
-              color="secondary"          
+              color="primary"          
             />
           </Grid>
           <Grid item xs={12} md={3}>
@@ -253,19 +272,19 @@ export default function CotizarItems({ rowsSeleccionadas, guardarError, datosext
               value={costounitario}
               onChange={handleChange}
               fullWidth    
-              color="secondary"                                         
+              color="primary"                                         
             />
           </Grid>     
-          <Grid item xs={12} md={3}>
+        </Grid>
+        <Grid item xs={6} md={3}>
             <ButtonComponent
-              className={classes.btn}
               type='submit'
               fullWidth
             >
-              Agregar costo unitario
+              AGREGAR COSTO UNITARIO
             </ButtonComponent>
-          </Grid>     
-        </Grid>
+          </Grid>
+        </ThemeProvider>
       </form>
       <br/>
       <Paper className={classes.root}>

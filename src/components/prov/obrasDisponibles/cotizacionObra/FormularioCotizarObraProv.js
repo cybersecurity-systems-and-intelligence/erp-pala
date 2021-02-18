@@ -3,13 +3,6 @@ import { Grid, TextField } from '@material-ui/core';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 
-const theme = createMuiTheme({
-    palette: {
-      secondary: {
-        main: '#b3d233',
-      },
-    },
-});
 
 const FormularioCotizarObraProv = ({ datosextras, guardarDatosExtras }) => {
 
@@ -21,11 +14,22 @@ const FormularioCotizarObraProv = ({ datosextras, guardarDatosExtras }) => {
             [e.target.name]: e.target.value
         })
     }
-    return (        
+    const theme = createMuiTheme({
+        palette: {
+          secondary: {
+            main: '#b3d233',
+          },
+        },
+    });
+
+    return ( 
+    <ThemeProvider theme={theme}>
         <Fragment>
-            <ThemeProvider theme={theme}>
-                <Grid container spacing={1}>
-            
+            <Grid 
+                container spacing={10}        
+                alignItems="center"
+                justify="center"
+            >
                     <Grid item xs={12} md={3}>
                         <TextField
                             id="sostenimiento"
@@ -50,8 +54,9 @@ const FormularioCotizarObraProv = ({ datosextras, guardarDatosExtras }) => {
                         />
                     </Grid>
                 </Grid>            
-            </ThemeProvider>
+           
         </Fragment>
+        </ThemeProvider>
     )
 }
  
