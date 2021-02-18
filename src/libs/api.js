@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { mTokenGeneral } from '../config/config'
 
-const baseUrl = 'https://apicotizacion.herokuapp.com'
+const baseUrl = 'https://apicotizacion.herokuapp.com/api'
 
 //request interceptor to add the auth token header to requests
 axios.interceptors.request.use(
@@ -27,15 +27,16 @@ axios.interceptors.response.use(
     function(error){
         const originalRequest = error.config
         let refreshToken = JSON.parse(localStorage.getItem('refreshToken'))
-        
-        if(refreshToken && error.response.status === 401 && !originalRequest._retry){
-            
+
+        if(error.response.status === 401){
+            return Promise.reject(error)
+        }else if(refreshToken && !originalRequest._retry){
+
             originalRequest._retry = true
-            return axios.post(`${baseUrl}/api/autorizacion/refreshToken`, { refreshToken: refreshToken })
+            return axios.post(`${baseUrl}/autorizacion/refreshToken`, { refreshToken: refreshToken })
                         .then((res) => {                           
                             if (res.status === 200) {                             
-                                localStorage.setItem('accessToken', JSON.stringify(res.data.accessToken))
-                                
+                                localStorage.setItem('accessToken', JSON.stringify(res.data.accessToken))                                
                                 return axios(originalRequest)
                             }
                         })
@@ -47,37 +48,40 @@ axios.interceptors.response.use(
 //Functions to make api calls
 const api = {
     login: (body) => {
-        return axios.post(`${baseUrl}/api/autorizacion`, {objeto: body})
+        return axios.post(`${baseUrl}/autorizacion`, {objeto: body})
     },
     refreshToken: (body) => {
-        return axios.post(`${baseUrl}/api/autorizacion/refreshToken`, body)
+        return axios.post(`${baseUrl}/autorizacion/refreshToken`, body)
     },
     logout: (body) => {
-        return axios.delete(`${baseUrl}/api/autorizacion/logout`, { data: body })
+        return axios.delete(`${baseUrl}/autorizacion/logout`, { data: body })
     },
     obrasVigentes: () => {
-        return axios.get(`${baseUrl}/api/obras/vigentes`)
+        return axios.get(`${baseUrl}/obras/vigentes`)
     },
     obrasCotizadasProv: (correo) => {
-        return axios.get(`${baseUrl}/api/cotizaciones/cotizadas/${correo}`)
+        return axios.get(`${baseUrl}/cotizaciones/cotizadas/${correo}`)
     },
     perfilProv: (correo) => {
-        return axios.get(`${baseUrl}/api/proveedores/datos_personales/${correo}`)
+        return axios.get(`${baseUrl}/proveedores/datos_personales/${correo}`)
     },
     crearObraAdmin: (body) => {
-        return axios.post(`${baseUrl}/api/obras`,{objeto:body})
+        return axios.post(`${baseUrl}/obras`,{objeto:body})
     },
     cargarObrasAdmin: () => {
-        return axios.get(`${baseUrl}/api/obras`)
+        return axios.get(`${baseUrl}/obras`)
     },
     cargarCotizacionesAdmin: (folio_obra) => {
-        return axios.get(`${baseUrl}/api/cotizaciones/${folio_obra}`)
+        return axios.get(`${baseUrl}/cotizaciones/${folio_obra}`)
     },
     crearCotizacionProv: (body) => {
-        return axios.post(`${baseUrl}/api/cotizaciones`,{objeto:body})
+        return axios.post(`${baseUrl}/cotizaciones`,{objeto:body})
     },
     crearProv: (body) => {
-        return axios.post(`${baseUrl}/api/proveedores`, {objeto:body})
+        return axios.post(`${baseUrl}/proveedores`, {objeto:body})
+    },
+    enviarCorreo: (body) => {
+        return axios.post(`${baseUrl}/correos/sendEmail`, { objeto: body })
     }
 }
 

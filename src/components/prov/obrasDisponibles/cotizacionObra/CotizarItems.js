@@ -126,14 +126,27 @@ export default function CotizarItems({ rowsSeleccionadas, guardarError, datosext
           "materiales_cotizacion": materiales                    
         }
         console.log(objeto);
-        // eslint-disable-next-line                
-        const resultadoAPI = await api.crearCotizacionProv(objeto)
+        // eslint-disable-next-line         
+        try{       
+          const resultadoAPI = await api.crearCotizacionProv(objeto)
 
-        guardarActualizarCards(Math.floor(Math.random() * 500) + 1)
-        guardarComponenteContx({
-            ...componentecontx,
-            numero_componente: 2
-        })
+          guardarActualizarCards(Math.floor(Math.random() * 500) + 1)
+          guardarComponenteContx({
+              ...componentecontx,
+              numero_componente: 2
+          })
+        }catch(error){
+          localStorage.removeItem("accessToken")
+          localStorage.removeItem("refreshToken")
+          localStorage.removeItem('componente')        
+
+          guardarComponenteContx({
+              nivel_acceso: null,
+              numero_ventana: 0,
+              numero_componente: null
+          })
+          return
+        }
           
       }catch(err){
           console.log(err);

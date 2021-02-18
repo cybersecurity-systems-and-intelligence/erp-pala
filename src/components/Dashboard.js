@@ -151,23 +151,49 @@ export default function Dashboard() {
   useEffect(() => {
     
     const consultarAPI = async () => {
-      if( nivel_acceso === 0){        
+      if( nivel_acceso === 0){                
+        try{
+          const respObrasCread = await api.cargarObrasAdmin()
+          console.log(respObrasCread);
+          guardarObrasCreadas(respObrasCread.data.Obras.reverse())
+        }catch(error){
+          localStorage.removeItem("accessToken")
+          localStorage.removeItem("refreshToken")
+          localStorage.removeItem('componente')        
+
+          guardarComponenteContx({
+            nivel_acceso: null,
+            numero_ventana: 0,
+            numero_componente: null
+          })
+          return
+        }
         
-        
-        const respObrasCread = await api.cargarObrasAdmin()
-        console.log(respObrasCread);
-        guardarObrasCreadas(respObrasCread.data.Obras.reverse())
       }else if ( nivel_acceso === 1 ){
 
         
-        const correo = decoded.usuario.correo_usuario
-        const respObrasDisp = await api.obrasVigentes()
-        const respObrasCoti = await api.obrasCotizadasProv(correo)
-        const respPerfil = await api.perfilProv(correo)
-        console.log(respObrasCoti.data.Obras);
-        guardarObrasDisponibles( respObrasDisp.data.Obras.reverse() )
-        guardarObrasCotizadas( respObrasCoti.data.Obras.reverse() )    
-        guardarPerfil( respPerfil.data.datos_personales )
+        const correo = decoded.usuario.correo_usuario        
+        try{
+          const respObrasDisp = await api.obrasVigentes()
+          const respObrasCoti = await api.obrasCotizadasProv(correo)
+          const respPerfil = await api.perfilProv(correo)
+
+          guardarObrasDisponibles( respObrasDisp.data.Obras.reverse() )
+          guardarObrasCotizadas( respObrasCoti.data.Obras.reverse() )    
+          guardarPerfil( respPerfil.data.datos_personales )
+        }catch(error){          
+          localStorage.removeItem("accessToken")
+          localStorage.removeItem("refreshToken")
+          localStorage.removeItem('componente')        
+
+          guardarComponenteContx({
+            nivel_acceso: null,
+            numero_ventana: 0,
+            numero_componente: null
+          })
+          return
+        }
+        
       }
     }
     consultarAPI()
@@ -229,22 +255,20 @@ export default function Dashboard() {
     }
   }
 
-  const salirlogin = async () => {
-    // localStorage.removeItem('jwt')
-    // localStorage.removeItem('componente')
+  const salirlogin = async () => {    
 
-    const refreshToken = JSON.parse(localStorage.getItem("refreshToken"))
     localStorage.removeItem("accessToken")
     localStorage.removeItem("refreshToken")
     localStorage.removeItem('componente')
-   
-    await api.logout({refreshToken: refreshToken});
-
     guardarComponenteContx({
       nivel_acceso: null,
       numero_ventana: 0,
       numero_componente: null
     })
+    try{
+      const refreshToken = JSON.parse(localStorage.getItem("refreshToken"))
+      await api.logout({refreshToken: refreshToken});    
+    }catch(error){}
   }
 
   return (

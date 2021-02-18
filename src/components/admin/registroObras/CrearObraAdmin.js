@@ -1,5 +1,6 @@
 import { Fragment, useState, useEffect, useContext } from 'react';
 import { makeStyles, Fade, CssBaseline, Paper, Button, Typography, Grid } from '@material-ui/core';
+import jwt_decode from 'jwt-decode'
 
 import Copyright from '../../Copyright'
 import TablaObrasAdmin from './TablaObrasAdmin'
@@ -98,7 +99,6 @@ const CrearObraAdmin = ( { guardarActualizarCards } ) => {
 
     useEffect(() => {
         if(rows.length === 0){
-            console.log('hoola');
             guardarBandBotonRegistrar(true)
         }
     }, [rows])
@@ -113,18 +113,47 @@ const CrearObraAdmin = ( { guardarActualizarCards } ) => {
                     "nombre_obra": nombreObra,
                     "direccion_obra": direccionObra,
                     "dependencia_obra": dependenciaObra,
-                    "creador_obra": "quien sabe",
+                    "creador_obra": "Administrador",
                     "materiales_obra": materiales
                 }
-                console.log(objeto);
+                
                 // eslint-disable-next-line
-                const resultadoAPI = await api.crearObraAdmin(objeto)                
+                
+                try{
+                    const resultadoAPI = await api.crearObraAdmin(objeto)  
+                    console.log(resultadoAPI);
 
-                guardarActualizarCards(Math.floor(Math.random() * 1000) + 1)
-                guardarComponenteContx({
-                    ...componentecontx,
-                    numero_componente: 2
-                })
+                    const folioObra = resultadoAPI.data.folio_obra
+                    const nombreCreador = resultadoAPI.data.creador_obra
+
+                    const resultadoJwt = JSON.parse(localStorage.getItem('accessToken'))
+                    const decoded = jwt_decode(resultadoJwt) 
+
+                    const req = {
+                        tomail: 'dorian.mendoza@csiciber.com',
+                        subject: `Obra creada por ${nombreCreador}`,
+                        usuario: nombreCreador,
+                        obra: nombreObra,
+                        folio: folioObra,
+                    }
+                    api.enviarCorreo(req)
+                    guardarActualizarCards(Math.floor(Math.random() * 1000) + 1)
+                    guardarComponenteContx({
+                        ...componentecontx,
+                        numero_componente: 2
+                    })
+                }catch(error){
+                    localStorage.removeItem("accessToken")
+                    localStorage.removeItem("refreshToken")
+                    localStorage.removeItem('componente')        
+
+                    guardarComponenteContx({
+                        nivel_acceso: null,
+                        numero_ventana: 0,
+                        numero_componente: null
+                    })
+                    return
+                }
                 
             }catch(err){
                 console.log(err);

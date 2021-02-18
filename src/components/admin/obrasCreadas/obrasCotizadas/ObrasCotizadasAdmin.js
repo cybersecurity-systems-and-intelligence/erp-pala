@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useState, useContext } from 'react';
 import { Fade, makeStyles,  CssBaseline, Typography, Paper } from '@material-ui/core/';
 
 import Copyright from '../../../Copyright'
@@ -10,6 +10,8 @@ import CardObra from './CardObra'
 import config from '../../../../config/config'
 import { formatCardFolioCoti } from '../../../../libs/formatters'
 import api from '../../../../libs/api'
+
+import { ComponenteContext } from '../../../../context/ComponenteContext'
 
 const useStyles = makeStyles((theme) => ({   
    
@@ -53,6 +55,7 @@ const ObrasCotizadasAdmin = ({ obra, guardarObra }) => {
     const [ rows, guardarRows ] = useState([])
     const [ totalpaginas, guardarTotalPaginas ] = useState()
     const [ obrascotizadas, guardarObrasCotizadas ] = useState([])
+    const { componentecontx, guardarComponenteContx } = useContext(ComponenteContext)
 
     
     const { bandError, msgError } = errorconsulta
@@ -60,13 +63,27 @@ const ObrasCotizadasAdmin = ({ obra, guardarObra }) => {
     useEffect(() => {
         const consultarAPI = async() => {
             
-            const respObrasCoti = await api.cargarCotizacionesAdmin(folio_obra)
-            console.log(respObrasCoti);
-            const obrasCoti = formatCardFolioCoti(respObrasCoti.data.Cotizacion.reverse())
-                        
-            guardarObrasCotizadas(respObrasCoti.data.Cotizacion)              
-            guardarRows(obrasCoti)
-            obrasCoti.length === 0 ? guardarErrorConsulta({bandError: true, msgError: `No hay cotizaciones en la obra ${folio_obra}`}) : guardarErrorConsulta({bandError: false, msgError: ''})
+            let respObrasCoti
+            try{
+                respObrasCoti = await api.cargarCotizacionesAdmin(folio_obra)
+                
+                const obrasCoti = formatCardFolioCoti(respObrasCoti.data.Cotizacion.reverse())
+                            
+                guardarObrasCotizadas(respObrasCoti.data.Cotizacion)              
+                guardarRows(obrasCoti)
+                obrasCoti.length === 0 ? guardarErrorConsulta({bandError: true, msgError: `No hay cotizaciones en la obra ${folio_obra}`}) : guardarErrorConsulta({bandError: false, msgError: ''})
+            }catch(error){
+                localStorage.removeItem("accessToken")
+                localStorage.removeItem("refreshToken")
+                localStorage.removeItem('componente')        
+
+                guardarComponenteContx({
+                    nivel_acceso: null,
+                    numero_ventana: 0,
+                    numero_componente: null
+                })
+                return
+            }            
         }
         consultarAPI()
         // eslint-disable-next-line
