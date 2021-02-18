@@ -151,7 +151,7 @@ export default function Dashboard() {
   useEffect(() => {
     
     const consultarAPI = async () => {
-      if( nivel_acceso === 0){                
+      if(nivel_acceso === 0 || nivel_acceso === 2) {                
         try{
           const respObrasCread = await api.cargarObrasAdmin()
           console.log(respObrasCread);
@@ -207,21 +207,21 @@ export default function Dashboard() {
       return <CrearObraAdmin
         guardarActualizarCards={guardarActualizarCards}
       />
-    }else if ( nivel_acceso === 0 && numero_componente === 1 ){
+    }else if ( (nivel_acceso === 0 || nivel_acceso === 2) && numero_componente === 1 ){
       return <PerfilAdmin
         correo={decoded.usuario.correo_usuario}
       />
-    }else if ( nivel_acceso === 0 && numero_componente === 2 ){
+    }else if ( (nivel_acceso === 0 || nivel_acceso === 2) && numero_componente === 2 ){
       return <ObrasCreadas
         guardarObra={guardarObra}     
         obrascreadas={obrascreadas}
       />
-    }else if ( nivel_acceso === 0 && numero_componente === 3 ){
+    }else if ( (nivel_acceso === 0 || nivel_acceso === 2) && numero_componente === 3 ){
       return <ObrasCotizadasAdmin
         obra={obra}
         guardarObra={guardarObra}
       />
-    }else if ( nivel_acceso === 0 && numero_componente === 4 ){
+    }else if ( (nivel_acceso === 0 || nivel_acceso === 2) && numero_componente === 4 ){
       return <DetalleObraAdmin
         obra={obra}
       />
@@ -256,7 +256,7 @@ export default function Dashboard() {
   }
 
   const salirlogin = async () => {    
-
+    const refreshToken = JSON.parse(localStorage.getItem("refreshToken"))
     localStorage.removeItem("accessToken")
     localStorage.removeItem("refreshToken")
     localStorage.removeItem('componente')
@@ -265,10 +265,12 @@ export default function Dashboard() {
       numero_ventana: 0,
       numero_componente: null
     })
-    try{
-      const refreshToken = JSON.parse(localStorage.getItem("refreshToken"))
-      await api.logout({refreshToken: refreshToken});    
-    }catch(error){}
+    try{      
+      const res = await api.logout({refreshToken: refreshToken});    
+      console.log(res);
+    }catch(error){
+      console.log(error);
+    }
   }
 
   return (
@@ -287,7 +289,7 @@ export default function Dashboard() {
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" align="center" noWrap className={classes.title}>
             {
-              nivel_acceso === 0 ? 'ADMINISTRACIÓN' : 'PROVEEDOR'
+              (nivel_acceso === 0)  ? 'ADMINISTRACIÓN' : nivel_acceso === 2 ? 'COMPRAS': 'PROVEEDOR'
             }
           </Typography>
           <IconButton color="inherit">
@@ -313,7 +315,7 @@ export default function Dashboard() {
           </IconButton>
         </div>
         {
-          nivel_acceso === 0 ? <ListItemsAdmin /> : <ListItemsProv/>
+          (nivel_acceso === 0 || nivel_acceso === 2)  ? <ListItemsAdmin /> : <ListItemsProv/>
         }
       </Drawer>
       
@@ -324,7 +326,7 @@ export default function Dashboard() {
         <img alt='PALA' style={{width: 170, marginTop:"20px"}} src={imagenes.imgjpg} />
          
             {
-              nivel_acceso === 0 ? paginaAdmin() : paginaProv()
+              (nivel_acceso === 0 || nivel_acceso === 2) ? paginaAdmin() : paginaProv()
             }
       </main>
     </div>

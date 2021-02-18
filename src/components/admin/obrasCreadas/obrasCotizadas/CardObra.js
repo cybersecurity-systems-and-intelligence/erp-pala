@@ -1,9 +1,12 @@
 import { Fragment, useState, useContext } from 'react';
 import { Card, Container, CardActions, CardContent, Grid, Typography, makeStyles }  from '@material-ui/core/';
-import {Pagination} from '@material-ui/lab/';
+import { Pagination } from '@material-ui/lab/';
+import { cloneDeep } from 'lodash';
 
-import {ComponenteContext} from '../../../../context/ComponenteContext'
+import { ComponenteContext } from '../../../../context/ComponenteContext'
+import { createPDF } from '../../../../libs/createPdf'
 import config from '../../../../config/config'
+import api from '../../../../libs/api'
 
 const useStyles = makeStyles((theme) => ({
   cardGrid: {
@@ -103,17 +106,30 @@ const CardObra = ({
       })
     };
 
-    const seleccionarObra = e => { 
-
-      const obraSeleccionada = obrascotizadas.filter(row => row.folio_cotizacion === e.target.id)
+    const seleccionarObra = async (e) => {
       
-      const obra = obraSeleccionada[0]        
+      const select = cloneDeep(rows).filter(row => row.folioCotizacion === e.target.id)
       
-      guardarObra(obra)
-      guardarComponenteContx({
-        ...componentecontx,
-        numero_componente: 4
-      })
+      if (select[0].requisitada){
+        try{
+          const resultadoApi = await api.buscarOrdenCompra(select[0].folioCotizacion)
+          console.log(resultadoApi.data.Orden_de_Compra);
+          createPDF([resultadoApi.data.Orden_de_Compra], 'orden compra')
+        }catch(error){
+          console.log(error);
+        }
+        //createPDF('', 'requisitada')
+      }else{
+        const obraSeleccionada = cloneDeep(obrascotizadas).filter(row => row.folio_cotizacion === e.target.id)
+      
+        const obra = obraSeleccionada[0]        
+        
+        guardarObra(obra)
+        guardarComponenteContx({
+          ...componentecontx,
+          numero_componente: 4
+        })
+      }      
       
     }
 
@@ -126,29 +142,32 @@ const CardObra = ({
                 {rows.slice(paginaactual, paginafinal).map((row) => (
                 <Grid item key={row.folioCotizacion} xs={12} sm={6} md={4}>
                     <Card className={classes.card}>                  
-                    <CardContent className={classes.cardContent}>
-                        <Typography gutterBottom variant="h5" component="h2">
-                          Folio Obra:<br/> {row.folioObra}
-                        </Typography>
-                       
-                        <Typography gutterBottom variant="h6" component="h2">
-                          Folio Cotizacion:<br/> {row.folioCotizacion}
-                        </Typography>
-                         
-                        <Typography>
-                        {row.nombreObra}
-                        </Typography>
+                      <CardContent className={classes.cardContent}>
+                          <Typography gutterBottom variant="p" component="p" style={row.requisitada ? { background: 'green'} : { background: 'red'}}>
+                            Requisitada<br/>
+                          </Typography>
+                          <Typography gutterBottom variant="h5" component="h2">
+                            Folio Obra:<br/> {row.folioObra}
+                          </Typography>
+                        
+                          <Typography gutterBottom variant="h6" component="h2">
+                            Folio Cotizacion:<br/> {row.folioCotizacion}
+                          </Typography>
+                          
+                          <Typography>
+                          {row.nombreObra}
+                          </Typography>
 
-                        </CardContent>
-                        <CardActions>
-                        <input
-                            type='button'
-                            id={ row.folioCotizacion }
-                            value="Seleccionar"
-                            onClick={seleccionarObra}
-                            className={classes.btn}
-                        />
-                    </CardActions>
+                          </CardContent>
+                          <CardActions>
+                          <input
+                              type='button'
+                              id={ row.folioCotizacion }
+                              value="Seleccionar"
+                              onClick={seleccionarObra}
+                              className={classes.btn}
+                          />
+                      </CardActions>
                     </Card>
                 </Grid>
                 ))}

@@ -4,8 +4,6 @@ import { cloneDeep } from 'lodash'
 import jwt_decode from 'jwt-decode'
 import { ThemeProvider } from '@material-ui/styles';
 
-import { ComponenteContext } from '../../../../context/ComponenteContext'
-import api from '../../../../libs/api'
 
 const useStyles = makeStyles({
   root: {
@@ -61,8 +59,7 @@ const ButtonComponent = styled('button')({
 });
 
 
-export default function CotizarItems({ rowsSeleccionadas, guardarError, datosextras, setOpenModal, obra, guardarActualizarCards, guardarBandDatosApi, banddatosapi }) {
-
+export default function CotizarItems({ rows, guardarRows, guardarError, datosextras, setOpenModal, guardarBandComponente, obra }) {
   const theme = createMuiTheme({
     palette: {
       primary: {
@@ -101,8 +98,7 @@ export default function CotizarItems({ rowsSeleccionadas, guardarError, datosext
 
 
 
-  const classes = useStyles();
-  const [ rows, guardarRows ] = useState([])
+  const classes = useStyles();  
   const [ page, setPage ] = useState(0);
   const [rowsPerPage, setRowsPerPage ] = useState(10)
   const [ bandbotonregistrar, guardarBandBotonRegistrar ] = useState(true)
@@ -110,72 +106,15 @@ export default function CotizarItems({ rowsSeleccionadas, guardarError, datosext
     clave: '',
     costounitario: ''
   })
-  const { clave, costounitario } = datos
+  const { clave, costounitario } = datos    
   const { sostenimiento, condiciones } = datosextras
-  const { componentecontx, guardarComponenteContx } = useContext(ComponenteContext)
-
-  useEffect(() => {
-    guardarRows(rowsSeleccionadas)
-  }, [])
-
-  useEffect(() => {
-    const consultarAPI = async () => {
-      try{
-        let materiales = rows
-        materiales.map(material => delete material.eliminar);
-        
-
-
-        const resultado = JSON.parse(localStorage.getItem('accessToken'))
-        const decoded = jwt_decode(resultado);        
-
-        const objeto = {
-          "nombre_obra": obra.nombre_obra,
-          "folio_obra": obra.folio_obra,
-          "correo_prov": decoded.usuario.correo_usuario,
-          'dias_sostenimiento_propuesta': sostenimiento,
-          'condiciones_comerciales': condiciones,
-          "materiales_cotizacion": materiales                    
-        }
-        console.log(objeto);
-        // eslint-disable-next-line         
-        try{       
-          const resultadoAPI = await api.crearCotizacionProv(objeto)
-
-          guardarActualizarCards(Math.floor(Math.random() * 500) + 1)
-          guardarComponenteContx({
-              ...componentecontx,
-              numero_componente: 2
-          })
-        }catch(error){
-          localStorage.removeItem("accessToken")
-          localStorage.removeItem("refreshToken")
-          localStorage.removeItem('componente')        
-
-          guardarComponenteContx({
-              nivel_acceso: null,
-              numero_ventana: 0,
-              numero_componente: null
-          })
-          return
-        }
-          
-      }catch(err){
-          console.log(err);
-          guardarBandDatosApi(false)
-          alert("La obra ya ha sido registrada")
-      }
-    }
-
-    if(banddatosapi && rows.length > 0){
-        consultarAPI()
-    }
-    //eslint-disable-next-line
-  }, [banddatosapi])
+  
 
   useEffect(() => {
     const res = cloneDeep(rows).filter(row => row.costounitario !== undefined)
+    console.log(res);
     if(res.length !== rows.length){      
+      guardarBandBotonRegistrar(true)
       return
     }
     guardarBandBotonRegistrar(false)
@@ -237,9 +176,14 @@ export default function CotizarItems({ rowsSeleccionadas, guardarError, datosext
         return
     }
     guardarError({ bandError: false, mensajeError: '' })
-    setOpenModal(true)
+    setOpenModal(true)    
   }
   
+  const regresar = () => {
+    guardarRows(obra.materiales_obra);
+    guardarBandComponente(false)
+  }
+
   return (
     <Fragment>
       
@@ -344,6 +288,15 @@ export default function CotizarItems({ rowsSeleccionadas, guardarError, datosext
       </Paper>
       <br/>
       <Grid container justify="flex-end" spacing={3}>
+      <Grid item xs={3}>
+          <Button 
+            className={classes.btnregistrar}
+            variant="contained"
+            color="primary"
+            onClick={regresar}
+            dir="rtl"
+          >Regresar</Button>
+        </Grid>
         <Grid item xs={3}>
           <Button 
             className={classes.btnregistrar}

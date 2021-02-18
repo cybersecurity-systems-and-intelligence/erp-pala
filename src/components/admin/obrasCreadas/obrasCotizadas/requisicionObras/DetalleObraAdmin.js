@@ -1,8 +1,15 @@
-import { useState, Fragment, useEffect } from 'react';
+import { useState, Fragment, useEffect, useContext } from 'react';
 import { Fade, makeStyles, Grid, Button, CssBaseline, Typography, Checkbox, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@material-ui/core/';
+import jwt_decode from 'jwt-decode'
+
 import Copyright from '../../../../Copyright'
+import Modal from '../../../../Modal'
+
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
+import { cloneDeep } from 'lodash';
+import api from '../../../../../libs/api'
+import { ComponenteContext } from '../../../../../context/ComponenteContext'
 
 const theme = createMuiTheme({
     palette: {
@@ -80,40 +87,26 @@ const useStyles = makeStyles((theme) => ({
 export default function DetalleObraAdmin({ obra }) {
 
   const columns = [
-    { id: 'folioItem', label: 'Folio Item', minWidth: 100 },
-    { id: 'categoria', label: 'Categoria', minWidth: 100 },
-    {
-      id: 'subcategoria',
-      label: 'Sub Categoria',
-      minWidth: 100,
-      align: 'right',
-      format: (value) => value.toLocaleString('en-US'),
-    },
-    {
-      id: 'producto',
-      label: 'Producto',
-      minWidth: 170,
-      align: 'right',
-      format: (value) => value.toLocaleString('en-US'),
-    },
+    { id: 'clave', label: 'Clave', minWidth: 100 },
+    { id: 'descripcion', label: 'Descripción', minWidth: 100 },
     {
       id: 'unidad',
       label: 'Unidad',
       minWidth: 100,
       align: 'right',
-      format: (value) => value.toFixed(2),
+      format: (value) => value.toLocaleString('en-US'),
     },
     {
-      id: 'requeridos',
+      id: 'cantidad',
       label: 'Requeridos',
       minWidth: 170,
       align: 'right',
-      format: (value) => value.toFixed(2),
+      format: (value) => value.toLocaleString('en-US'),
     },
     {
-      id: 'anotaciones',
-      label: 'Anotaciones',
-      minWidth: 170,
+      id: 'costounitario',
+      label: 'Costo unitario',
+      minWidth: 100,
       align: 'right',
       format: (value) => value.toFixed(2),
     },
@@ -131,14 +124,18 @@ export default function DetalleObraAdmin({ obra }) {
 
     const [ page, setPage ] = useState(0)
     const [ rowsPerPage, setRowsPerPage ] = useState(10)
+    const [ openmodal, setOpenModal ] = useState(false)
+    const [ banddatosapi, guardarBandDatosApi ] = useState(false)
     // eslint-disable-next-line
     const [ rows, guardarRows ] = useState(obra.materiales_cotizacion)
     const [ checks, guardarChecks ] = useState({})
     const [ bandbotonregistrar, guardarBandBotonRegistrar ] = useState(true)
+
+    const { componentecontx, guardarComponenteContx } = useContext(ComponenteContext)
  
     useEffect(() => {
         const objeto = {}
-        obra.materiales_cotizacion.map(e => (objeto[e.folioItem] = false))
+        obra.materiales_cotizacion.map(e => (objeto[e.clave] = false))
         guardarChecks(objeto)
         //eslint-disable-next-line
     }, [])
@@ -151,7 +148,7 @@ export default function DetalleObraAdmin({ obra }) {
                 band = true
                 break
             }
-        }        
+        }                
         if(band === true){
             guardarBandBotonRegistrar(false)
         }else{
@@ -160,8 +157,75 @@ export default function DetalleObraAdmin({ obra }) {
 
     }, [checks])
 
+    const buscarItem = (items, clave) => {
+        const res = cloneDeep(items).filter(item => item.clave === clave)
+        return res[0]
+    }
+    useEffect(() => {
+        const registrar = async () => {
+            setOpenModal(true)
+            const requisicion = cloneDeep(obra)
+            
+            delete requisicion.IVA
+            delete requisicion.total
+            delete requisicion.total_IVA
+            delete requisicion.requisitada
+            delete requisicion.materiales_cotizacion
+    
+            const itemsSelect = []
+            for (const property in checks) {
+                if(checks[property]){
+                    itemsSelect.push(buscarItem(rows, property))
+                }
+            }   
+            requisicion.materiales_cotizacion = itemsSelect
+            console.log(requisicion);
+            try {
+                const resultadoAPI = await api.crearRequisicion(requisicion)
+    
+                const folioOrdenCompra = resultadoAPI.data.folio_ordenCompra
+                const nombreObra = resultadoAPI.data.nombre_obra
+    
+                const resultadoJwt = JSON.parse(localStorage.getItem('accessToken'))
+                const decoded = jwt_decode(resultadoJwt) 
+                const nombreUsuario = decoded.usuario.nombre_usuario
+    
+                const req = {
+                    tomail: 'dorian.mendoza@csiciber.com',
+                    subject: `Orden de compra echa por ${nombreUsuario}`,
+                    usuario: nombreUsuario,
+                    obra: nombreObra,
+                    folio: folioOrdenCompra,
+                    typeNotify: 'orden compra'
+                }
+                api.enviarCorreo(req)
+                guardarComponenteContx({
+                    ...componentecontx,
+                    numero_componente: 2
+                })
+            }catch(error) {
+                guardarBandDatosApi(false)            
+                if (error.response.status === 401){
+                    localStorage.removeItem("accessToken")
+                    localStorage.removeItem("refreshToken")
+                    localStorage.removeItem('componente')        
+        
+                    guardarComponenteContx({
+                        nivel_acceso: null,
+                        numero_ventana: 0,
+                        numero_componente: null
+                    })
+                    return
+                  }
+            }       
+        }
+        if(banddatosapi){
+            registrar()
+        }
+    }, [banddatosapi])
+
     const registrar = () => {
-        //console.log(checks);
+        setOpenModal(true)           
     }
   
 
@@ -192,7 +256,7 @@ export default function DetalleObraAdmin({ obra }) {
                 <Paper className={classes.paper}>
 
                 <Typography align="center" component='div'>
-                        <h3 className={classes.rb1} >REQUISICIÓN DE OBRAS<hr className={classes.hr}/></h3> 
+                        <h3 className={classes.rb1} >Orden de compra<hr className={classes.hr}/></h3> 
                         </Typography>
                     <br/>
                     <Paper className={classes.root}>
@@ -214,7 +278,7 @@ export default function DetalleObraAdmin({ obra }) {
                                 <TableBody >
                                     {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                                         return (
-                                        <TableRow  hover role="checkbox" tabIndex={-1} key={row.folioItem}>
+                                        <TableRow  hover role="checkbox" tabIndex={-1} key={row.clave}>
                                             {columns.map((column) => {
                                             const value = row[column.id]
                                             return (
@@ -223,9 +287,9 @@ export default function DetalleObraAdmin({ obra }) {
                                                     column.id === 'seleccionar'
                                                 ?
                                                 <Checkbox
-                                                    //value={checks[row.folioItem]}
-                                                    value={checks[row.folioItem] ? true : false}
-                                                    id={row.folioItem}
+                                                    //value={checks[row.clave]}
+                                                    value={checks[row.clave] ? true : false}
+                                                    id={row.clave}
                                                     variant="contained"
                                                     color="secondary"
                                                     onClick={seleccionarFolio}
@@ -262,6 +326,11 @@ export default function DetalleObraAdmin({ obra }) {
                             >Registrar</Button>
                         </Grid>
                     </Grid>
+                    <Modal
+                        openmodal={openmodal}
+                        setOpenModal={setOpenModal}
+                        guardarBandDatosApi={guardarBandDatosApi}
+                    />
                 </Paper>            
                 </Fade>
             </main>

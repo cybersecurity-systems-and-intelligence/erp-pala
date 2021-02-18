@@ -4,7 +4,7 @@ import { createDd } from './docdefinition'
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs
 
-export const createPDF = (obra) => {
+export const createPDF = (obra, tipo) => {
 	/*
 	const dd = {
 		folio: 12345,
@@ -51,5 +51,5 @@ export const createPDF = (obra) => {
 		],
 	}
 	*/
-	return pdfMake.createPdf(createDd(obra)).open()
+	return pdfMake.createPdf(createDd(obra, tipo)).open()
 }

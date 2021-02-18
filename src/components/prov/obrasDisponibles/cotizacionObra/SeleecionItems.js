@@ -40,6 +40,7 @@ const useStyles = makeStyles({
   },
 });
 
+
 const theme = createMuiTheme({
   palette: {
     primary: {
@@ -48,7 +49,8 @@ const theme = createMuiTheme({
   },
 });
 
-export default function SeleecionItems({ rows, guardarRows, guardarBandComponente, obra }) {
+export default function SeleecionItems({ rows, guardarRows, guardarBandComponente, obra, checks, guardarChecks }) {
+
 
   const columns = [
     { id: 'clave', label: 'Clave', minWidth: 100 },
@@ -77,8 +79,7 @@ export default function SeleecionItems({ rows, guardarRows, guardarBandComponent
 
   const classes = useStyles();
   const [ page, setPage ] = useState(0);
-  const [ rowsPerPage, setRowsPerPage ] = useState(10);
-  const [ checks, guardarChecks ] = useState({})
+  const [ rowsPerPage, setRowsPerPage ] = useState(10);  
   const [ clave, guardarClave ] = useState('')
   const [ bandbotonregistrar, guardarBandBotonRegistrar ] = useState(true)
 
@@ -187,6 +188,7 @@ export default function SeleecionItems({ rows, guardarRows, guardarBandComponent
                           ? 
                           <ThemeProvider theme={theme}>
                             <Checkbox
+                              defaultChecked={checks[row.clave] ? true : false}
                               value={checks[row.clave] ? true : false}
                               id={row.clave}
                               value='Eliminar'
