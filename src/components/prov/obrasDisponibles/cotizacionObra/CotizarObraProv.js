@@ -1,5 +1,6 @@
-import { Fragment, useState, useEffect } from 'react';
+import { Fragment, useState, useEffect, useContext } from 'react';
 import { makeStyles, Fade, CssBaseline, Paper, Typography } from '@material-ui/core';
+import jwt_decode from 'jwt-decode'
 
 import Copyright from '../../../Copyright'
 import SeleecionItems from './SeleecionItems'
@@ -8,7 +9,9 @@ import Error from '../../../Error'
 import Modal from '../../../Modal'
 import FormularioCotizarObraProv from './FormularioCotizarObraProv'
 
+import api from '../../../../libs/api'
 
+import { ComponenteContext } from '../../../../context/ComponenteContext'
 
 const useStyles = makeStyles((theme) => ({
   
@@ -73,10 +76,12 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
     const [ banddatosapi, guardarBandDatosApi ] = useState(false)
     const [ openmodal, setOpenModal ] = useState(false)
     const [ bandcomponente, guardarBandComponente ] = useState(false)
+    const [ checks, guardarChecks ] = useState({})
     
     // Destructuring de los state
     const { bandError, mensajeError } = error
-
+    const { componentecontx, guardarComponenteContx } = useContext(ComponenteContext)
+    const { sostenimiento, condiciones } = datosextras
 
     useEffect(() => {     
         
@@ -85,10 +90,60 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
         }
         consultarAPI()
         //eslint-disable-next-line
-    }, [])    
-
+    }, [])
     
-
+    useEffect(() => {
+        const consultarAPI = async () => {
+          try{
+            guardarError({ bandError: false, mensajeError: '' })
+            let materiales = rows
+            materiales.map(material => delete material.eliminar);
+                    
+            const resultado = JSON.parse(localStorage.getItem('accessToken'))
+            const decoded = jwt_decode(resultado);        
+    
+            const objeto = {
+              "nombre_obra": obra.nombre_obra,
+              "folio_obra": obra.folio_obra,
+              "correo_prov": decoded.usuario.correo_usuario,
+              'dias_sostenimiento_propuesta': sostenimiento,
+              'condiciones_comerciales': condiciones,
+              "materiales_cotizacion": materiales                    
+            }
+            console.log(objeto);
+            // eslint-disable-next-line         
+                
+            const resultadoAPI = await api.crearCotizacionProv(objeto)
+    
+            guardarActualizarCards(Math.floor(Math.random() * 500) + 1)
+            guardarComponenteContx({
+                ...componentecontx,
+                numero_componente: 2
+            }) 
+          }catch(err){
+              if (err.response.status === 401){
+                localStorage.removeItem("accessToken")
+                localStorage.removeItem("refreshToken")
+                localStorage.removeItem('componente')        
+    
+                guardarComponenteContx({
+                    nivel_acceso: null,
+                    numero_ventana: 0,
+                    numero_componente: null
+                })
+                return
+              }
+              guardarError({ bandError: true, mensajeError: 'Debes ingresar todos los costos unitarios' })
+              guardarBandDatosApi(false)
+          }
+        }
+    
+        if(banddatosapi && rows.length > 0){
+            consultarAPI()
+        }
+        //eslint-disable-next-line
+    }, [banddatosapi])      
+    
     return ( 
         <Fragment>
             <CssBaseline />      
@@ -112,14 +167,13 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
                             bandcomponente 
                             ?
                             <CotizarItems
-                                rowsSeleccionadas={rows}
+                                rows={rows}
+                                guardarRows={guardarRows}
                                 guardarError={guardarError}
                                 datosextras={datosextras}
                                 setOpenModal={setOpenModal}
+                                guardarBandComponente={guardarBandComponente}
                                 obra={obra}
-                                guardarActualizarCards={guardarActualizarCards}
-                                guardarBandDatosApi={guardarBandDatosApi}
-                                banddatosapi={banddatosapi}
                             />
                             :
                             <SeleecionItems
@@ -127,6 +181,8 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
                                 guardarRows={guardarRows}
                                 guardarBandComponente={guardarBandComponente}
                                 obra={obra}
+                                checks={checks}
+                                guardarChecks={guardarChecks}
                             />
                         }
                         

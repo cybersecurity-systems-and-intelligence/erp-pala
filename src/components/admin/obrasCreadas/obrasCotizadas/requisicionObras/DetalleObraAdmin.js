@@ -1,8 +1,11 @@
-import { useState, Fragment, useEffect } from 'react';
+import { useState, Fragment, useEffect, useContext } from 'react';
 import { Fade, makeStyles, Grid, Button, CssBaseline, Typography, Checkbox, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@material-ui/core/';
 import Copyright from '../../../../Copyright'
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
+import { cloneDeep } from 'lodash';
+import api from '../../../../../libs/api'
+import { ComponenteContext } from '../../../../../context/ComponenteContext'
 
 const theme = createMuiTheme({
     palette: {
@@ -80,40 +83,26 @@ const useStyles = makeStyles((theme) => ({
 export default function DetalleObraAdmin({ obra }) {
 
   const columns = [
-    { id: 'folioItem', label: 'Folio Item', minWidth: 100 },
-    { id: 'categoria', label: 'Categoria', minWidth: 100 },
-    {
-      id: 'subcategoria',
-      label: 'Sub Categoria',
-      minWidth: 100,
-      align: 'right',
-      format: (value) => value.toLocaleString('en-US'),
-    },
-    {
-      id: 'producto',
-      label: 'Producto',
-      minWidth: 170,
-      align: 'right',
-      format: (value) => value.toLocaleString('en-US'),
-    },
+    { id: 'clave', label: 'Clave', minWidth: 100 },
+    { id: 'descripcion', label: 'Descripción', minWidth: 100 },
     {
       id: 'unidad',
       label: 'Unidad',
       minWidth: 100,
       align: 'right',
-      format: (value) => value.toFixed(2),
+      format: (value) => value.toLocaleString('en-US'),
     },
     {
-      id: 'requeridos',
+      id: 'cantidad',
       label: 'Requeridos',
       minWidth: 170,
       align: 'right',
-      format: (value) => value.toFixed(2),
+      format: (value) => value.toLocaleString('en-US'),
     },
     {
-      id: 'anotaciones',
-      label: 'Anotaciones',
-      minWidth: 170,
+      id: 'costounitario',
+      label: 'Costo unitario',
+      minWidth: 100,
       align: 'right',
       format: (value) => value.toFixed(2),
     },
@@ -135,10 +124,12 @@ export default function DetalleObraAdmin({ obra }) {
     const [ rows, guardarRows ] = useState(obra.materiales_cotizacion)
     const [ checks, guardarChecks ] = useState({})
     const [ bandbotonregistrar, guardarBandBotonRegistrar ] = useState(true)
+
+    const { guardarComponenteContx } = useContext(ComponenteContext)
  
     useEffect(() => {
         const objeto = {}
-        obra.materiales_cotizacion.map(e => (objeto[e.folioItem] = false))
+        obra.materiales_cotizacion.map(e => (objeto[e.clave] = false))
         guardarChecks(objeto)
         //eslint-disable-next-line
     }, [])
@@ -151,7 +142,7 @@ export default function DetalleObraAdmin({ obra }) {
                 band = true
                 break
             }
-        }        
+        }                
         if(band === true){
             guardarBandBotonRegistrar(false)
         }else{
@@ -160,8 +151,45 @@ export default function DetalleObraAdmin({ obra }) {
 
     }, [checks])
 
-    const registrar = () => {
-        //console.log(checks);
+    const buscarItem = (items, clave) => {
+        const res = cloneDeep(items).filter(item => item.clave === clave)
+        return res[0]
+    }
+
+    const registrar = async () => {
+        const requisicion = cloneDeep(obra)
+        
+        delete requisicion.IVA
+        delete requisicion.total
+        delete requisicion.total_IVA
+        delete requisicion.requisitada
+        delete requisicion.materiales_cotizacion
+
+        const itemsSelect = []
+        for (const property in checks) {
+            if(checks[property]){
+                itemsSelect.push(buscarItem(rows, property))
+            }
+        }   
+        requisicion.materiales_cotizacion = itemsSelect
+        console.log(requisicion);
+        try {
+            const consulta = await api.crearRequisicion(requisicion)
+        }catch(error) {
+            console.log(error)
+            if (error.response.status === 401){
+                localStorage.removeItem("accessToken")
+                localStorage.removeItem("refreshToken")
+                localStorage.removeItem('componente')        
+    
+                guardarComponenteContx({
+                    nivel_acceso: null,
+                    numero_ventana: 0,
+                    numero_componente: null
+                })
+                return
+              }
+        }       
     }
   
 
@@ -214,7 +242,7 @@ export default function DetalleObraAdmin({ obra }) {
                                 <TableBody >
                                     {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                                         return (
-                                        <TableRow  hover role="checkbox" tabIndex={-1} key={row.folioItem}>
+                                        <TableRow  hover role="checkbox" tabIndex={-1} key={row.clave}>
                                             {columns.map((column) => {
                                             const value = row[column.id]
                                             return (
@@ -223,9 +251,9 @@ export default function DetalleObraAdmin({ obra }) {
                                                     column.id === 'seleccionar'
                                                 ?
                                                 <Checkbox
-                                                    //value={checks[row.folioItem]}
-                                                    value={checks[row.folioItem] ? true : false}
-                                                    id={row.folioItem}
+                                                    //value={checks[row.clave]}
+                                                    value={checks[row.clave] ? true : false}
+                                                    id={row.clave}
                                                     variant="contained"
                                                     color="secondary"
                                                     onClick={seleccionarFolio}

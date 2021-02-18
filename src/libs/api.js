@@ -82,6 +82,9 @@ const api = {
     },
     enviarCorreo: (body) => {
         return axios.post(`${baseUrl}/correos/sendEmail`, { objeto: body })
+    },
+    crearRequisicion: (body) => {
+        return axios.post(`${baseUrl}/ordenCompra`, { objeto: body })
     }
 }
 

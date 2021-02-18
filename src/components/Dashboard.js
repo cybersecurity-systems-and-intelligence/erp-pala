@@ -256,7 +256,7 @@ export default function Dashboard() {
   }
 
   const salirlogin = async () => {    
-
+    const refreshToken = JSON.parse(localStorage.getItem("refreshToken"))
     localStorage.removeItem("accessToken")
     localStorage.removeItem("refreshToken")
     localStorage.removeItem('componente')
@@ -265,10 +265,12 @@ export default function Dashboard() {
       numero_ventana: 0,
       numero_componente: null
     })
-    try{
-      const refreshToken = JSON.parse(localStorage.getItem("refreshToken"))
-      await api.logout({refreshToken: refreshToken});    
-    }catch(error){}
+    try{      
+      const res = await api.logout({refreshToken: refreshToken});    
+      console.log(res);
+    }catch(error){
+      console.log(error);
+    }
   }
 
   return (
