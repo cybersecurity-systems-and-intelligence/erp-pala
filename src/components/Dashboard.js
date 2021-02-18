@@ -254,7 +254,7 @@ export default function Dashboard() {
       return 'error 400'
     }
   }
-
+  console.log();
   const salirlogin = async () => {    
     const refreshToken = JSON.parse(localStorage.getItem("refreshToken"))
     localStorage.removeItem("accessToken")
@@ -289,7 +289,7 @@ export default function Dashboard() {
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" align="center" noWrap className={classes.title}>
             {
-              (nivel_acceso === 0)  ? 'ADMINISTRACIÓN' : nivel_acceso === 2 ? 'COMPRAS': 'PROVEEDOR'
+              (nivel_acceso === 0)  ? 'ADMINISTRACIÓN' : nivel_acceso === 2 ? 'COMPRAS' : 'PROVEEDOR'
             }
           </Typography>
           <IconButton color="inherit">
