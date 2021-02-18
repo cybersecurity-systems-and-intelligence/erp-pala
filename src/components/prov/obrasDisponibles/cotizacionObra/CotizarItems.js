@@ -42,16 +42,17 @@ const useStyles = makeStyles({
   },
 });
 const ButtonComponent = styled('button')({
-  height: '40px',
+  height: '100%',
   width: '100%',
   background: 'linear-gradient(#d4e157, #b3d233)',
-  color:'#000',
-  fontWeight: '500',
+  color:'#424242',
+  fontWeight: '600',
   borderColor:'#d4e157',
   borderRadius: '5px',
   cursor: 'Pointer',
   fontSize:'15px',
   marginTop:'10%',
+  marginBottom:'12%',
 
   '&:hover': {
       background: 'linear-gradient(#b3d233, #d4e157)',
