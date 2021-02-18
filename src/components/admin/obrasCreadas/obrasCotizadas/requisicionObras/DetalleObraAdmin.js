@@ -220,7 +220,7 @@ export default function DetalleObraAdmin({ obra }) {
                 <Paper className={classes.paper}>
 
                 <Typography align="center" component='div'>
-                        <h3 className={classes.rb1} >REQUISICIÓN DE OBRAS<hr className={classes.hr}/></h3> 
+                        <h3 className={classes.rb1} >Orden de compra<hr className={classes.hr}/></h3> 
                         </Typography>
                     <br/>
                     <Paper className={classes.root}>
