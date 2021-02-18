@@ -42,7 +42,7 @@ const useStyles = makeStyles({
 
 const theme = createMuiTheme({
   palette: {
-    secondary: {
+    primary: {
       main: '#b3d233',
     },
   },
@@ -137,11 +137,12 @@ export default function SeleecionItems({ rows, guardarRows, guardarBandComponent
 
   return (
     <Fragment>
+      
       <Grid 
           container spacing={1}
           alignItems="center"
           justify="center">
-          
+          <ThemeProvider theme={theme}>
            <Grid item xs={12} md={3}>
                <TextField
                    id="clave"
@@ -149,10 +150,12 @@ export default function SeleecionItems({ rows, guardarRows, guardarBandComponent
                    label="Clave"                  
                    value={clave}
                    onChange={handleChange}
-                   color="secondary"
+                   color="primary"
                />
-           </Grid>           
+           </Grid>
+           </ThemeProvider>           
        </Grid>
+       
       <br/>
       <Paper className={classes.root}>
         <TableContainer className={classes.container}>
@@ -188,7 +191,7 @@ export default function SeleecionItems({ rows, guardarRows, guardarBandComponent
                               id={row.clave}
                               value='Eliminar'
                               variant="contained"
-                              color="secondary"
+                              color="primary"
                               onClick={seleccionarFolio}
                             />
                             </ThemeProvider>
@@ -220,7 +223,6 @@ export default function SeleecionItems({ rows, guardarRows, guardarBandComponent
             className={classes.btnregistrar}
             disabled={bandbotonregistrar}
             variant="contained"
-            color="primary"
             onClick={selectItems}
             dir="rtl"
           >Cotizar</Button>

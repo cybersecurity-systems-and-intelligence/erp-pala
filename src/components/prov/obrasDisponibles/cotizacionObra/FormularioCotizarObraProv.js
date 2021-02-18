@@ -4,7 +4,10 @@ import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 
 
+
 const FormularioCotizarObraProv = ({ datosextras, guardarDatosExtras }) => {
+
+ 
 
     const { sostenimiento, condiciones } = datosextras
 
@@ -20,16 +23,25 @@ const FormularioCotizarObraProv = ({ datosextras, guardarDatosExtras }) => {
             main: '#b3d233',
           },
         },
+        palette: {
+            primary: {
+              main: '#b3d233',
+            },
+          },
     });
+    
 
     return ( 
-    <ThemeProvider theme={theme}>
+        
         <Fragment>
+            <ThemeProvider theme={theme}>
             <Grid 
                 container spacing={10}        
                 alignItems="center"
                 justify="center"
+                color="secondary"  
             >
+                    
                     <Grid item xs={12} md={3}>
                         <TextField
                             id="sostenimiento"
@@ -39,9 +51,11 @@ const FormularioCotizarObraProv = ({ datosextras, guardarDatosExtras }) => {
                             onChange={handleChange}
                             type='number'
                             fullWidth
-                            color="secondary"         
+                            color="primary"      
                         />
+                    
                     </Grid>
+                    
                     <Grid item xs={12} md={3}>
                         <TextField                                    
                             id="condiciones"
@@ -50,13 +64,15 @@ const FormularioCotizarObraProv = ({ datosextras, guardarDatosExtras }) => {
                             value={condiciones}
                             onChange={handleChange}
                             fullWidth    
-                            color="secondary"                                         
+                            color="primary"                                        
                         />
                     </Grid>
+                    
                 </Grid>            
-           
+                </ThemeProvider>
         </Fragment>
-        </ThemeProvider>
+         
+       
     )
 }
  

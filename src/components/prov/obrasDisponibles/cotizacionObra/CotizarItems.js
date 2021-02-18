@@ -43,10 +43,10 @@ const useStyles = makeStyles({
 });
 const ButtonComponent = styled('button')({
   height: '40px',
-  width: '70%',
+  width: '100%',
   background: 'linear-gradient(#d4e157, #b3d233)',
   color:'#000',
-  fontWeight: '600',
+  fontWeight: '500',
   borderColor:'#d4e157',
   borderRadius: '5px',
   cursor: 'Pointer',
@@ -59,19 +59,16 @@ const ButtonComponent = styled('button')({
   }
 });
 
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      main: '#b3d233',
-    },
-    secondary: {
-      main: '#d32f2f',
-    },
-  },
-});
 
 export default function CotizarItems({ rowsSeleccionadas, guardarError, datosextras, setOpenModal, obra, guardarActualizarCards, guardarBandDatosApi, banddatosapi }) {
 
+  const theme = createMuiTheme({
+    palette: {
+      primary: {
+        main: '#b3d233',
+      },
+    },
+  });
   const columns = [
     { id: 'clave', label: 'Clave', minWidth: 100 },
     { id: 'descripcion', label: 'Descripción', minWidth: 100 },
@@ -248,7 +245,6 @@ export default function CotizarItems({ rowsSeleccionadas, guardarError, datosext
       <form
         onSubmit={handleSubmit}
       >
-        <ThemeProvider theme={theme}>
         <Grid container spacing={10}
           alignItems="center"
           justify="center"
@@ -264,6 +260,7 @@ export default function CotizarItems({ rowsSeleccionadas, guardarError, datosext
               color="primary"          
             />
           </Grid>
+          <ThemeProvider theme={theme}>
           <Grid item xs={12} md={3}>
             <TextField                                    
               id="costounitario"
@@ -274,7 +271,8 @@ export default function CotizarItems({ rowsSeleccionadas, guardarError, datosext
               fullWidth    
               color="primary"                                         
             />
-          </Grid>     
+          </Grid>
+          </ThemeProvider>     
         </Grid>
         <Grid item xs={6} md={3}>
             <ButtonComponent
@@ -284,7 +282,6 @@ export default function CotizarItems({ rowsSeleccionadas, guardarError, datosext
               AGREGAR COSTO UNITARIO
             </ButtonComponent>
           </Grid>
-        </ThemeProvider>
       </form>
       <br/>
       <Paper className={classes.root}>
