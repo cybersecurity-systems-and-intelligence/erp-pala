@@ -114,6 +114,20 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
             // eslint-disable-next-line         
                 
             const resultadoAPI = await api.crearCotizacionProv(objeto)
+            console.log(resultadoAPI);
+
+            const folioCoti = resultadoAPI.data.folio_cotizacion
+            const nombreUsuario = decoded.usuario.nombre_usuario
+            const nombreObra = obra.nombre_obra
+            const req = {
+                tomail: 'dorian.mendoza@csiciber.com',
+                subject: `Se cotizó una obra por ${nombreUsuario}`,
+                usuario: nombreUsuario,
+                obra: nombreObra,
+                folio: folioCoti,
+                typeNotify: 'cotizacion'
+            }
+            api.enviarCorreo(req)
     
             guardarActualizarCards(Math.floor(Math.random() * 500) + 1)
             guardarComponenteContx({

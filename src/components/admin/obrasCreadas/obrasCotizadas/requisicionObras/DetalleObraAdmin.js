@@ -1,6 +1,10 @@
 import { useState, Fragment, useEffect, useContext } from 'react';
 import { Fade, makeStyles, Grid, Button, CssBaseline, Typography, Checkbox, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@material-ui/core/';
+import jwt_decode from 'jwt-decode'
+
 import Copyright from '../../../../Copyright'
+import Modal from '../../../../Modal'
+
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import { cloneDeep } from 'lodash';
@@ -120,12 +124,14 @@ export default function DetalleObraAdmin({ obra }) {
 
     const [ page, setPage ] = useState(0)
     const [ rowsPerPage, setRowsPerPage ] = useState(10)
+    const [ openmodal, setOpenModal ] = useState(false)
+    const [ banddatosapi, guardarBandDatosApi ] = useState(false)
     // eslint-disable-next-line
     const [ rows, guardarRows ] = useState(obra.materiales_cotizacion)
     const [ checks, guardarChecks ] = useState({})
     const [ bandbotonregistrar, guardarBandBotonRegistrar ] = useState(true)
 
-    const { guardarComponenteContx } = useContext(ComponenteContext)
+    const { componentecontx, guardarComponenteContx } = useContext(ComponenteContext)
  
     useEffect(() => {
         const objeto = {}
@@ -155,41 +161,71 @@ export default function DetalleObraAdmin({ obra }) {
         const res = cloneDeep(items).filter(item => item.clave === clave)
         return res[0]
     }
-
-    const registrar = async () => {
-        const requisicion = cloneDeep(obra)
-        
-        delete requisicion.IVA
-        delete requisicion.total
-        delete requisicion.total_IVA
-        delete requisicion.requisitada
-        delete requisicion.materiales_cotizacion
-
-        const itemsSelect = []
-        for (const property in checks) {
-            if(checks[property]){
-                itemsSelect.push(buscarItem(rows, property))
-            }
-        }   
-        requisicion.materiales_cotizacion = itemsSelect
-        console.log(requisicion);
-        try {
-            const consulta = await api.crearRequisicion(requisicion)
-        }catch(error) {
-            console.log(error)
-            if (error.response.status === 401){
-                localStorage.removeItem("accessToken")
-                localStorage.removeItem("refreshToken")
-                localStorage.removeItem('componente')        
+    useEffect(() => {
+        const registrar = async () => {
+            setOpenModal(true)
+            const requisicion = cloneDeep(obra)
+            
+            delete requisicion.IVA
+            delete requisicion.total
+            delete requisicion.total_IVA
+            delete requisicion.requisitada
+            delete requisicion.materiales_cotizacion
     
+            const itemsSelect = []
+            for (const property in checks) {
+                if(checks[property]){
+                    itemsSelect.push(buscarItem(rows, property))
+                }
+            }   
+            requisicion.materiales_cotizacion = itemsSelect
+            console.log(requisicion);
+            try {
+                const resultadoAPI = await api.crearRequisicion(requisicion)
+    
+                const folioOrdenCompra = resultadoAPI.data.folio_ordenCompra
+                const nombreObra = resultadoAPI.data.nombre_obra
+    
+                const resultadoJwt = JSON.parse(localStorage.getItem('accessToken'))
+                const decoded = jwt_decode(resultadoJwt) 
+                const nombreUsuario = decoded.usuario.nombre_usuario
+    
+                const req = {
+                    tomail: 'dorian.mendoza@csiciber.com',
+                    subject: `Orden de compra echa por ${nombreUsuario}`,
+                    usuario: nombreUsuario,
+                    obra: nombreObra,
+                    folio: folioOrdenCompra,
+                    typeNotify: 'orden compra'
+                }
+                api.enviarCorreo(req)
                 guardarComponenteContx({
-                    nivel_acceso: null,
-                    numero_ventana: 0,
-                    numero_componente: null
+                    ...componentecontx,
+                    numero_componente: 2
                 })
-                return
-              }
-        }       
+            }catch(error) {
+                guardarBandDatosApi(false)            
+                if (error.response.status === 401){
+                    localStorage.removeItem("accessToken")
+                    localStorage.removeItem("refreshToken")
+                    localStorage.removeItem('componente')        
+        
+                    guardarComponenteContx({
+                        nivel_acceso: null,
+                        numero_ventana: 0,
+                        numero_componente: null
+                    })
+                    return
+                  }
+            }       
+        }
+        if(banddatosapi){
+            registrar()
+        }
+    }, [banddatosapi])
+
+    const registrar = () => {
+        setOpenModal(true)           
     }
   
 
@@ -290,6 +326,11 @@ export default function DetalleObraAdmin({ obra }) {
                             >Registrar</Button>
                         </Grid>
                     </Grid>
+                    <Modal
+                        openmodal={openmodal}
+                        setOpenModal={setOpenModal}
+                        guardarBandDatosApi={guardarBandDatosApi}
+                    />
                 </Paper>            
                 </Fade>
             </main>

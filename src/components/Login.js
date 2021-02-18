@@ -100,7 +100,7 @@ const Login = () => {
             const { usuario } = jwt_decode(accessToken)
             const { nivel_acceso_usuario } = usuario
 
-            if ( nivel_acceso_usuario === 0 || nivel_acceso_usuario === 1 ){                                            
+            if ( nivel_acceso_usuario === 0 || nivel_acceso_usuario === 1 || nivel_acceso_usuario === 2){                                            
                 guardarLS(nivel_acceso_usuario, 1, 1)
                 guardarComponenteContx({
                     nivel_acceso: nivel_acceso_usuario,

@@ -4,8 +4,8 @@ import { formatArray } from './formatters'
 
 const images = `data:image/png;base64,${image64}`
 
-export const createDd = data => {
-	
+export const createDd = (data, tipo) => {
+	console.log(data);
 	const {
 		folio_cotizacion,
 		fecha_creacion,
@@ -19,7 +19,8 @@ export const createDd = data => {
 		total,
 		total_IVA,
 	} = data[0]
-	console.log(data[0].materiales_cotizacion);
+	
+
 	const arr = formatArray(data[0].materiales_cotizacion)
 
 	const dd = {
@@ -32,7 +33,16 @@ export const createDd = data => {
 				text: '\n\n',
 			},
 			{
-				text: [
+				text: [					
+					{
+						text: tipo,
+					},
+					{
+						text: '\n',
+					},
+					{
+						text: '\n',
+					},
 					{
 						text: 'Cotizacion No:  ',
 						style: 'titles',

@@ -85,6 +85,9 @@ const api = {
     },
     crearRequisicion: (body) => {
         return axios.post(`${baseUrl}/ordenCompra`, { objeto: body })
+    },
+    buscarOrdenCompra: (folio_cotizacion) => {
+        return axios.get(`${baseUrl}/ordenCompra/${folio_cotizacion}`)
     }
 }
 

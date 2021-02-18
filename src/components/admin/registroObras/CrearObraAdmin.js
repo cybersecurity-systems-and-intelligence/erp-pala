@@ -124,17 +124,19 @@ const CrearObraAdmin = ( { guardarActualizarCards } ) => {
                     console.log(resultadoAPI);
 
                     const folioObra = resultadoAPI.data.folio_obra
-                    const nombreCreador = resultadoAPI.data.creador_obra
+                    
 
                     const resultadoJwt = JSON.parse(localStorage.getItem('accessToken'))
                     const decoded = jwt_decode(resultadoJwt) 
+                    const nombreUsuario = decoded.usuario.nombre_usuario
 
                     const req = {
                         tomail: 'dorian.mendoza@csiciber.com',
-                        subject: `Obra creada por ${nombreCreador}`,
-                        usuario: nombreCreador,
+                        subject: `Obra creada por ${nombreUsuario}`,
+                        usuario: nombreUsuario,
                         obra: nombreObra,
                         folio: folioObra,
+                        typeNotify: 'obra'
                     }
                     api.enviarCorreo(req)
                     guardarActualizarCards(Math.floor(Math.random() * 1000) + 1)

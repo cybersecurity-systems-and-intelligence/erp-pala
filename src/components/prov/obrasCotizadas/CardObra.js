@@ -103,8 +103,7 @@ const CardObra = ({
     const seleccionarObra = e => { 
       const copia = cloneDeep(obrascotizadas)
       const obraSeleccionada = copia.filter(row => row.folio_cotizacion === e.target.id)        
-      createPDF(obraSeleccionada)
-      
+      createPDF(obraSeleccionada, 'Cotización')      
     }
 
     return (

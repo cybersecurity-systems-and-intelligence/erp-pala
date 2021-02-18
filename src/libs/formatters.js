@@ -42,12 +42,13 @@ export const formatCardFolioObra = ( respObrasDisp ) => {
 	return folioObra
 }
 
-export const formatCardFolioCoti = (respObrasCoti) => {
+export const formatCardFolioCoti = (respObrasCoti) => {	
 	const folioCoti = respObrasCoti.map(obra => (
         {
-        folioObra: obra.folio_obra,
-        folioCotizacion: obra.folio_cotizacion,
-        nombreObra: obra.nombre_obra,
+			folioObra: obra.folio_obra,
+			folioCotizacion: obra.folio_cotizacion,
+			nombreObra: obra.nombre_obra,
+			requisitada: obra.requisitada
         }
 	))
 	return folioCoti

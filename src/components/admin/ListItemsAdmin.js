@@ -6,7 +6,7 @@ import { ComponenteContext } from '../../context/ComponenteContext'
 
 import { guardarLS } from '../../libs/guardarLS'
 
-const ListItemsAdmin = ( { datosgenerales, guardarDatosGenerales, guardarRowsObrasTotales, guardarRowsObrasCotizadas, obrascreadas, guardarTipoBusqueda} ) => {
+const ListItemsAdmin = ( { } ) => {
 
   const { componentecontx, guardarComponenteContx } = useContext(ComponenteContext)
   const { nivel_acceso, numero_ventana } = componentecontx
@@ -50,15 +50,21 @@ const ListItemsAdmin = ( { datosgenerales, guardarDatosGenerales, guardarRowsObr
         </ListItemIcon>
         <ListItemText primary="Perfil" />
       </ListItem>
-      <ListItem
-        button
-        onClick={handleListItemClick2}
-      >
-        <ListItemIcon>
-          <Add />
-        </ListItemIcon>
-        <ListItemText primary="Crear Obra" />
-      </ListItem>
+      {
+        nivel_acceso === 0
+        ?
+        <ListItem
+          button
+          onClick={handleListItemClick2}
+        >
+          <ListItemIcon>
+            <Add />
+          </ListItemIcon>
+          <ListItemText primary="Crear Obra" />
+        </ListItem>
+        :
+        null
+      }      
       <ListItem
         button
         onClick={handleListItemClick3}
