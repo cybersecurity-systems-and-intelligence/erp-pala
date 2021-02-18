@@ -224,7 +224,7 @@ export default function CotizarItems({ rows, guardarRows, guardarError, datosext
               type='submit'
               fullWidth
             >
-              AGREGAR COSTO UNITARIO
+              GUARDAR
             </ButtonComponent>
           </Grid>
       </form>
@@ -260,7 +260,7 @@ export default function CotizarItems({ rows, guardarRows, guardarError, datosext
                           <input 
                             type='button'
                             id={row.clave}
-                            value='Editar'
+                            value='Agregar costo'
                             variant="contained"
                             color="primary"
                             onClick={seleccionarItem}
