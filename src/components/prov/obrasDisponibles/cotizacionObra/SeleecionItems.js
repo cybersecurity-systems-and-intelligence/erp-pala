@@ -2,6 +2,9 @@ import { useState, useEffect, Fragment } from 'react';
 import { makeStyles, TextField, Grid, Button, Checkbox, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@material-ui/core/';
 import { cloneDeep } from 'lodash'
 
+import { createMuiTheme } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/styles';
+
 const useStyles = makeStyles({
   root: {
     width: '100%',
@@ -37,7 +40,17 @@ const useStyles = makeStyles({
   },
 });
 
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#b3d233',
+    },
+  },
+});
+
 export default function SeleecionItems({ rows, guardarRows, guardarBandComponente, obra, checks, guardarChecks }) {
+
 
   const columns = [
     { id: 'clave', label: 'Clave', minWidth: 100 },
@@ -125,8 +138,12 @@ export default function SeleecionItems({ rows, guardarRows, guardarBandComponent
 
   return (
     <Fragment>
-      <Grid container spacing={1}>
-           
+      
+      <Grid 
+          container spacing={1}
+          alignItems="center"
+          justify="center">
+          <ThemeProvider theme={theme}>
            <Grid item xs={12} md={3}>
                <TextField
                    id="clave"
@@ -134,9 +151,12 @@ export default function SeleecionItems({ rows, guardarRows, guardarBandComponent
                    label="Clave"                  
                    value={clave}
                    onChange={handleChange}
+                   color="primary"
                />
-           </Grid>           
+           </Grid>
+           </ThemeProvider>           
        </Grid>
+       
       <br/>
       <Paper className={classes.root}>
         <TableContainer className={classes.container}>
@@ -166,6 +186,7 @@ export default function SeleecionItems({ rows, guardarRows, guardarBandComponent
                           { 
                             column.id === 'seleccionar' 
                           ? 
+                          <ThemeProvider theme={theme}>
                             <Checkbox
                               defaultChecked={checks[row.clave] ? true : false}
                               value={checks[row.clave] ? true : false}
@@ -174,7 +195,9 @@ export default function SeleecionItems({ rows, guardarRows, guardarBandComponent
                               variant="contained"
                               color="primary"
                               onClick={seleccionarFolio}
-                            /> : value }
+                            />
+                            </ThemeProvider>
+                             : value }
                         </TableCell>
                       );
                     })}
@@ -202,7 +225,6 @@ export default function SeleecionItems({ rows, guardarRows, guardarBandComponent
             className={classes.btnregistrar}
             disabled={bandbotonregistrar}
             variant="contained"
-            color="primary"
             onClick={selectItems}
             dir="rtl"
           >Cotizar</Button>
