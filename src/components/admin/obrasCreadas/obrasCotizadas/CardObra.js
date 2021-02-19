@@ -143,8 +143,14 @@ const CardObra = ({
                 <Grid item key={row.folioCotizacion} xs={12} sm={6} md={4}>
                     <Card className={classes.card}>                  
                       <CardContent className={classes.cardContent}>
-                          <Typography gutterBottom variant="p" component="p" style={row.requisitada ? { background: 'green'} : { background: 'red'}}>
-                            Requisitada<br/>
+                          <Typography 
+                            gutterBottom  
+                            variant="p" 
+                            component="p" 
+                            style={row.requisitada ? { background: '#e1ffb1', width: '50%', borderRadius: 8} : { background: '#ffa4a2', width: '50%', borderRadius: 8}}>
+
+                            Requisitada
+                            <br/>
                           </Typography>
                           <Typography gutterBottom variant="h5" component="h2">
                             Folio Obra:<br/> {row.folioObra}

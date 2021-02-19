@@ -1,5 +1,5 @@
 import { Fragment, useState, useEffect, useContext } from 'react';
-import { makeStyles, Fade, CssBaseline, Paper, Typography } from '@material-ui/core';
+import { makeStyles,Grid,Button, Fade, CssBaseline, Paper, Typography } from '@material-ui/core';
 import jwt_decode from 'jwt-decode'
 
 import Copyright from '../../../Copyright'
@@ -8,7 +8,7 @@ import CotizarItems from './CotizarItems'
 import Error from '../../../Error'
 import Modal from '../../../Modal'
 import FormularioCotizarObraProv from './FormularioCotizarObraProv'
-
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import api from '../../../../libs/api'
 
 import { ComponenteContext } from '../../../../context/ComponenteContext'
@@ -38,10 +38,22 @@ const useStyles = makeStyles((theme) => ({
         '&:hover': {
             color:'#000',
             fontWeight: '700',
-        }
-
-
+        },
     },
+
+    btnRegresar: {
+        float: 'left',
+        right:'250%',
+        background: 'linear-gradient(#ff616f, #d32f2f)',
+        color: 'white',
+        borderRadius:'10%',
+
+        '&:hover': {
+            background: 'linear-gradient(#d32f2f, #ff616f)',
+            
+          },
+      },
+
     rb1:{
         alignItems: 'center',
         textAlign: 'center'
@@ -164,6 +176,17 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
             <main className={classes.layout}>
                 <Fade in={true}>
                     <Paper className={classes.paper}>
+                        
+      <Grid container justify="flex-start"  item xs={2}>
+          <Button
+            className={classes.btnRegresar}
+            variant="contained"
+            color="primary"
+            //*onClick={regresar}
+            dir="rtl"
+          ><ArrowBackIcon/></Button>
+        </Grid>
+      
                         <Typography align="center">
                             <h3 className={classes.rb1} >COTIZACIÓN DE OBRA<hr className={classes.hr}/></h3> 
                         </Typography>

@@ -3,7 +3,7 @@ import { makeStyles, createMuiTheme, Grid, styled, Button, TextField, Paper, Tab
 import { cloneDeep } from 'lodash'
 import jwt_decode from 'jwt-decode'
 import { ThemeProvider } from '@material-ui/styles';
-
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 const useStyles = makeStyles({
   root: {
@@ -28,16 +28,19 @@ const useStyles = makeStyles({
       
     },
   },
-  btnregistrar: {
-    float: 'right',
+
+  btnEnviar: {
+    width:'60%',
+    
     background: 'linear-gradient(#d4e157, #b3d233)',
     color:'#424242',
 
     '&:hover': {
       color:'#000',
-      fontWeight: '700',
+      
     }
   },
+  
 });
 const ButtonComponent = styled('button')({
   height: '100%',
@@ -296,27 +299,21 @@ export default function CotizarItems({ rows, guardarRows, guardarError, datosext
         
       </Paper>
       <br/>
-      <Grid container justify="flex-end" spacing={3}>
-      <Grid item xs={3}>
+      
+      <Grid  spacing={6}>
+  
+        <Grid item xs={2}>
           <Button 
-            className={classes.btnregistrar}
-            variant="contained"
-            color="primary"
-            onClick={regresar}
-            dir="rtl"
-          >Regresar</Button>
-        </Grid>
-        <Grid item xs={3}>
-          <Button 
-            className={classes.btnregistrar}
+            className={classes.btnEnviar}
             disabled={bandbotonregistrar}
             variant="contained"
             color="primary"
             onClick={registrar}
             dir="rtl"
-          >Enviar Cotización</Button>
+          >Enviar</Button>
         </Grid>
       </Grid>
+      
     </Fragment>
   );
 }
