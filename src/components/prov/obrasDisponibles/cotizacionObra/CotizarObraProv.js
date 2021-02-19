@@ -30,29 +30,6 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(3),
       },
     },
-    btnregistrar: {
-        float: 'right',
-        background: 'linear-gradient(#d4e157, #b3d233)',
-        color:'#424242',
-
-        '&:hover': {
-            color:'#000',
-            fontWeight: '700',
-        },
-    },
-
-    btnRegresar: {
-        float: 'left',
-        right:'250%',
-        background: 'linear-gradient(#ff616f, #d32f2f)',
-        color: 'white',
-        borderRadius:'10%',
-
-        '&:hover': {
-            background: 'linear-gradient(#d32f2f, #ff616f)',
-            
-          },
-      },
 
     rb1:{
         alignItems: 'center',
@@ -175,17 +152,7 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
             <CssBaseline />      
             <main className={classes.layout}>
                 <Fade in={true}>
-                    <Paper className={classes.paper}>
-                        
-      <Grid container justify="flex-start"  item xs={2}>
-          <Button
-            className={classes.btnRegresar}
-            variant="contained"
-            color="primary"
-            //*onClick={regresar}
-            dir="rtl"
-          ><ArrowBackIcon/></Button>
-        </Grid>
+                    <Paper className={classes.paper}>                              
       
                         <Typography align="center">
                             <h3 className={classes.rb1} >COTIZACIÓN DE OBRA<hr className={classes.hr}/></h3> 

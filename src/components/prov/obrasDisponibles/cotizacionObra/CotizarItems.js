@@ -28,6 +28,26 @@ const useStyles = makeStyles({
       
     },
   },
+  btnregistrar: {
+    float: 'right',
+    background: 'linear-gradient(#d4e157, #b3d233)',
+    color:'#424242',
+
+    '&:hover': {
+      color:'#000',
+      fontWeight: '700',
+    }
+  },
+  btnregresar: {
+    float: 'left',
+    background: 'linear-gradient(#d4e157, #b3d233)',
+    color:'#424242',
+
+    '&:hover': {
+      color:'#000',
+      fontWeight: '700',
+    }
+  },
 
   btnEnviar: {
     width:'60%',
@@ -300,17 +320,25 @@ export default function CotizarItems({ rows, guardarRows, guardarError, datosext
       </Paper>
       <br/>
       
-      <Grid  spacing={6}>
-  
-        <Grid item xs={2}>
+      <Grid container spacing={12} style={{width: '100%'}}>
+        <Grid item xs={6} style={{float: 'left'}}>
           <Button 
-            className={classes.btnEnviar}
+            className={classes.btnregresar}
+            variant="contained"
+            color="primary"
+            onClick={regresar}
+            dir="rtl"
+          >Regresar</Button>
+        </Grid>
+        <Grid item xs={6}>
+          <Button 
+            className={classes.btnregistrar}
             disabled={bandbotonregistrar}
             variant="contained"
             color="primary"
             onClick={registrar}
             dir="rtl"
-          >Enviar</Button>
+          >Enviar Cotización</Button>
         </Grid>
       </Grid>
       
