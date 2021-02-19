@@ -102,6 +102,7 @@ export default function CotizarItems({ rows, guardarRows, guardarError, datosext
   const [ page, setPage ] = useState(0);
   const [rowsPerPage, setRowsPerPage ] = useState(10)
   const [ bandbotonregistrar, guardarBandBotonRegistrar ] = useState(true)
+  const [ banddatos, guardarBandDatos ] = useState(false)
   const [ datos, guardarDatos ] = useState({
     clave: '',
     costounitario: ''
@@ -130,7 +131,8 @@ export default function CotizarItems({ rows, guardarRows, guardarError, datosext
   };
 
 
-  const seleccionarItem = e => {         
+  const seleccionarItem = e => {        
+    guardarBandDatos(true)
     const claveRow = e.target.id
     const buscarItem = cloneDeep(rows).filter(row => row.clave === claveRow)
     guardarDatos({
@@ -141,7 +143,8 @@ export default function CotizarItems({ rows, guardarRows, guardarError, datosext
 
   const handleSubmit = e => {
     e.preventDefault()
-    if(clave.trim() === '' || costounitario.trim() === ''){
+    guardarBandDatos(false)
+    if(clave.trim() === '' || costounitario.trim() === '') {
       guardarError({ bandError: true, mensajeError: 'Tienes que editar un producto e ingresar su costo unitario' })
       return
     }
@@ -187,47 +190,53 @@ export default function CotizarItems({ rows, guardarRows, guardarError, datosext
   return (
     <Fragment>
       
-      <form
-        onSubmit={handleSubmit}
-      >
-        <Grid container spacing={10}
-          alignItems="center"
-          justify="center"
-        >           
-          <Grid item xs={12} md={3}>
-            <TextField
-              disabled
-              id="clave"
-              name="clave"
-              label="Clave"                        
-              value={''+clave}
-              fullWidth    
-              color="primary"          
-            />
+      {
+        banddatos
+        ?
+        <form
+          onSubmit={handleSubmit}
+        >
+          <Grid container spacing={10}
+            alignItems="center"
+            justify="center"
+          >           
+            <Grid item xs={12} md={3}>
+              <TextField
+                disabled
+                id="clave"
+                name="clave"
+                label="Clave"                        
+                value={''+clave}
+                fullWidth    
+                color="primary"          
+              />
+            </Grid>
+            <ThemeProvider theme={theme}>
+            <Grid item xs={12} md={3}>
+              <TextField                                    
+                id="costounitario"
+                name="costounitario"
+                label="Costo Unitario"                        
+                value={costounitario}
+                onChange={handleChange}
+                fullWidth    
+                color="primary"                                         
+              />
+            </Grid>
+            </ThemeProvider>     
           </Grid>
-          <ThemeProvider theme={theme}>
-          <Grid item xs={12} md={3}>
-            <TextField                                    
-              id="costounitario"
-              name="costounitario"
-              label="Costo Unitario"                        
-              value={costounitario}
-              onChange={handleChange}
-              fullWidth    
-              color="primary"                                         
-            />
-          </Grid>
-          </ThemeProvider>     
-        </Grid>
-        <Grid item xs={6} md={3}>
-            <ButtonComponent
-              type='submit'
-              fullWidth
-            >
-              GUARDAR
-            </ButtonComponent>
-          </Grid>
-      </form>
+          <Grid item xs={6} md={3}>
+              <ButtonComponent
+                type='submit'
+                fullWidth
+              >
+                GUARDAR
+              </ButtonComponent>
+            </Grid>
+        </form>
+        : 
+        null
+      }
       <br/>
       <Paper className={classes.root}>
         <TableContainer className={classes.container}>
