@@ -4,6 +4,7 @@ import jwt_decode from 'jwt-decode'
 
 import Copyright from '../../../../Copyright'
 import Modal from '../../../../Modal'
+import Formulario from './Formulario'
 
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
@@ -258,6 +259,11 @@ export default function DetalleObraAdmin({ obra }) {
                 <Typography align="center" component='div'>
                         <h3 className={classes.rb1} >Orden de compra<hr className={classes.hr}/></h3> 
                         </Typography>
+                    <br/>
+
+                    <Formulario />
+
+                    <br/>
                     <br/>
                     <Paper className={classes.root}>
                         <TableContainer  className={classes.container}>
